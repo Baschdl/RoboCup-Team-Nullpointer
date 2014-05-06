@@ -1,6 +1,6 @@
 package de.null_pointer.communication_pi;
 
-public class VirtualCommunicationPi extends Communication_Pi {
+public class VirtualCommunicationPi extends CommunicationPi {
 
 	@Override
 	public String receiveString() {

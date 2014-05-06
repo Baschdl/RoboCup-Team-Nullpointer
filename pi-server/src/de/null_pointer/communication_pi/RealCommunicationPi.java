@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class RealCommunicationPi extends Communication_Pi {
+public class RealCommunicationPi extends CommunicationPi {
 	DataInputStream dataFromBrick;
 	DataOutputStream dataToBrick;
 
