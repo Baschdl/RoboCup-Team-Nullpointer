@@ -1,6 +1,11 @@
 package de.null_pointer.communication_pi;
 
 public class VirtualCommunicationPi extends CommunicationPi {
+	private boolean closed = false;
+
+	public boolean isClosed() {
+		return closed;
+	}
 
 	@Override
 	public String receiveString() {
@@ -16,7 +21,7 @@ public class VirtualCommunicationPi extends CommunicationPi {
 
 	@Override
 	public void closeConnection() {
-		// TODO Auto-generated method stub
+		closed = true;
 		
 	}
 
