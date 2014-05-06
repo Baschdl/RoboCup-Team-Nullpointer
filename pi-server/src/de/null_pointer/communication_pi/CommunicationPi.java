@@ -1,6 +1,6 @@
 package de.null_pointer.communication_pi;
 
-public abstract class Communication_Pi {
+public abstract class CommunicationPi {
 
 	public abstract String receiveString();
 	public abstract void sendString(String data);
