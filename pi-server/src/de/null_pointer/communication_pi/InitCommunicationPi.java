@@ -21,7 +21,7 @@ public class InitCommunicationPi {
 
 			} else {
 				return new RealCommunicationPi(conn.getInputStream(),
-						conn.getOutputStream());
+						conn.getOutputStream(), conn);
 			}
 
 		} catch (Exception e) {
