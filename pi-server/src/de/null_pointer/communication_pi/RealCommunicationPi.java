@@ -10,6 +10,13 @@ import lejos.pc.comm.NXTConnector;
 
 import org.apache.log4j.Logger;
 
+/**
+ * @author sebastian
+ * 
+ *         Mit dieser Klasse koennen Strings zum Brick gesendet sowie empfangen
+ *         und die Verbindung am Schluss geschlossen werden.
+ * 
+ */
 public class RealCommunicationPi extends CommunicationPi {
 	DataInputStream dataFromBrick;
 	DataOutputStream dataToBrick;
@@ -27,6 +34,12 @@ public class RealCommunicationPi extends CommunicationPi {
 		conn = pConn;
 	}
 
+	/**
+	 * Empfaengt einen String von einem Brick.
+	 * 
+	 * @return Gibt den aus dem DataInpuString gelesenen String zurück, bei
+	 *         einer Exception den String "ENDE".
+	 */
 	@Override
 	public synchronized String receiveString() {
 		try {
@@ -43,6 +56,12 @@ public class RealCommunicationPi extends CommunicationPi {
 
 	}
 
+	/**
+	 * Sendet den uebergebenen String an einen Brick.
+	 * 
+	 * @param Benoetigt
+	 *            den String, welcher gesendet werden soll.
+	 */
 	@Override
 	public synchronized void sendString(String data) {
 		try {
@@ -63,6 +82,10 @@ public class RealCommunicationPi extends CommunicationPi {
 
 	}
 
+	/**
+	 * Schliesst den DataInputStream, DataOutputStream und die Verbindung zum
+	 * Brick ueber den NXTConnector.
+	 */
 	@Override
 	public void closeConnection() {
 		try {
