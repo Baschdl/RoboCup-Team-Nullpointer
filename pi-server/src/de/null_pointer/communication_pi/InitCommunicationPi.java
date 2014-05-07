@@ -28,7 +28,7 @@ public class InitCommunicationPi {
 
 			logger.warn("PC: error connection to NXT: " + brick_id);
 			System.exit(0);
-			
+
 			return null;
 
 		}
