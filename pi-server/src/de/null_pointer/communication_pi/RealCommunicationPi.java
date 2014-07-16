@@ -45,7 +45,6 @@ public class RealCommunicationPi extends CommunicationPi {
 		try {
 
 			String data = dataFromBrick.readUTF();
-
 			return data;
 
 		} catch (IOException e) {
@@ -67,13 +66,12 @@ public class RealCommunicationPi extends CommunicationPi {
 		try {
 
 			dataToBrick.writeUTF(data);
-
 			dataToBrick.flush();
 
 		} catch (IOException e) {
-
+			
 			logger.error("IO Exception writing bytes");
-
+			
 		} catch (NullPointerException npe) {
 
 			logger.error("NullPointerException writing data");
@@ -91,9 +89,7 @@ public class RealCommunicationPi extends CommunicationPi {
 		try {
 
 			dataFromBrick.close();
-
 			dataToBrick.close();
-
 			logger.info("Closed data streams");
 
 		} catch (IOException ioe) {
@@ -105,7 +101,6 @@ public class RealCommunicationPi extends CommunicationPi {
 		try {
 
 			conn.close();
-
 			logger.info("Closed connection to brick");
 
 		} catch (IOException ioe) {
