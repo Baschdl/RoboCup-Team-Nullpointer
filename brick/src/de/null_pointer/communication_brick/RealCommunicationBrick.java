@@ -2,6 +2,7 @@ package de.null_pointer.communication_brick;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -20,19 +21,48 @@ public class RealCommunicationBrick extends CommunicationBrick {
 
 	@Override
 	public String receiveString() {
-		// TODO Auto-generated method stub
-		return null;
+
+		String string;
+		try {
+
+			string = dataFromPi.readUTF();
+			return string;
+
+		} catch (IOException e) {
+
+			System.err.println("IO Exception reading data");
+			return null;
+
+		}
 	}
 
 	@Override
 	public void sendString(String data) {
-		// TODO Auto-generated method stub
+		try {
+
+			dataToPi.writeUTF(data);
+			dataToPi.flush();
+
+		} catch (IOException e) {
+
+			System.err.println("IO Exception writing data");
+
+		}
 
 	}
 
 	@Override
 	public void closeConnection() {
-		// TODO Auto-generated method stub
+		try {
+
+			dataFromPi.close();
+			dataToPi.close();
+
+		} catch (IOException e) {
+
+			System.err.println("IO Exception closing connection");
+
+		}
 
 	}
 
