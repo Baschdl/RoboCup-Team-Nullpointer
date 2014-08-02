@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-public class BrickControl {
-	private static Logger logger = Logger.getLogger(BrickControl.class);
+public class BrickControlPi {
+	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
 	private RealCommunicationPi com;
 
