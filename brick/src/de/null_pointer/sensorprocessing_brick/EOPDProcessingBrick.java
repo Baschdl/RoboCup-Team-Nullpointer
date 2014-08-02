@@ -14,7 +14,7 @@ public class EOPDProcessingBrick {
 	private int value = 0;
 	
 	public EOPDProcessingBrick(BrickControlBrick brickControl, int sensorID, ADSensorPort port, boolean longRange){
-		this.eopd = new EOPD(port, longRange);
+		eopd = new EOPD(port, longRange);
 		this.brickControl = brickControl;
 		this.sensorID = sensorID;
 	}
@@ -28,9 +28,9 @@ public class EOPDProcessingBrick {
 	}
 	
 	public void processData(){
-		if(this.old_value != (this.value = this.eopd.readRawValue())){
-			this.old_value = this.value;
-			brickControl.sendData(this.sensorID, 1, this.value);
+		if(old_value != (value = eopd.readRawValue())){
+			old_value = value;
+			brickControl.sendData(sensorID, 1, value);
 		}
 	}
 }
