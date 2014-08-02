@@ -6,7 +6,7 @@ import lejos.nxt.addon.OpticalDistanceSensor;
 
 public class DistNxProcessingBrick {
 	
-	OpticalDistanceSensor distNx = null;
+	private OpticalDistanceSensor distNx = null;
 	private BrickControlBrick brickControl;
 	
 	private int mid_value = 0;
@@ -18,10 +18,11 @@ public class DistNxProcessingBrick {
 		this.brickControl = brickControl;
 	}
 	
-	public void processDistance(){
+	//Daten werden nach dem 5. Aufruf Gesendet
+	public void processData(){
 		mid_value = (counter * mid_value + distNx.getDistance()) / counter + 1;
 		counter++;
-		if(counter == 5 && mid_value != old_value){
+		if(counter == 6 && mid_value != old_value){
 			old_value = mid_value;
 			counter = 1;
 			brickControl.sendData(1, 1, mid_value);
