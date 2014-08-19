@@ -36,6 +36,7 @@ public class LSAProcessingBrick {
 		if((counter == 5) && compareIntArr()){
 		for(int i = 0; i < 8; i++){
 			old_values[i] = mid_values[i];
+			//TODO: eventuell eine Warteschleife?
 			brickControl.sendData(2, i + 1, mid_values[i]);
 		}
 		counter = 1;
