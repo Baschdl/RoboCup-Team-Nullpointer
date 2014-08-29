@@ -8,12 +8,10 @@ public class LSAProcessingBrick {
 	
 	private LightSensorArray lsa = null;
 	private BrickControlBrick brickControl;
-	
-	// length = 8
-	private int[] mid_values = new int[]{-1,-1,-1,-1,-1,-1,-1,-1};
-	private int[] old_values = new int[]{0,0,0,0,0,0,0,0};
-	private int counter = 1;
 
+	private int[][] values = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};
+	private int[] midValues = new int[]{-1,-1,-1,-1,-1,-1,-1,-1};
+	
 	public LSAProcessingBrick(BrickControlBrick brickControl, I2CPort port){
 		lsa = new LightSensorArray(port);
 		this.brickControl = brickControl;
@@ -27,28 +25,31 @@ public class LSAProcessingBrick {
 		return lsa.calibrateWhite();
 	}
 	
-	//Daten werden nach dem 5. Aufruf Gesendet
 	public void processData(){
-		for(int i = 0; i < 8; i++){
-			mid_values[i] = (counter * mid_values[i] + lsa.getLightValues()[i]) / counter + 1;
-			counter++;
-		}
-		if((counter == 5) && compareIntArr()){
-		for(int i = 0; i < 8; i++){
-			old_values[i] = mid_values[i];
-			//TODO: eventuell eine Warteschleife?
-			brickControl.sendData(2, i + 1, mid_values[i]);
-		}
-		counter = 1;
-		}
-	}
-	
-	private boolean compareIntArr(){
-		for(int i = 0; i < 8; i++){
-			if(old_values[i] != mid_values[i]){
-				return false;
+		for(int i = 0; i < 4; i++){
+			for(int j = 0; j < 8; j++){
+				values[j][j] = values[j+1][j];
 			}
 		}
-		return true;
+		for(int i = 0; i < 8; i++){
+			values[5] = lsa.getLightValues();
+		}
+		
+		int[] buffer  = {0,0,0,0,0,0,0,0};
+		
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 5; j++){
+				buffer[j] += values[j][i];
+			}
+		}
+		for(int i = 0; i < 8; i++){
+			buffer[i] /= 5;
+		}
+		for(int i = 0; i < 8; i++){
+			if(buffer[i] != midValues[i]){
+				midValues[i] = buffer[i];
+				brickControl.sendData(2, i + 1, midValues[i]);
+			}
+		}
 	}
 }
