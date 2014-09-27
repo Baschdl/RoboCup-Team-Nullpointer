@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/pc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/log4j-1.2.17"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pi-gui"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

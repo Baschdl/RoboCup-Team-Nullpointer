@@ -19,10 +19,12 @@ import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+import de.null_pointer.gui.*;
 
 public class PiServer {
 
-	private static Logger logger = Logger.getRootLogger();
+	private static java.util.logging.Logger logger = Logger.getRootLogger();
+	private static JFDisplayValues vGUI = new JFDisplayValues();
 
 	public static void main(String[] args) {
 		//TODO: Angeschlossene Sensoren uebergeben
@@ -89,7 +91,7 @@ public class PiServer {
 			// ruft die GUI auf
 			// else
 			if (s.equals("-gui")) {
-
+				vGUI.startGUI();
 			}
 		}
 	}
