@@ -45,14 +45,18 @@ public class Navigation {
 		 * c: indicates the depth of the column being added
 		 * r: indicates the depth of the row being added
 		 */
-			
-		for(int i2 = 1, o2 = 2, o3 = 0; i2 >= -1; i2 -= 2, o2 -= 2, o3 += 2){	// iterates to generate rows of Node-lines in both North and South;
-			for(int r = 1; r <= y; r++){						// iterates to generate several rows of Node-lines;
+		
+		// iterates to generate rows of Node-lines in both North and South;	
+		for(int i2 = 1, o2 = 2, o3 = 0; i2 >= -1; i2 -= 2, o2 -= 2, o3 += 2){	
+			// iterates to generate several rows of Node-lines;
+			for(int r = 1; r <= y; r++){						
 				rowPointer.addNeighbor(new Node(0, r*30), o3);
 				rowPointer = rowPointer.getNeighbor(o3);
 				columnPointer = rowPointer;
-				for(int i = 1, o = 1; i >= -1; i -= 2, o += 2){	// iterates to generate a Line of Nodes in both East and West;
-					for(int c = 1; c <= x; c++){				// generates line of Nodes in one direction;
+				// iterates to generate a Line of Nodes in both East and West;
+				for(int i = 1, o = 1; i >= -1; i -= 2, o += 2){
+					// generates line of Nodes in one direction;
+					for(int c = 1; c <= x; c++){
 						columnPointer.addNeighbor(new Node(i*c*30, i2*r*30), o);
 						columnPointer = columnPointer.getNeighbor(o);
 						dcolumnPointer = dcolumnPointer.getNeighbor(o);
