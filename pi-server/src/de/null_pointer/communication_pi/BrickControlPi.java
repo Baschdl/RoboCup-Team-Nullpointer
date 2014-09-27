@@ -11,6 +11,13 @@ public class BrickControlPi {
 
 	private boolean readyToProcessData;
 
+	/**
+	 * Erhaelt die vom Brick empfangenen Daten und gibt sie an die passenden
+	 * Klassen weiter.
+	 * 
+	 * @param receiveData
+	 *            Enthaelt die vom Brick gesendeten Daten.
+	 */
 	void processData(float[] receiveData) {
 		// gibt empfangene Daten weiter
 
@@ -41,6 +48,14 @@ public class BrickControlPi {
 
 	}
 
+	/**
+	 * Erhaelt die an dem jeweiligen Brick angeschlossenen Sensoren und
+	 * initialisert dazu passend die Sensorobjekte
+	 * 
+	 * @param Sensor
+	 *            Enthaelt die am Brick angeschlossenen Sensoren in der
+	 *            Reihenfolge, in der sie angesteckt sind (Sensorport 1-4)
+	 */
 	public void sendSensorData(String[] Sensor) {
 		logger.info("intializing sensors: " + Arrays.toString(Sensor));
 		readyToProcessData = false;
@@ -85,56 +100,120 @@ public class BrickControlPi {
 		logger.debug("sendSensorData flag set to: " + readyToProcessData);
 	}
 
+	/**
+	 * Empfaengt einen String vom Brick
+	 * 
+	 * @return Gibt die von checkString(...) weiter verarbeiteten Daten zurück
+	 */
 	float[] receiveData() {
 		String dataString = null;
-		String debugString = "-";
-		float[] dataInt = new float[4];
 		try {
-			// System.out.println("Lese Zeile...");
+			// logger.info("Lese Zeile...");
 			dataString = com.receiveString();
-			debugString = dataString;
-			// System.out.println("gelesen.");
-			int indexMaxDataString = dataString.length() - 1;
-			if (dataString.charAt(0) == '*'
-					&& dataString.charAt(indexMaxDataString) == '#') {
-				dataString = dataString.substring(1, indexMaxDataString);
-				String puf[] = new String[4];
-				int index1 = 0, index2 = 0;
-				for (int i = 0; i < 4; i++) {
-					if (index1 < dataString.length()) {
-						index2 = dataString.indexOf(";", index1);
-						if (index2 >= 0) {
-							puf[i] = dataString.substring(index1, index2);
-							index1 = index2 + 1;
-						} else {
-							puf[i] = dataString.substring(index1);
-						}
-					}
-					dataInt[i] = Integer.parseInt(puf[i]);
-				}
-				return dataInt;
-			} else {
-				logger.error("Fehlerhafte Daten" + debugString);
-				return null;
-			}
+			// logger.info("gelesen.");
+			return checkString(dataString);
+
 		} catch (Exception e) {
-			System.err.println(e);
+			logger.error("Fehler beim Empfangen von Daten:" + e);
 			return null;
 		}
 	}
 
+	/**
+	 * Ueberprueft den empfangenen String auf Validität und teilt ihn in seine
+	 * Einzelteile auf.
+	 * 
+	 * @param dataString
+	 *            Enthaelt die Daten, welche ueberprueft und weiter verarbeitet
+	 *            werden sollen
+	 * @return Gibt die uebergebenen Daten aufgeteilt in ihre Einzelteile
+	 *         zurueck
+	 */
+	float[] checkString(String dataString) {
+		float[] dataInt = new float[4];
+		String debugString = dataString;
+		// Ermittelt die Laenge des Strings
+		int indexMaxDataString = dataString.length() - 1;
+		// Ueberprueft, ob die Kodierung richtig ist ('*' am Anfang, '#' am
+		// Ende)
+		if (dataString.charAt(0) == '*'
+				&& dataString.charAt(indexMaxDataString) == '#') {
+			// Entfernt das '*' am Anfang des Strings
+			dataString = dataString.substring(1, indexMaxDataString);
+			String puf[] = new String[4];
+			// TODO: Siehe Unterrichtsmaterial, Kommentare ergaenzen
+			int index1 = 0, index2 = 0;
+			for (int i = 0; i < 4; i++) {
+				if (index1 < dataString.length()) {
+					index2 = dataString.indexOf(";", index1);
+					if (index2 >= 0) {
+						puf[i] = dataString.substring(index1, index2);
+						index1 = index2 + 1;
+					} else {
+						puf[i] = dataString.substring(index1);
+					}
+				}
+				// Wandelt die Strings in Integer um und speichert sie ab
+				dataInt[i] = Integer.parseInt(puf[i]);
+			}
+			return dataInt;
+		} else {
+			logger.error("Fehlerhafte Daten" + debugString);
+			return null;
+		}
+	}
+
+	/**
+	 * Kodiert die zu sendenden Kommandos und sendet sie ab.
+	 * 
+	 * @param recipient
+	 *            Spezifiziert an welchen Sensor/ Motor... das Kommando
+	 *            gerichtet ist.
+	 * @param action
+	 *            Gibt an was passieren soll bzw. welche Methode auf dem Brick
+	 *            aufgerufen werden soll.
+	 */
 	public void sendCommand(int recipient, int action) {
 		String command = "*" + recipient + ";" + action + ";" + "0" + ";" + "0"
 				+ "#";
 		com.sendString(command);
 	}
 
+	/**
+	 * Kodiert die zu sendenden Kommandos und sendet sie ab.
+	 * 
+	 * @param recipient
+	 *            Spezifiziert an welchen Sensor/ Motor... das Kommando
+	 *            gerichtet ist.
+	 * @param action
+	 *            Gibt an was passieren soll bzw. welche Methode auf dem Brick
+	 *            aufgerufen werden soll.
+	 * @param parameter
+	 *            Weitere Werte, die für die durch das Kommando ausgeloeste
+	 *            Operation noetig sind.
+	 */
 	public void sendCommand(int recipient, int action, int parameter) {
 		String command = "*" + recipient + ";" + action + ";" + parameter + ";"
 				+ "0" + "#";
 		com.sendString(command);
 	}
 
+	/**
+	 * Kodiert die zu sendenden Kommandos und sendet sie ab.
+	 * 
+	 * @param recipient
+	 *            Spezifiziert an welchen Sensor/ Motor... das Kommando
+	 *            gerichtet ist.
+	 * @param action
+	 *            Gibt an was passieren soll bzw. welche Methode auf dem Brick
+	 *            aufgerufen werden soll.
+	 * @param parameter
+	 *            Weitere Werte, die für die durch das Kommando ausgeloeste
+	 *            Operation noetig sind.
+	 * @param options
+	 *            Gibt z.B. bei den Motoren an in welche Richtung sie sich
+	 *            drehen sollen.
+	 */
 	private void sendCommand(int recipient, int action, int parameter,
 			int options) {
 
