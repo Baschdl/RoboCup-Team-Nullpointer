@@ -1,25 +1,39 @@
 package de.null_pointer.behavior;
 
+import org.apache.log4j.Logger;
+
+import de.null_pointer.communication_pi.BrickControlPi;
+import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import lejos.robotics.subsumption.Behavior;
 
 public class Slope implements Behavior {
+	private static Logger logger = Logger.getLogger(Slope.class);
+	
+	MotorControlPi motorControl;
+	Abs_ImuProcessingPi absImu;
+
+	Slope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu) {
+		this.motorControl = motorControl;
+		this.absImu = absImu;
+	}
 
 	@Override
 	public boolean takeControl() {
-		// TODO Auto-generated method stub
+		// TODO: Benoetigt Neigung vom AbsImu
 		return false;
 	}
 
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void suppress() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
