@@ -38,7 +38,7 @@ public class Navigation {
 		disconnectTile(buffer2);
 		
 		currentTile.removeNeighbor(orientation);
-		currentTile.addNeighbor(buffer, orientation);
+		currentTile.addNeighbor(buffer, orientation, 0);
 	}
 	
 	public boolean isVisited(){
@@ -105,7 +105,7 @@ public class Navigation {
 		//Generates the initial line of Nodes
 		for(int i = 1, o = 1; i >= -1; i -= 2, o += 2){
 			for(int c = 1; c <= x; c++){
-				columnPointer.addNeighbor(new Node(i*c*30,0), o);
+				columnPointer.addNeighbor(new Node(i*c*30,0), o, 0);
 				columnPointer = columnPointer.getNeighbor(o);
 			}
 			columnPointer = initialNode;
@@ -123,17 +123,17 @@ public class Navigation {
 		for(int i2 = 1, o2 = 2, o3 = 0; i2 >= -1; i2 -= 2, o2 -= 2, o3 += 2){	
 			// iterates to generate several rows of Node-lines
 			for(int r = 1; r <= y; r++){						
-				rowPointer.addNeighbor(new Node(0, r*30), o3);
+				rowPointer.addNeighbor(new Node(0, r*30), o3, 0);
 				rowPointer = rowPointer.getNeighbor(o3);
 				columnPointer = rowPointer;
 				// iterates to generate a Line of Nodes in both East and West
 				for(int i = 1, o = 1; i >= -1; i -= 2, o += 2){
 					// generates line of Nodes in one direction
 					for(int c = 1; c <= x; c++){
-						columnPointer.addNeighbor(new Node(i*c*30, i2*r*30), o);
+						columnPointer.addNeighbor(new Node(i*c*30, i2*r*30), o, 0);
 						columnPointer = columnPointer.getNeighbor(o);
 						dcolumnPointer = dcolumnPointer.getNeighbor(o);
-						columnPointer.addNeighbor(dcolumnPointer, o2);
+						columnPointer.addNeighbor(dcolumnPointer, o2, 0);
 					}
 					columnPointer = rowPointer;
 					dcolumnPointer = drowPointer;

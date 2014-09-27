@@ -125,12 +125,17 @@ public class Node {
 	 *            The neighboring node to connect with.
 	 * @param orientation
 	 * 			  indicates the orientation of the added Node
+	 * @param abort
+	 * 			  
 	 * @return Returns false if the neighbor already existed, or if you try to
 	 *         add this node to itself as a neighbor.
 	 */
 	// TODO: addNeighbor()-Methode unbedingt mit jUnit testen
-	public boolean addNeighbor(Node neighbor, int orientation) {
+	public boolean addNeighbor(Node neighbor, int orientation, int abort) {
 		// Check if Node is already connected
+		if(abort == 2){
+			return true;
+		}
 		for (int i = 0; i < neighbors.length; i++) {
 			if (neighbors[i] == neighbor) {
 				if (i == orientation) {
@@ -148,9 +153,10 @@ public class Node {
 			return false;
 		}
 		int i = orientation;
+		int a = abort + 1;
 		neighbors[i] = neighbor;
 
-		neighbor.addNeighbor(this, invertOrientation(i));
+		neighbor.addNeighbor(this, invertOrientation(i), a);
 		return true;
 	}
 
