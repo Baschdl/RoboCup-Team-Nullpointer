@@ -104,8 +104,11 @@ public class Node {
 	 * @return The collection of all neighboring nodes.
 	 */
 	public Node[] getNeighbors() {
-
 		return neighbors;
+	}
+	
+	public Node getNeighbor(String orientation){
+		return neighbors[Orientation.valueOf(orientation).ordinal()];
 	}
 
 	private void setNeighbors(Node[] neighborCopy) {

@@ -4,29 +4,28 @@ public class Abs_ImuProcessingPi {
 
 	public Abs_ImuProcessingPi(){}
 	
-	private int[] tiltData = new int[]{-1,-1,-1};
-	private int[] acceleration = new int[]{-1,-1,-1};
-	private int[] magneticField = new int[]{-1,-1,-1};
-	private int[] gyro = new int[]{-1,-1,-1};
-	private int compassHeading = -1;
+	private int angle = 0;
+	private int heading = 0; // 0 = N, 1 = O, 2 = S, 3 = W
 	
-	public void setTiltData(int index, int value){
-		tiltData[index] = value;
+	public void setAngle(int angle){
+		this.angle = angle;
+		
+		if(angle < 45 && angle > 315){
+			heading = 0;
+		}else if(angle < 135 && angle > 45){
+			heading = 1;
+		}else if(angle < 225 && angle > 135){
+			heading = 2;
+		}else{
+			heading = 3;
+		}
 	}
 	
-	public void setAcceleration(int index, int value){
-		acceleration[index] = value;
+	public int getAngle(){
+		return angle;
 	}
 	
-	public void setMagneticField(int index, int value){
-		magneticField[index] = value;
-	}
-	
-	public void setGyro(int index, int value){
-		gyro[index] = value;
-	}
-	
-	public void setCompassHeading(int value){
-		compassHeading = value;
+	public int getHeading(){
+		return heading;
 	}
 }
