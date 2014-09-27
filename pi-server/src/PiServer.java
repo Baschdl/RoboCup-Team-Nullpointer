@@ -24,9 +24,27 @@ import de.null_pointer.gui.*;
 public class PiServer {
 
 	private static Logger logger = Logger.getRootLogger();
-	private static JFDisplayValues vGUI = new JFDisplayValues();
 
 	public static void main(String[] args) {
+		// Anlegen und Einrichten des Loggers
+
+		// SimpleLayout layout = new SimpleLayout();
+		PatternLayout layout = new PatternLayout("%d{ISO8601} %-6p [%c] %m%n");
+		ConsoleAppender consoleAppender = new ConsoleAppender(layout);
+		logger.addAppender(consoleAppender);
+
+		// TODO: Abspeichern der Logs in ein File implementieren
+
+		// boolean append = true;
+		// FileHandler handler = new FileHandler("default.log", append);
+		//
+		// Logger logger2 = Logger.getLogger(PiServer.class);
+		// logger.addHandler(handler);
+
+		// Spezifiziert welche Meldungen alles ausgegeben werden
+		// ALL | DEBUG | INFO | WARN | ERROR | FATAL | OFF:
+		logger.setLevel(Level.ALL);
+
 		// TODO: Angeschlossene Sensoren uebergeben
 		BrickControlPi brickCon1 = new BrickControlPi();
 		BrickControlPi brickCon2 = new BrickControlPi();
@@ -55,25 +73,8 @@ public class PiServer {
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
 
 		Arbitrator arbitator = new Arbitrator(behavior);
-
-		// Anlegen und Einrichten des Loggers
-
-		// SimpleLayout layout = new SimpleLayout();
-		PatternLayout layout = new PatternLayout("%d{ISO8601} %-6p [%c] %m%n");
-		ConsoleAppender consoleAppender = new ConsoleAppender(layout);
-		logger.addAppender(consoleAppender);
-
-		// TODO: Abspeichern der Logs in ein File implementieren
-
-		// boolean append = true;
-		// FileHandler handler = new FileHandler("default.log", append);
-		//
-		// Logger logger2 = Logger.getLogger(PiServer.class);
-		// logger.addHandler(handler);
-
-		// Spezifiziert welche Meldungen alles ausgegeben werden
-		// ALL | DEBUG | INFO | WARN | ERROR | FATAL | OFF:
-		logger.setLevel(Level.ALL);
+		
+		JFDisplayValues vGUI = new JFDisplayValues();
 
 		logger.info("starting programm");
 
