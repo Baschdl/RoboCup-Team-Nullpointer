@@ -83,11 +83,13 @@ public class PiServer {
 		for (String s : args) {
 			// comp steht für competition, führt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
+				logger.info("Wettkampfprogramm gestartet");
 				arbitator.start();
 			}
 
 			// ruft die GUI auf
 			else if (s.equals("-gui")) {
+				logger.info("GUI gestartet");
 				vGUI.startGUI();
 			}
 		}
