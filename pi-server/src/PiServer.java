@@ -27,10 +27,10 @@ public class PiServer {
 	private static JFDisplayValues vGUI = new JFDisplayValues();
 
 	public static void main(String[] args) {
-		//TODO: Angeschlossene Sensoren uebergeben
+		// TODO: Angeschlossene Sensoren uebergeben
 		BrickControlPi brickCon1 = new BrickControlPi();
 		BrickControlPi brickCon2 = new BrickControlPi();
-		
+
 		MotorControlPi motorControl = new MotorControlPi(brickCon1, brickCon2);
 
 		Abs_ImuProcessingPi absImu = new Abs_ImuProcessingPi();
@@ -38,10 +38,12 @@ public class PiServer {
 		EOPDProcessingPi eopdRight = new EOPDProcessingPi();
 		DistNxProcessingPi distNx = new DistNxProcessingPi();
 		LSAProcessingPi las = new LSAProcessingPi();
-		
-		Navigation nav = new Navigation();
 
-		//TODO: Reihenfolge richtig?
+		int widthMap = 11;
+		int heightMap = 11;
+		Navigation nav = new Navigation(widthMap, heightMap);
+
+		// TODO: Reihenfolge richtig?
 		Behavior b1 = new MovingForward(motorControl);
 		Behavior b2 = new NextTile(absImu, nav);
 		Behavior b3 = new Slope(motorControl, absImu, nav);
@@ -51,9 +53,8 @@ public class PiServer {
 		Behavior b6 = new Victim(motorControl);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
-		
+
 		Arbitrator arbitator = new Arbitrator(behavior);
-		arbitator.start();
 
 		// Anlegen und Einrichten des Loggers
 
@@ -79,18 +80,13 @@ public class PiServer {
 		// Entscheidet anhand der Uebergabeparameter beim Start welche
 		// Programmteile ausgeführt werden
 		for (String s : args) {
-			// TODO: Aufruf des Wettkampfprogrammes implementieren, muss das
-			// immer ausgeführt werden? Oder wollen wir die Möglichkeit haben
-			// auch nur die Werte auszugeben?
-
 			// comp steht für competition, führt das Wettkampfprogramm aus
-			// if (s.equals("-comp")) {
-			//
-			// }
+			if (s.equals("-comp")) {
+				arbitator.start();
+			}
 
 			// ruft die GUI auf
-			// else
-			if (s.equals("-gui")) {
+			else if (s.equals("-gui")) {
 				vGUI.startGUI();
 			}
 		}
