@@ -198,9 +198,9 @@ public class Node {
 	public int invertOrientation(int initialOrientation) {
 		int calculated_orientation = 0;
 		if (initialOrientation <= 1) {
-			calculated_orientation = calculated_orientation + 2;
+			calculated_orientation = initialOrientation + 2;
 		} else if (initialOrientation >= 2) {
-			calculated_orientation = calculated_orientation - 2;
+			calculated_orientation = initialOrientation - 2;
 		}
 		return calculated_orientation;
 	}
