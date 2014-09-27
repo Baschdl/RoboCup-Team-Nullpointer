@@ -29,6 +29,7 @@ public class BlackTile implements Behavior {
 
 	@Override
 	public void action() {
+		logger.info("Schwarze Kachel erkannt");
 		// TODO Auto-generated method stub
 
 	}

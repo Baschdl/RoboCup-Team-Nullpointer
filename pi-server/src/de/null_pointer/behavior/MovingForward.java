@@ -22,6 +22,7 @@ public class MovingForward implements Behavior {
 
 	@Override
 	public void action() {
+		logger.info("Bewege mich vorwaerts");
 		//TODO: Geschwindigkeit anpassen
 		motorControl.forward(200);
 		

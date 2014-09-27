@@ -26,6 +26,7 @@ public class NextTile implements Behavior {
 
 	@Override
 	public void action() {
+		logger.info("Naechste Kachel erreicht");
 		// TODO Auto-generated method stub
 
 	}

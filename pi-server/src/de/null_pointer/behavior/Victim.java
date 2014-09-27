@@ -23,6 +23,7 @@ public class Victim implements Behavior {
 
 	@Override
 	public void action() {
+		logger.info("Opfer erkannt");
 		// TODO Auto-generated method stub
 
 	}

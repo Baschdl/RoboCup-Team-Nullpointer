@@ -30,6 +30,7 @@ public class Slope implements Behavior {
 
 	@Override
 	public void action() {
+		logger.info("Steigung erkannt");
 		// TODO Auto-generated method stub
 
 	}

@@ -36,6 +36,7 @@ public class Intersection implements Behavior {
 
 	@Override
 	public void action() {
+		logger.info("Kreuzung erkannt");
 		// TODO Auto-generated method stub
 
 	}
