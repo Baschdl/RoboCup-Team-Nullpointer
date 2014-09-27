@@ -61,13 +61,13 @@ public class Node {
 
 	/**
 	 * List of neighbors to this node.
+	 * 0 = North
+	 * 1 = East
+	 * 2 = South
+	 * 3 = West
 	 */
 	private Node[] neighbors = new Node[4];
 	private int[] tremauxCounter = { 0, 0, 0, 0 };
-
-	public enum Orientation {
-		North, East, South, West
-	}
 
 	/**
 	 * Creates a new instance of a node.
@@ -94,8 +94,8 @@ public class Node {
 		return tremauxCounter;
 	}
 
-	public void incTremauxCounter(String orientation) {
-		tremauxCounter[Orientation.valueOf(orientation).ordinal()]++;
+	public void incTremauxCounter(int orientation) {
+		tremauxCounter[orientation]++;
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class Node {
 		return neighbors;
 	}
 	
-	public Node getNeighbor(String orientation){
-		return neighbors[Orientation.valueOf(orientation).ordinal()];
+	public Node getNeighbor(int orientation){
+		return neighbors[orientation];
 	}
 
 	private void setNeighbors(Node[] neighborCopy) {
@@ -137,19 +137,17 @@ public class Node {
 	 * 
 	 * @param neighbor
 	 *            The neighboring node to connect with.
+	 * @param orientation
+	 * 			  indicates the orientation of the added Node
 	 * @return Returns false if the neighbor already existed, or if you try to
 	 *         add this node to itself as a neighbor.
 	 */
 	// TODO: addNeighbor()-Methode unbedingt mit jUnit testen
-	public boolean addNeighbor(Node neighbor, String orientation) {
-		// TODO: OPTION - Maybe code here should add each other as neighbors?
-		// Check to make sure same isn't added twice. (Assuming ArrayList
-		// doesn't do this already?)
-		// if (neighbors.contains(neighbor))
-		// return false;
+	public boolean addNeighbor(Node neighbor, int orientation) {
+		// Check if Node is already connected
 		for (int i = 0; i < neighbors.length; i++) {
 			if (neighbors[i] == neighbor) {
-				if (Orientation.values()[i] == Orientation.valueOf(orientation)) {
+				if (i == orientation) {
 					logger.error("Der einzufuegende Nachbar ist schon an der gewollten Stelle eingefuegt!");
 				} else {
 					logger.error("Der einzufuegende Nachbar ist schon an einer anderen Stelle eingefuegt!");
@@ -163,11 +161,10 @@ public class Node {
 			logger.error("Die Node wird mit sich selbst verbunden!");
 			return false;
 		}
-		int i = Orientation.valueOf(orientation).ordinal();
+		int i = orientation;
 		neighbors[i] = neighbor;
 
-		neighbor.addNeighbor(this,
-				Orientation.values()[invertOrientation(i)].name());
+		neighbor.addNeighbor(this, invertOrientation(i));
 		return true;
 	}
 
@@ -199,11 +196,11 @@ public class Node {
 		return false;
 	}
 
-	public void removeNeighbor(String orientation) {
+	public void removeNeighbor(int orientation) {
 		int i = -1;
 		// Falls eine Exception auftritt, weist er der Variable i keinen neuen
 		// Wert zu, sondern benutzt -1
-		if (neighbors[i = Orientation.valueOf(orientation).ordinal()] == null) {
+		if (neighbors[i = orientation] == null) {
 			logger.warn("Nachbar-Eintrag war bereits null/ kein Nachbar vorhanden");
 		} else {
 			neighbors[i].removeNeighbor(this);
