@@ -43,7 +43,7 @@ public class PiServer {
 
 		// Spezifiziert welche Meldungen alles ausgegeben werden
 		// ALL | DEBUG | INFO | WARN | ERROR | FATAL | OFF:
-		logger.setLevel(Level.ALL);
+		logger.setLevel(Level.INFO);
 
 		// TODO: Angeschlossene Sensoren uebergeben
 		BrickControlPi brickCon1 = new BrickControlPi();
@@ -73,7 +73,7 @@ public class PiServer {
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
 
 		Arbitrator arbitator = new Arbitrator(behavior);
-		
+
 		JFDisplayValues vGUI = new JFDisplayValues();
 
 		logger.info("starting programm");
@@ -81,17 +81,19 @@ public class PiServer {
 		// Entscheidet anhand der Uebergabeparameter beim Start welche
 		// Programmteile ausgeführt werden
 		for (String s : args) {
+
+			// ruft die GUI auf
+			if (s.equals("-gui")) {
+				logger.info("GUI gestartet");
+				vGUI.startGUI();
+			}
+
 			// comp steht für competition, führt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
 				logger.info("Wettkampfprogramm gestartet");
 				arbitator.start();
 			}
 
-			// ruft die GUI auf
-			else if (s.equals("-gui")) {
-				logger.info("GUI gestartet");
-				vGUI.startGUI();
-			}
 		}
 	}
 }
