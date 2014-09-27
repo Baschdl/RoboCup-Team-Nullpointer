@@ -6,30 +6,31 @@ import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import lejos.robotics.subsumption.Behavior;
 
-public class MovingForward implements Behavior {
-	private static Logger logger = Logger.getLogger(MovingForward.class);
+public class Victim implements Behavior {
+	private static Logger logger = Logger.getLogger(Victim.class);
 	
 	MotorControlPi motorControl;
-	
-	MovingForward(MotorControlPi motorControl) {
+
+	Victim(MotorControlPi motorControl) {
 		this.motorControl = motorControl;
 	}
 
 	@Override
 	public boolean takeControl() {
-		return true;
+		// TODO: Benoetigt Wärmesensor
+		return false;
 	}
 
 	@Override
 	public void action() {
-		//TODO: Geschwindigkeit anpassen
-		motorControl.forward(200);
-		
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void suppress() {
-		
+		// TODO Auto-generated method stub
+
 	}
 
 }

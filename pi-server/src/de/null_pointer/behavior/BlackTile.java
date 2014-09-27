@@ -4,32 +4,36 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 import lejos.robotics.subsumption.Behavior;
 
-public class MovingForward implements Behavior {
-	private static Logger logger = Logger.getLogger(MovingForward.class);
+public class BlackTile implements Behavior {
+	private static Logger logger = Logger.getLogger(BlackTile.class);
 	
 	MotorControlPi motorControl;
-	
-	MovingForward(MotorControlPi motorControl) {
+	LSAProcessingPi lsa;
+
+	BlackTile(MotorControlPi motorControl, LSAProcessingPi lsa) {
 		this.motorControl = motorControl;
+		this.lsa = lsa;
 	}
 
 	@Override
 	public boolean takeControl() {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public void action() {
-		//TODO: Geschwindigkeit anpassen
-		motorControl.forward(200);
-		
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void suppress() {
-		
+		// TODO Auto-generated method stub
+
 	}
 
 }

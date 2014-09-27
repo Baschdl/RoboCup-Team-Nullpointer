@@ -1,6 +1,7 @@
 package de.null_pointer.communication_pi;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -154,11 +155,18 @@ public class BrickControlPi {
 					}
 				}
 				// Wandelt die Strings in Integer um und speichert sie ab
-				dataInt[i] = Integer.parseInt(puf[i]);
+				if (puf[i].matches("[0-9]+")) {
+					dataInt[i] = Integer.parseInt(puf[i]);
+				} else {
+					logger.error("Ungueltige Zeichen im uebertragenen String (Buchstaben, mehrere/ falsche Separatoren...): "
+							+ debugString);
+					return null;
+				}
+
 			}
 			return dataInt;
 		} else {
-			logger.error("Fehlerhafte Daten" + debugString);
+			logger.error("Fehlerhafte Daten: " + debugString);
 			return null;
 		}
 	}
