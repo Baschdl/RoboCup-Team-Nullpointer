@@ -1,24 +1,30 @@
 package de.null_pointer.behavior;
 
+import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import lejos.robotics.subsumption.Behavior;
 
 public class MovingForward implements Behavior {
+	
+	MotorControlPi motorControl;
+	
+	MovingForward(MotorControlPi motorControl) {
+		this.motorControl = motorControl;
+	}
 
 	@Override
 	public boolean takeControl() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
+		//TODO: Geschwindigkeit anpassen
+		motorControl.forward(200);
 		
 	}
 
 	@Override
 	public void suppress() {
-		// TODO Auto-generated method stub
 		
 	}
 
