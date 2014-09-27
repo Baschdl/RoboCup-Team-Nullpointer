@@ -2,16 +2,13 @@ package de.null_pointer.navigation.map;
 
 import org.apache.log4j.Logger;
 
-/*
- * WARNING: THIS CLASS IS SHARED BETWEEN THE classes AND pccomms PROJECTS.
- * DO NOT EDIT THE VERSION IN pccomms AS IT WILL BE OVERWRITTEN WHEN THE PROJECT IS BUILT.
- */
-
 /**
  * This class represents a Node which can be connected to other neighboring
  * nodes. Node sets can be searched using search algorithms. Typically the
  * search algorithm only requires one starting node and one goal node. It
  * assumes these nodes are linked by intermediate nodes.
+ * 
+ * Orignal Code from lejos;
  * 
  * @author BB
  * @see lejos.robotics.pathfinding.SearchAlgorithm
@@ -19,13 +16,6 @@ import org.apache.log4j.Logger;
 public class Node {
 
 	private static Logger logger = Logger.getLogger(Node.class);
-
-	/**
-	 * This constant is multiplied with the float coordinate to get an integer
-	 * for faster internal computations. A multiplier of 100 gives the
-	 * equivalent of 2 decimal places (1.2345 = 123)
-	 */
-	static final int MULTIPLIER = 100;
 
 	/**
 	 * The x coordinate of this node.
@@ -38,35 +28,25 @@ public class Node {
 	public float y;
 
 	/**
-	 * The cumulative distance from the start node to this node.
-	 */
-	// private float g_score = 0;
-
-	/*
-	 * The estimated distance to the goal node from this node. Distance
-	 * "as the crow flies"
-	 */
-	// private float h_score = 0;
-
-	/**
-	 * The predecessor node used by A* search algorithm to mark off the previous
-	 * node in the search tree.
-	 */
-	// private Node cameFrom = null;
-
-	/**
 	 * Indicates if intersection/ node was visited already.
 	 */
 	private boolean visited = false;
+	
+	/**
+	 * Indicates if intersection/ node is a Black Tile.
+	 */
+	private boolean blackTile = false;
 
 	/**
 	 * List of neighbors to this node.
-	 * 0 = North
-	 * 1 = East
-	 * 2 = South
-	 * 3 = West
+	 * 0 = North;
+	 * 1 = East;
+	 * 2 = South;
+	 * 3 = West;
 	 */
 	private Node[] neighbors = new Node[4];
+	
+	
 	private int[] tremauxCounter = { 0, 0, 0, 0 };
 
 	/**
@@ -87,7 +67,15 @@ public class Node {
 	}
 
 	public void setVisited() {
-		this.visited = true;
+		visited = true;
+	}
+	
+	public boolean isBlackTile(){
+		return blackTile;
+	}
+	
+	public void setBlackTile(){
+		blackTile = true;
 	}
 
 	public int[] getTremauxCounter() {
@@ -131,9 +119,7 @@ public class Node {
 	}
 
 	/**
-	 * Adds a neighboring node to this node, connecting them together. Note: You
-	 * must make sure to add this node to the neighbor, and also add the
-	 * neighbor to this node. This method doesn't do both.
+	 * Adds a neighboring node to this node, connecting them together.
 	 * 
 	 * @param neighbor
 	 *            The neighboring node to connect with.
@@ -209,7 +195,7 @@ public class Node {
 		}
 	}
 
-	private int invertOrientation(int initialOrientation) {
+	public int invertOrientation(int initialOrientation) {
 		int calculated_orientation = 0;
 		if (initialOrientation <= 1) {
 			calculated_orientation = calculated_orientation + 2;
@@ -218,87 +204,4 @@ public class Node {
 		}
 		return calculated_orientation;
 	}
-	/**
-	 * Method used by A* to calculate search score. The H score is the estimated
-	 * distance to the goal node from this node. It can either be distance
-	 * "as the crow flies" or in the case of a grid navigation mesh, the minimum
-	 * number of grid spaces to get to the goal node (x squares horizontally + y
-	 * squares vertically from goal). NOTE: There is no getH_score() because the
-	 * A* algorithm only needs to set this value, not retrieve it.
-	 * 
-	 * @param h
-	 */
-	// protected void setH_Score(float h) {
-	// h_score = h;
-	// }
-
-	/**
-	 * Calculates the distance to a neighbor node. This method is used to
-	 * optimize the algorithm.
-	 * 
-	 * @param neighbor
-	 * @return the distance to neighbor
-	 */
-	// protected float calculateG(Node neighbor) {
-	// return (float) Point2D.distance(this.x, this.y, neighbor.x, neighbor.y);
-	// }
-
-	/**
-	 * Calculates the distance to the goal node. This method is used to optimize
-	 * the algorithm.
-	 * 
-	 * @param goal
-	 * @return the distance to goal
-	 */
-	// protected float calculateH(Node goal) {
-	// return calculateG(goal);
-	// }
-
-	/**
-	 * Method used by A* to calculate search score. The G score is the
-	 * cumulative distance from the start node to this node.
-	 * 
-	 * @param g
-	 */
-	// protected void setG_Score(float g) {
-	// g_score = g;
-	// }
-
-	/**
-	 * Method used by A* to calculate search score. The G score is the
-	 * cumulative distance from the start node to this node.
-	 * 
-	 * @return the search score
-	 */
-	// protected float getG_Score() {
-	// return g_score;
-	// }
-
-	/**
-	 * Method used by A* to calculate search score. You can't set FScore because
-	 * it is derived internally by adding the gscore and hscore.
-	 */
-	// protected float getF_Score() {
-	// return g_score + h_score;
-	// }
-
-	/**
-	 * Used by A* search. Stores the node that the search came from prior to
-	 * this node.
-	 * 
-	 * @return the predecessor node
-	 */
-	// protected Node getPredecessor() {
-	// return cameFrom;
-	// }
-
-	/**
-	 * Used by A* search. Stores the node that the search came from prior to
-	 * this node.
-	 * 
-	 * @param orig
-	 */
-	// protected void setPredecessor(Node orig) {
-	// cameFrom = orig;
-	// }
 }
