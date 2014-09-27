@@ -4,18 +4,22 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import lejos.robotics.subsumption.Behavior;
 
 public class Slope implements Behavior {
 	private static Logger logger = Logger.getLogger(Slope.class);
-	
+
 	MotorControlPi motorControl;
 	Abs_ImuProcessingPi absImu;
+	Navigation nav;
 
-	Slope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu) {
+	public Slope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu,
+			Navigation nav) {
 		this.motorControl = motorControl;
 		this.absImu = absImu;
+		this.nav = nav;
 	}
 
 	@Override

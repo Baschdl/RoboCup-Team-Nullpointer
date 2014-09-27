@@ -1,16 +1,21 @@
 package de.null_pointer.communication_pi;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
 public class BrickControlPi {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
+	private InitCommunicationPi initCom = new InitCommunicationPi();
 	private RealCommunicationPi com;
 
 	private boolean readyToProcessData;
+
+	public BrickControlPi() {
+		// TODO: brick_id passend uebergeben+ ueberpruefen des casts
+		com = (RealCommunicationPi) initCom.initConnection(null);
+	}
 
 	/**
 	 * Erhaelt die vom Brick empfangenen Daten und gibt sie an die passenden

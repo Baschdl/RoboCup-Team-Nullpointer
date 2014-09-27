@@ -11,7 +11,7 @@ public class Victim implements Behavior {
 	
 	MotorControlPi motorControl;
 
-	Victim(MotorControlPi motorControl) {
+	public Victim(MotorControlPi motorControl) {
 		this.motorControl = motorControl;
 	}
 

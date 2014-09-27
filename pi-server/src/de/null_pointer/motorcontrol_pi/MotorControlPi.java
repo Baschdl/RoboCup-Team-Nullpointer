@@ -16,6 +16,12 @@ public class MotorControlPi {
 	private int speedDifference = -1;
 	private int notMoving = -1;
 
+	
+	public MotorControlPi(BrickControlPi brickCon1, BrickControlPi brickCon2) {
+		this.brickCon1 = brickCon1;
+		this.brickCon2 = brickCon2;
+	}
+	
 	/**
 	 * Methode zum vorwaerts Fahren des Roboters.
 	 * 

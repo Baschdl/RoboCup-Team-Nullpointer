@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 import lejos.robotics.subsumption.Behavior;
 
@@ -12,10 +13,12 @@ public class BlackTile implements Behavior {
 	
 	MotorControlPi motorControl;
 	LSAProcessingPi lsa;
+	Navigation nav;
 
-	BlackTile(MotorControlPi motorControl, LSAProcessingPi lsa) {
+	public BlackTile(MotorControlPi motorControl, LSAProcessingPi lsa, Navigation nav) {
 		this.motorControl = motorControl;
 		this.lsa = lsa;
+		this.nav = nav;
 	}
 
 	@Override

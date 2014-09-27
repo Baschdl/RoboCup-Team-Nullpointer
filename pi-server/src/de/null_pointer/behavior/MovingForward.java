@@ -11,7 +11,7 @@ public class MovingForward implements Behavior {
 	
 	MotorControlPi motorControl;
 	
-	MovingForward(MotorControlPi motorControl) {
+	public MovingForward(MotorControlPi motorControl) {
 		this.motorControl = motorControl;
 	}
 
