@@ -13,8 +13,9 @@ public class BrickControlPi {
 	private boolean readyToProcessData;
 
 	public BrickControlPi() {
-		// TODO: brick_id passend uebergeben+ ueberpruefen des casts
-		com = (RealCommunicationPi) initCom.initConnection(null);
+		// TODO: brick_id passend uebergeben
+		// TODO: Cast funktioniert nicht
+		// com = (RealCommunicationPi) initCom.initConnection(null);
 	}
 
 	/**

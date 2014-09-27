@@ -23,7 +23,7 @@ import de.null_pointer.gui.*;
 
 public class PiServer {
 
-	private static java.util.logging.Logger logger = Logger.getRootLogger();
+	private static Logger logger = Logger.getRootLogger();
 	private static JFDisplayValues vGUI = new JFDisplayValues();
 
 	public static void main(String[] args) {
