@@ -1,18 +1,17 @@
 package de.null_pointer.gui;
 
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.util.Arrays;
 
-import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.WindowConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
-import javax.swing.JCheckBox;
+import javax.swing.border.EmptyBorder;
 
+public class JFDisplayValues extends JFrame {
 
-public class JFDisplayValues extends javax.swing.JFrame{
-	
+	private JPanel contentPane;
 	public JLabel jLLSA;
 	public JLabel jLDistNX;
 	public JLabel lblEopdRechts;
@@ -25,19 +24,33 @@ public class JFDisplayValues extends javax.swing.JFrame{
 	private JLabel lblAbsoluteimuacgKompassWinkel;
 	private JLabel jLAbsoluteIMU_ACG_Compass_Angle;
 	
+
+	/**
+	 * Launch the application.
+	 */
 	public void startGUI(){
-		SwingUtilities.invokeLater(new Runnable() {
+		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				JFDisplayValues inst = new JFDisplayValues();
-				inst.setLocationRelativeTo(null);
-				inst.setVisible(true);
+				try {
+					JFDisplayValues frame = new JFDisplayValues();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		});	
+		});
 	}
-	
+
+	/**
+	 * Create the frame.
+	 */
 	public JFDisplayValues() {
-		super();
-		getContentPane().setLayout(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
 		JLabel lblNewLabel = new JLabel("LSA Raw:");
 		lblNewLabel.setBounds(10, 11, 54, 14);
@@ -86,19 +99,9 @@ public class JFDisplayValues extends javax.swing.JFrame{
 		jLAbsoluteIMU_ACG_Compass_Angle = new JLabel("--");
 		jLAbsoluteIMU_ACG_Compass_Angle.setBounds(189, 111, 46, 14);
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Angle);
-		initGUI();
-		
 	}
-	
-	private void initGUI() {
-		try {
-		} catch (Exception e) {
-		    //add your error handling code here
-			e.printStackTrace();
-		}
-	}
-	
-	public void showLSARaw(int[] lsavalues){
+
+public void showLSARaw(int[] lsavalues){
 		
 		jLLSA.setText(Arrays.toString(lsavalues));
 		//TODO Ausgeben der verarbeiteten Values --> Verarbeitungsklasse schreiben
