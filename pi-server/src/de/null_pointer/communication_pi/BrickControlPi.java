@@ -7,15 +7,18 @@ import org.apache.log4j.Logger;
 public class BrickControlPi {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
-	private InitCommunicationPi initCom = new InitCommunicationPi();
 	private RealCommunicationPi com;
 
 	private boolean readyToProcessData;
 
+	public BrickControlPi(RealCommunicationPi com) {
+		this.com = com;
+	}
+	
+	/**
+	 * Konstruktor nur fuer Testzwecke
+	 */
 	public BrickControlPi() {
-		// TODO: brick_id passend uebergeben
-		// TODO: Cast funktioniert nicht
-		// com = (RealCommunicationPi) initCom.initConnection(null);
 	}
 
 	/**
