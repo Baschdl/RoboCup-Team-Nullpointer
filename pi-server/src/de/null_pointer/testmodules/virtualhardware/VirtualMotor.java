@@ -1,5 +1,13 @@
 package de.null_pointer.testmodules.virtualhardware;
 
+/**
+ * Virtual Motor to integrate motor commands in jUnit-Tests.
+ * 
+ * Original Code from <a
+ * href="http://sourceforge.net/projects/testablelejos/">http
+ * ://sourceforge.net/projects/testablelejos/</a>
+ */
+
 public class VirtualMotor {
 
 	public VirtualMotor() {
