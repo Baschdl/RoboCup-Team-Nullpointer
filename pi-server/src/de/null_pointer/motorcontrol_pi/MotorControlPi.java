@@ -10,18 +10,40 @@ public class MotorControlPi {
 	private BrickControlPi brickCon1;
 	private BrickControlPi brickCon2;
 
+	//actualSpeed: positive: speed forward, negative: speed backward
 	private int actualSpeed = -1;
+	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3
 	private int mode = -1;
 	private int speedCurve = -1;
 	private int speedDifference = -1;
 	private int notMoving = -1;
 
-	
+	// Getters werden zum Testen benoetigt
+	public int getActualSpeed() {
+		return actualSpeed;
+	}
+
+	public int getMode() {
+		return mode;
+	}
+
+	public int getSpeedCurve() {
+		return speedCurve;
+	}
+
+	public int getSpeedDifference() {
+		return speedDifference;
+	}
+
+	public int getNotMoving() {
+		return notMoving;
+	}
+
 	public MotorControlPi(BrickControlPi brickCon1, BrickControlPi brickCon2) {
 		this.brickCon1 = brickCon1;
 		this.brickCon2 = brickCon2;
 	}
-	
+
 	/**
 	 * Methode zum vorwaerts Fahren des Roboters.
 	 * 
@@ -65,8 +87,9 @@ public class MotorControlPi {
 			// brickCon2.backward(speed, 'B');
 			// brickCon2.forward(speed, 'C');
 			// brickCon1.stop('A');
-			actualSpeed = speed;
-			mode = 0;
+			// TODO: Stimmt das so?
+			actualSpeed = -speed;
+			mode = 1;
 		}
 	}
 

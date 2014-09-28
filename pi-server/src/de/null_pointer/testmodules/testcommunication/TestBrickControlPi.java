@@ -11,6 +11,19 @@ public class TestBrickControlPi extends BrickControlPi {
 	private VirtualMotor motorB = new VirtualMotor();
 	private VirtualMotor motorC = new VirtualMotor();
 
+	// Getter werden zum Testen der Klasse benoetigt
+	public VirtualMotor getMotorA() {
+		return motorA;
+	}
+
+	public VirtualMotor getMotorB() {
+		return motorB;
+	}
+
+	public VirtualMotor getMotorC() {
+		return motorC;
+	}
+
 	private static Logger logger = Logger.getLogger(TestBrickControlPi.class);
 
 	@Override
