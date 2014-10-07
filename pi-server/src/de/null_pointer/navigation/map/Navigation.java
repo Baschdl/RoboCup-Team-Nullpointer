@@ -1,6 +1,5 @@
 package de.null_pointer.navigation.map;
 
-
 public class Navigation {
 	
 	private Node currentTile;
@@ -10,9 +9,39 @@ public class Navigation {
 	}
 	
 	//TODO
-	public int tremauxAlgorithm(){
+	/**
+	 * @param orientation
+	 * 				Current Orientation of the robot
+	 * @return returns the direction which the robot should take 
+	 */
+	public int tremauxAlgorithm(int orientation){
+		
 		int direction = 0;
+		
+		currentTile.incTremauxCounter(currentTile.invertOrientation(orientation));
+		
+		//check for dead end; if detected, robot reverses
+		if(testforsomething(orientation, -2) == 2){
+			return currentTile.invertOrientation(orientation);
+		}
+		
+		
+
+		
 		return direction;
+	}
+	
+	private int testforsomething(int orientation, int test){
+		int b = 0;
+		int[] tremauxCounter = currentTile.getTremauxCounter();
+		for(int i = 0; i < 4; i++){
+			if(orientation != i){
+				if(tremauxCounter[i] == test){
+					b++;
+				}
+			}
+		}
+		return b;
 	}
 	
 	/**
@@ -31,22 +60,18 @@ public class Navigation {
 	 * (new map level is basically a new map connected to the original one)
 	 * @param orientation
 	 * 				direction in which the new map layer is added
+	 * @param mSizeX
+	 * 				Width of the to be generated map layer (at least 3; hast to be uneven)
+	 * @param mSizeY
+	 * 				Height of the to be generated map layer (at least 3; hast to be uneven)
 	 */
-	public void slope(int orientation){
-		Node buffer = initializeMap(11, 11);
+	public void slope(int orientation, int mSizeX, int mSizeY){
+		Node buffer = initializeMap(mSizeX, mSizeY);
 		Node buffer2 = buffer.getNeighbor(buffer.invertOrientation(orientation));
 		disconnectTile(buffer2);
 		
 		currentTile.removeNeighbor(orientation);
 		currentTile.addNeighbor(buffer, orientation, 0);
-	}
-	
-	public boolean isVisited(){
-		return currentTile.isVisited();
-	}
-
-	public void setVisited(){
-		currentTile.setVisited();
 	}
 	
 	public boolean isBlackTile(){
