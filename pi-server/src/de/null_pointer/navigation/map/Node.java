@@ -26,11 +26,6 @@ public class Node {
 	 * The y coordinate of this node.
 	 */
 	public float y;
-
-	/**
-	 * Indicates if intersection/ node was visited already.
-	 */
-	private boolean visited = false;
 	
 	/**
 	 * Indicates if intersection/ node is a Black Tile.
@@ -62,14 +57,6 @@ public class Node {
 		this.y = y;
 	}
 
-	public boolean isVisited() {
-		return visited;
-	}
-
-	public void setVisited() {
-		visited = true;
-	}
-	
 	public boolean isBlackTile(){
 		return blackTile;
 	}
@@ -126,7 +113,7 @@ public class Node {
 	 * @param orientation
 	 * 			  indicates the orientation of the added Node
 	 * @param abort
-	 * 			  
+	 * 			  has to be 0; used to prevent wrong error messages
 	 * @return Returns false if the neighbor already existed, or if you try to
 	 *         add this node to itself as a neighbor.
 	 */
@@ -152,19 +139,16 @@ public class Node {
 			logger.error("Die Node wird mit sich selbst verbunden!");
 			return false;
 		}
-		int i = orientation;
 		int a = abort + 1;
-		neighbors[i] = neighbor;
+		neighbors[orientation] = neighbor;
 
-		neighbor.addNeighbor(this, invertOrientation(i), a);
+		neighbor.addNeighbor(this, invertOrientation(orientation), a);
 		return true;
 	}
 
 	/**
 	 * Removes a node from this node as neighbors, effectively disconnecting
-	 * them. Note: You have to remove this node from the neighbor, and also
-	 * remove the neighbor from this node. This method doesn't do both.
-	 * 
+	 * them.
 	 * @param neighbor
 	 *            The neighboring node to disconnect from.
 	 * @return Returns false if the neighbor did not previously exist as a
@@ -181,6 +165,7 @@ public class Node {
 				}
 				neighbors[i].setNeighbors(neighborCopy);
 				neighbors[i] = null;
+				tremauxCounter[i] = -2;
 				return true;
 			}
 		}
@@ -188,6 +173,14 @@ public class Node {
 		return false;
 	}
 
+	/**
+	 * Removes a node from this node as neighbors, effectively disconnecting
+	 * them.
+	 * @param orientation
+	 *            Orientation of neighboring node to disconnect from.
+	 * @return Returns false if the neighbor did not previously exist as a
+	 *         neighbor.
+	 */
 	public void removeNeighbor(int orientation) {
 		int i = -1;
 		// Falls eine Exception auftritt, weist er der Variable i keinen neuen
@@ -197,7 +190,7 @@ public class Node {
 		} else {
 			neighbors[i].removeNeighbor(this);
 			neighbors[i] = null;
-
+			tremauxCounter[i] = -2;
 		}
 	}
 
