@@ -30,7 +30,12 @@ public class BlackTile implements Behavior {
 	@Override
 	public void action() {
 		logger.info("Schwarze Kachel erkannt");
-		// TODO Auto-generated method stub
+		motorControl.stop();
+		nav.setBlackTile();
+		//TODO: aktuelle Ausrichtung bei Gyro erfragen 
+		int directionToMove = nav.tremauxAlgorithm(-1);
+		
+		//TODO: in "directionToMove"-Richtung fahren
 
 	}
 

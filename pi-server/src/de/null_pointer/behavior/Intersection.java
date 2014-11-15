@@ -18,6 +18,9 @@ public class Intersection implements Behavior {
 	EOPDProcessingPi eopdRight;
 	Navigation nav;
 
+	int minimalDistanceFront = 10;
+	int maximalDistanceSide = 20;
+
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
 			Navigation nav) {
@@ -30,14 +33,63 @@ public class Intersection implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		// TODO Auto-generated method stub
+		if (distnx.getDistance() <= minimalDistanceFront) {
+			logger.info("Behavior Intersection: Wall ahead");
+			return true;
+		}
+		// TODO: passende EOPD-Methoden werden benoetigt
+		// else if (eopdLeft.getDistance() >= maximalDistanceSide) {
+		// logger.info("Behavior Intersection: Hallway left");
+		// return true;
+		// } else if (eopdLeft.getDistance() >= maximalDistanceSide) {
+		// logger.info("Behavior Intersection: Hallway right");
+		// return true;
+		// }
 		return false;
 	}
 
 	@Override
 	public void action() {
-		logger.info("Kreuzung erkannt");
-		// TODO Auto-generated method stub
+		logger.info("Behavior Intersection: Intersection detected");
+
+		if (distnx.getDistance() <= minimalDistanceFront) {
+			motorControl.stop();
+			wallAhead();
+		}
+
+		// TODO: benoetigt Implementation des Streckenzaehlers
+		// Wenn Streckenzaehler >= 30 ist
+		else if (false) {
+			motorControl.stop();
+			findHallway();
+		}
+
+		// TODO: von dieser bis zur letzten KReuzung seitliche Verbindungen
+		// kappen
+
+		// TODO: aktuelle Ausrichtung von Gyro erfragen
+		int directionToMove = nav.tremauxAlgorithm(-1);
+
+		// TODO: in die gegebene Richtung fahren
+	}
+
+	private void findHallway() {
+		// if (eopdLeft.getDistance() <= maximalDistanceSide) {
+		// // TODO: linker Nachbar entfernen
+		// nav.removeNeighbor(-1);
+		// }
+		// if (eopdRight.getDistance() <= maximalDistanceSide) {
+		// // TODO: rechter Nachbar entfernen
+		// nav.removeNeighbor(-1);
+		// }
+
+	}
+
+	private void wallAhead() {
+		// TODO: ersetze "-1" durch passende Nummer fuer "vorne"/ Gyro
+		nav.removeNeighbor(-1);
+
+		findHallway();
 
 	}
 
