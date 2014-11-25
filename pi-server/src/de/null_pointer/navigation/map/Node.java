@@ -31,6 +31,11 @@ public class Node {
 	 * Indicates if intersection/ node is a Black Tile.
 	 */
 	private boolean blackTile = false;
+	
+	/**
+	 * Indicates if intersection/ node was already visited.
+	 */
+	private boolean visited = false;
 
 	/**
 	 * List of neighbors to this node.
@@ -63,6 +68,14 @@ public class Node {
 	
 	public void setBlackTile(){
 		blackTile = true;
+	}
+	
+	public boolean isVisited(){
+		return visited;
+	}
+	
+	public void setVisited(){
+		visited = true;
 	}
 
 	public int[] getTremauxCounter() {
