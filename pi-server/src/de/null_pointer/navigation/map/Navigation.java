@@ -12,33 +12,92 @@ public class Navigation {
 	/**
 	 * @param orientation
 	 * 				Current Orientation of the robot
-	 * @return returns the direction which the robot should take 
+	 * @param blackTileRetreat
+	 * 				true if robot recently retreated from a black tile
+	 * @return returns the direction the robot should take; -1 if something went wrong...
 	 */
-	public int tremauxAlgorithm(int orientation){
+	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat){
 		
-		int direction = 0;
-		
-		currentTile.incTremauxCounter(currentTile.invertOrientation(orientation));
+		if(blackTileRetreat == false){
+			currentTile.incTremauxCounter(currentTile.invertOrientation(orientation));
+		}
+		int[] tremauxCounter = currentTile.getTremauxCounter();
 		
 		//check for dead end; if detected, robot reverses
-		if(testforsomething(orientation, -2) == 2){
+		if(possibleDirections(tremauxCounter) <= 1){	
 			return currentTile.invertOrientation(orientation);
+		//check for corner-Tile; if detected, robot turns into the direction of the curve
+		}else if(possibleDirections(tremauxCounter) == 2){
+			if(blackTileRetreat == false){
+				for(int i = 0; i < 4; i++){
+					if(orientation != i){
+						if(tremauxCounter[i] != -2){
+							return i;
+						}
+					}
+				}
+			}else{
+				//TODO: black tile beachten !
+			}
+		// -> real intersection; check TremauxCounter to evaluate direction
+		}else{
+			if(currentTile.isVisited() && tremauxCounter[currentTile.invertOrientation(orientation)] == 1){
+				//if tile was already visited and the previous corridor was only taken once, the robot reverses and passes it a second time
+				currentTile.incTremauxCounter(currentTile.invertOrientation(orientation));
+				return currentTile.invertOrientation(orientation);
+			}else if(currentTile.isVisited()){
+				//if there is no corridor which was never passed, the robot takes the rightmost once passed corridor
+				if(rightmostDirection(orientation, tremauxCounter, 0) == -1){
+					currentTile.incTremauxCounter(rightmostDirection(orientation, tremauxCounter, 1));
+					return rightmostDirection(orientation, tremauxCounter, 1);
+				//if there is a corridor which was never passed, the robot takes the rightmost one
+				}else{
+					currentTile.incTremauxCounter(rightmostDirection(orientation, tremauxCounter, 0));
+					return rightmostDirection(orientation, tremauxCounter, 0);
+				}
+			}else{
+				//tile was visited the first time; robot takes the rightmost direction
+				currentTile.incTremauxCounter(rightmostDirection(orientation, tremauxCounter, 0));
+				return rightmostDirection(orientation, tremauxCounter, 0);
+			}
 		}
 		
-		
-
-		
-		return direction;
+		return -1;
 	}
 	
-	private int testforsomething(int orientation, int test){
-		int b = 0;
-		int[] tremauxCounter = currentTile.getTremauxCounter();
+	private int rightmostDirection(int orientation, int[] tremauxCounter, int value){
+		if(tremauxCounter[rightleftDirection(orientation, true)] == value){
+			return rightleftDirection(orientation, true);
+		}else if(tremauxCounter[orientation] == value){
+			return orientation;
+		}else if(tremauxCounter[rightleftDirection(orientation, false)] == value){
+			return rightleftDirection(orientation, false);
+		}
+		return -1;
+	}
+	
+	private int rightleftDirection(int direction, boolean right){
+		if(right){
+			if(direction == 3){
+				return 0;
+			}else{
+				return direction+1;
+			}
+		}else{
+			if(direction == 0){
+				return 3;
+			}else{
+				return direction-1;
+			}
+		}
+		
+	}
+	
+	private int possibleDirections(int[] tremauxCounter){
+		int b = 4;
 		for(int i = 0; i < 4; i++){
-			if(orientation != i){
-				if(tremauxCounter[i] == test){
-					b++;
-				}
+			if(tremauxCounter[i] != -2){
+				b--;
 			}
 		}
 		return b;
