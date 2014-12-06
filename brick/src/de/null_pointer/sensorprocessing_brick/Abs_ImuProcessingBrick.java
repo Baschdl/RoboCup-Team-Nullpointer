@@ -13,33 +13,47 @@ public class Abs_ImuProcessingBrick {
 	private int[] gyro = new int[] { 0, 0, 0 };
 	private int angle = 0;
 	private int angleExcludingPeriodicity = 0;
+	private int oldAngleExcludingPeriodicity = 0;
 	private int deltaAngle = 0;
+	private int horizontalDimension = -1;
+	private double time = 0;
+	private double oldTime = 0;
 
 	// TODO: Richtiger Wert?
 	private double sensitivity = 0.00875;
 
-	public Abs_ImuProcessingBrick(BrickControlBrick brickControl, I2CPort port) {
+	/**
+	 * @param brickControl
+	 * 			Association to BrickControl
+	 * @param port
+	 * 			the port the Abs_Imu is plugged into
+	 * @param horizontalDimension 
+	 * 			0-2; Number of the horizontal Dimension
+	 */
+	public Abs_ImuProcessingBrick(BrickControlBrick brickControl, I2CPort port, int horizontalDimension) {
 		abs_imu = new AbsoluteIMU_ACG(port);
 		startGyro = getGyro();
 		this.brickControl = brickControl;
+		this.horizontalDimension = horizontalDimension;
 	}
 
-	// TODO:
-	public void processData() {
+	public void processData(){
+		time = System.currentTimeMillis() - oldTime;
 		gyro = getGyro();
-		for (int i = 0; i < 3; i++) {
-			// Nullpunktfehler korrigieren
-			gyro[i] -= startGyro[i];
-			deltaAngle += gyro[i] * sensitivity;
-		}
-		// TODO: Zeitwert anpassen
-		angle += deltaAngle / 100;
+		
+		// Nullpunktfehler korrigieren
+		gyro[horizontalDimension] -= startGyro[horizontalDimension];
+		deltaAngle += gyro[horizontalDimension] * sensitivity;
+		
+		angle += deltaAngle / (1000 / time);
 
 		angleExcludingPeriodicity = angle % 360;
-
-		for (int i = 0; i < 3; i++) {
-			brickControl.sendData(5, 11 + i, gyro[i]);
+		
+		//neuer Winkel wird nur verschickt, wenn er mindestens 3 Grad vom letzten abweicht
+		if(angleExcludingPeriodicity <= oldAngleExcludingPeriodicity-3 || angleExcludingPeriodicity >= oldAngleExcludingPeriodicity+3){
+			brickControl.sendData(5, 16, angleExcludingPeriodicity);
 		}
+		oldTime = System.currentTimeMillis();
 	}
 
 	public int getFilter() {
