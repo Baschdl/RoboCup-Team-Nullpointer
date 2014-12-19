@@ -17,10 +17,23 @@ public class HandleValues {
 	private int absimuacg_angle_old;
 
 	private JFDisplayValues valueGUI = new JFDisplayValues();
-	private LSAProcessingPi lsaprocclass = new LSAProcessingPi();
-	private Abs_ImuProcessingPi absimuprocclass = new Abs_ImuProcessingPi();
-	private EOPDProcessingPi eopdprocclass = new EOPDProcessingPi();
-	private DistNxProcessingPi distnxprocclass = new DistNxProcessingPi();
+	private LSAProcessingPi lsaprocclass = null;
+	private Abs_ImuProcessingPi absimuprocclass = null;
+	private EOPDProcessingPi eopdLeftprocclass = null;
+	private EOPDProcessingPi eopdRightprocclass = null;
+	private DistNxProcessingPi distnxprocclass = null;
+
+	public HandleValues(LSAProcessingPi lsaprocclass,
+			Abs_ImuProcessingPi absimuprocclass,
+			EOPDProcessingPi eopdLeftprocclass,
+			EOPDProcessingPi eopdRightprocclass,
+			DistNxProcessingPi distnxprocclass) {
+		this.lsaprocclass = lsaprocclass;
+		this.absimuprocclass = absimuprocclass;
+		this.eopdLeftprocclass = eopdLeftprocclass;
+		this.eopdRightprocclass = eopdRightprocclass;
+		this.distnxprocclass = distnxprocclass;
+	}
 
 	public void readValues() {
 
@@ -32,7 +45,7 @@ public class HandleValues {
 			readLeftEOPD();
 			readAbs_ImuCompass_Angle();
 			readAbs_ImuCompass_Heading();
-			
+
 		}
 
 	}
@@ -88,10 +101,11 @@ public class HandleValues {
 	private void readAbs_ImuCompass_Angle() {
 
 		absimuacg_angle_old = absimuacg_angle;
-		absimuacg_angle = absimuprocclass.getAngle();
+		absimuacg_angle = absimuprocclass.getAngleHorizontal();
 		if (absimuacg_angle != absimuacg_angle_old) {
 
-			valueGUI.showAbsoluteIMUACG_compass_angle(absimuprocclass.getAngle());
+			valueGUI.showAbsoluteIMUACG_compass_angle(absimuprocclass
+					.getAngleHorizontal());
 
 		}
 	}
