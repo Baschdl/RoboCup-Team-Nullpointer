@@ -55,7 +55,7 @@ public class Abs_ImuProcessingBrick {
 		
 		// neuer Winkel wird nur verschickt, wenn er mindestens 3 Grad vom letzten abweicht
 		if(angleExcludingPeriodicity <= oldAngleExcludingPeriodicity[dimension]-3 || angleExcludingPeriodicity >= oldAngleExcludingPeriodicity[dimension]+3){
-			brickControl.sendData(5, 16, angleExcludingPeriodicity);
+			brickControl.sendData(5, dimension + 16, angleExcludingPeriodicity);
 			oldAngleExcludingPeriodicity[dimension] = angleExcludingPeriodicity;
 		}
 		oldTime[dimension] = System.currentTimeMillis();
