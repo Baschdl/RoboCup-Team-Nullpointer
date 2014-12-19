@@ -33,9 +33,12 @@ public class Intersection implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		if (distnx.getDistance() <= minimalDistanceFront) {
-			logger.info("Behavior Intersection: Wall ahead");
+		int actualDistance;
+		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront) {
+			logger.info("Wall ahead");
 			return true;
+		} else if (actualDistance < 0) {
+			logger.error("No DistNx-Values (negative value)");
 		}
 		// TODO: passende EOPD-Methoden werden benoetigt
 		// else if (eopdLeft.getDistance() >= maximalDistanceSide) {
@@ -50,7 +53,7 @@ public class Intersection implements Behavior {
 
 	@Override
 	public void action() {
-		logger.info("Behavior Intersection: Intersection detected");
+		logger.info("Intersection detected");
 
 		if (distnx.getDistance() <= minimalDistanceFront) {
 			motorControl.stop();
@@ -68,7 +71,7 @@ public class Intersection implements Behavior {
 		// kappen
 
 		// TODO: aktuelle Ausrichtung von Gyro erfragen
-		int directionToMove = nav.tremauxAlgorithm(-1);
+		int directionToMove = nav.tremauxAlgorithm(-1, false);
 
 		// TODO: in die gegebene Richtung fahren
 	}

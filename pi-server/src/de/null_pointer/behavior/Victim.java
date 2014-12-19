@@ -17,13 +17,18 @@ public class Victim implements Behavior {
 
 	@Override
 	public boolean takeControl() {
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			logger.fatal("InterruptedException while sleep()"); 
+		}
 		// TODO: Benoetigt Wärmesensor
 		return false;
 	}
 
 	@Override
 	public void action() {
-		logger.info("Opfer erkannt");
+		logger.info("Victim detected");
 		// TODO Auto-generated method stub
 
 	}

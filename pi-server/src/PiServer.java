@@ -1,10 +1,13 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
-import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.chainsaw.Main;
 
 import de.null_pointer.behavior.BlackTile;
 import de.null_pointer.behavior.Intersection;
@@ -13,10 +16,10 @@ import de.null_pointer.behavior.NextTile;
 import de.null_pointer.behavior.Slope;
 import de.null_pointer.behavior.Victim;
 import de.null_pointer.communication_pi.BrickControlPi;
-import de.null_pointer.communication_pi.BrickControlPiTest;
 import de.null_pointer.communication_pi.CommunicationPi;
 import de.null_pointer.communication_pi.InitCommunicationPi;
 import de.null_pointer.communication_pi.RealCommunicationPi;
+import de.null_pointer.gui.JFDisplayValues;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
@@ -24,38 +27,29 @@ import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 import de.null_pointer.testmodules.testcommunication.TestBrickControlPi;
-import de.null_pointer.gui.*;
 
 public class PiServer {
 
-	private static Logger logger = Logger.getRootLogger();
+	private static Logger logger = Logger.getLogger("TST.SIM");
 
 	public static void main(String[] args) {
-		// Anlegen und Einrichten des Loggers
+		System.out.println("Hello World!");
 
-		// SimpleLayout layout = new SimpleLayout();
-		PatternLayout layout = new PatternLayout("%d{ISO8601} %-6p [%c] %m%n");
-		ConsoleAppender consoleAppender = new ConsoleAppender(layout);
-		logger.addAppender(consoleAppender);
-
-		// TODO: Abspeichern der Logs in ein File implementieren
-
-		// boolean append = true;
-		// FileHandler handler = new FileHandler("default.log", append);
-		//
-		// Logger logger2 = Logger.getLogger(PiServer.class);
-		// logger.addHandler(handler);
+		logger.setLevel(Level.INFO);
+		loadConfiguration("log4j.properties");
+		logger.log(Level.INFO, "---");
+		logger.log(Level.INFO, "my Message is: it should work now");
 
 		// Spezifiziert welche Meldungen alles ausgegeben werden
 		// ALL | DEBUG | INFO | WARN | ERROR | FATAL | OFF:
-		logger.setLevel(Level.INFO);
+		// logger.setLevel(Level.INFO);
 
 		BrickControlPi brickCon1 = null;
 		BrickControlPi brickCon2 = null;
 
 		InitCommunicationPi initCom = new InitCommunicationPi();
-		
-		//TODO: Brick-IDs eintragen
+
+		// TODO: Brick-IDs eintragen
 		String[] brickIDs = { null, null };
 		CommunicationPi comPi;
 
@@ -84,7 +78,7 @@ public class PiServer {
 
 		MotorControlPi motorControl = new MotorControlPi(brickCon1, brickCon2);
 
-		Abs_ImuProcessingPi absImu = new Abs_ImuProcessingPi();
+		Abs_ImuProcessingPi absImu = new Abs_ImuProcessingPi(-1, -1, -1);
 		EOPDProcessingPi eopdLeft = new EOPDProcessingPi();
 		EOPDProcessingPi eopdRight = new EOPDProcessingPi();
 		DistNxProcessingPi distNx = new DistNxProcessingPi();
@@ -128,5 +122,22 @@ public class PiServer {
 			}
 
 		}
+	}
+
+	private static void loadConfiguration(String configFile) {
+
+		Properties properties = new Properties();
+		InputStream input = null;
+		try {
+			input = Main.class.getClassLoader().getResourceAsStream(configFile);
+			properties.load(input);
+			logger.log(Level.INFO, "load configuration file " + configFile);
+			logger.log(Level.INFO, properties.getProperty("my.value"));
+
+		} catch (IOException e) {
+			logger.log(Level.ERROR, "configuration file not found "
+					+ configFile + " " + e.getMessage());
+		}
+
 	}
 }
