@@ -17,6 +17,7 @@ public class Abs_ImuProcessingBrick {
 	private int[] deltaAngle = new int[]{0,0,0};
 	private double time = 0;
 	private double[] oldTime = new double[]{0,0,0};
+	private int[] oldTiltData = new int[]{0,0,0};
 
 	private double sensitivity = 0.00875;
 
@@ -33,18 +34,22 @@ public class Abs_ImuProcessingBrick {
 	}
 
 	/**
+	 * Processes GyroData of given Dimension (into an angle) and sends it to pi-server, if it has changed
 	 * @param dimension
-	 * 			0-2; Dimension which will be processed
+	 * 			dimension to be processed;
+	 * 			0: x
+	 * 			1: y
+	 * 			2: z
 	 */
-	public void processData(int dimension){
-		// Die Zeit seit dem letzten Aufruf wird ermittelt
+	public void processData_Angle(int dimension){
+		// time since last call gets determined 
 		time = System.currentTimeMillis() - oldTime[dimension];
 		gyro = getGyro();
 		
-		// Nullpunktfehler korrigieren
+		// Zero error gets corrected
 		gyro[dimension] -= startGyro[dimension];
 		
-		//seit letzem Messen Ueberschrittenen Winkel bestimmen
+		// seit letzem Messen Ueberschrittenen Winkel bestimmen
 		deltaAngle[dimension] += gyro[dimension] * sensitivity;
 		
 		// zu Vorherigem Winkel wird der in der Vergangenen Zeit ueberschrittene Winkel hinzuaddiert
@@ -59,6 +64,23 @@ public class Abs_ImuProcessingBrick {
 			oldAngleExcludingPeriodicity[dimension] = angleExcludingPeriodicity;
 		}
 		oldTime[dimension] = System.currentTimeMillis();
+	}
+	
+	/**
+	 * Processes TiltData of given dimension and sends it to pi-server, if it has changed
+	 * @param dimension
+	 * 			dimension to be processed;
+	 * 			0: x
+	 * 			1: y
+	 * 			2: z
+	 */
+	public void processData_TiltData(int dimension){
+		int[] TiltData = abs_imu.getTiltData();
+		// neue TiltData wird nur verschickt, wenn sie vom letzten Wert abweicht
+		if(TiltData[dimension] < oldTiltData[dimension] || TiltData[dimension] > oldTiltData[dimension]){
+			brickControl.sendData(5, dimension + 11, TiltData[dimension]);
+			oldTiltData[dimension] = TiltData[dimension];
+		}
 	}
 
 	public int getFilter() {
