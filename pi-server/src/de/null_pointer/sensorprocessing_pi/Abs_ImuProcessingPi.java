@@ -12,8 +12,10 @@ public class Abs_ImuProcessingPi {
 	private int dimension_vertical = -1;
 	private int dimension_rotational = -1;
 
-	private int angle[] = { 0, 0, 0 };
+	private int angle[] = {0,0,0};
 	private int heading = 0; // 0 = N, 1 = O, 2 = S, 3 = W
+	
+	private int tiltData[] = {0,0,0};
 
 	public void setAngle(int angle, int dimension) {
 		this.angle[dimension] = angle;
@@ -41,6 +43,14 @@ public class Abs_ImuProcessingPi {
 
 	public int getAngleRotational() {
 		return angle[dimension_rotational];
+	}	
+	
+	public void setTiltData(int tiltData, int dimension){
+		this.tiltData[dimension] = tiltData;
+	}
+	
+	public int getTiltDataVertical(){
+		return tiltData[dimension_vertical];
 	}
 
 	public int getHeading() {

@@ -4,17 +4,34 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
+import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
+import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+
 public class BrickControlPi {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
-	private RealCommunicationPi com;
+	private RealCommunicationPi com = null;
+	private Abs_ImuProcessingPi abs_Imu = null;
+	private DistNxProcessingPi distNx = null;
+	private EOPDProcessingPi eopdLeft = null;
+	private EOPDProcessingPi eopdRight = null;
+	private LSAProcessingPi lsa = null;
 
 	private boolean readyToProcessData;
 
-	public BrickControlPi(RealCommunicationPi com) {
+	public BrickControlPi(RealCommunicationPi com, Abs_ImuProcessingPi abs_Imu,
+			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
+			EOPDProcessingPi eopdRight, LSAProcessingPi lsa) {
 		this.com = com;
+		this.abs_Imu = abs_Imu;
+		this.distNx = distNx;
+		this.eopdLeft = eopdLeft;
+		this.eopdRight = eopdRight;
+		this.lsa = lsa;
 	}
-	
+
 	/**
 	 * Konstruktor nur fuer Testzwecke
 	 */
@@ -35,20 +52,24 @@ public class BrickControlPi {
 		// Arrays.toString(receiveData));
 		if (receiveData[0] == 1) {
 			// Dist-Nx
+			distNx.setDistance(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 2) {
 			// LSA
+			lsa.setLSA(Math.round(receiveData[1]-1), Math.round(receiveData[2]));
 		} else if (receiveData[0] == 3) {
 			// linker EOPD
+			eopdLeft.setEOPDdistance(Math.round(receiveData[1]));
 		} else if (receiveData[0] == 4) {
 			// rechter EOPD
+			eopdRight.setEOPDdistance(Math.round(receiveData[1]));
 		} else if (receiveData[0] == 5) {
 			// AbsIMU-ACG
-		} else if (receiveData[0] == 6) {
-			// linker Tastsenspr
-		} else if (receiveData[0] == 7) {
-			// rechter Tastsensor
-		} else if (receiveData[0] == 8) {
-			// Boltmeter
+			if(Math.round(receiveData[1]) >= 16){
+				abs_Imu.setAngle(Math.round(receiveData[2]), Math.round(receiveData[1])-16);
+			}else{
+				abs_Imu.setTiltData(Math.round(receiveData[2]), Math.round(receiveData[1])-11);
+			}
+			
 		} else {
 			// System.out.println("process Data (no sensor) " +
 			// Arrays.toString(receiveData));

@@ -25,31 +25,42 @@ public class VirtualDistNX {
 	}
 
 	private void generateValue(int mode) {
-		
-		if(mode == 0){
-			range = biggestValueOK - smallestValueOK;
-			value[0] = (int) Math.random() * range
-					+ smallestValueOK;
+		int additionOrSubtraction = (int) Math.random()*10;
+		if(additionOrSubtraction>=5){
 			
-			for (int i = 1; i < amountValues; i++) {
+			if(mode == 0){
+				range = biggestValueOK - smallestValueOK;
+				value[0] = (int) Math.random() * range
+						+ smallestValueOK;
+				
+				for (int i = 1; i < amountValues; i++) {
 
-				value[i] = (int) Math.random() * 10 
-			}
+					value[i] = (int) Math.random() * 10 + value[i-1];
+				}
 
-		}else if(mode == 1){
-			range = biggestValueNoSpace - smallestValueNoSpace;
-			
-			
-			value[0] = (int) Math.random() * range
-					+ smallestValueNoSpace;
-			
-			for (int i = 1; i < amountValues; i++) {
-
+				//Ueberlegung mit Grenzwertueberschreitung fortfuehren
+				//entweder zweite Bedingung für Schleife oder ab bestimmtem Wert subtrahieren
+			}else if(mode == 1){
+				range = biggestValueNoSpace - smallestValueNoSpace;
 				
 				
+				value[0] = (int) Math.random() * range
+						+ smallestValueNoSpace;
+				
+				for (int i = 1; i < amountValues; i++) {
+					
+					value[i] = (int) Math.random() *10 + value[i-1];
 
+				}
 			}
+			
+		}else if(additionOrSubtraction<5){
+			
+			
+			
 		}
+		
+		
 	}
 
 	public String[] getOK() { // ok = mode 0
