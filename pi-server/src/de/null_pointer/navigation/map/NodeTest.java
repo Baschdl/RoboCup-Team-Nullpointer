@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class NodeTest {
-	private Node nodeToTest = new Node(0, 0);
+	private Node nodeToTest = new Node(0, 0, 0);
 
 	@Test
 	public void testInvertOrientation0() {
