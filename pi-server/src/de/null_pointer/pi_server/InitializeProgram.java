@@ -1,4 +1,5 @@
 package de.null_pointer.pi_server;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -47,6 +48,50 @@ public class InitializeProgram {
 		return arbitrator;
 	}
 
+	public BrickControlPi getBrickCon1() {
+		return brickCon1;
+	}
+
+	public BrickControlPi getBrickCon2() {
+		return brickCon2;
+	}
+
+	public InitCommunicationPi getInitCom() {
+		return initCom;
+	}
+
+	public MotorControlPi getMotorControl() {
+		return motorControl;
+	}
+
+	public Abs_ImuProcessingPi getAbsImu() {
+		return absImu;
+	}
+
+	public EOPDProcessingPi getEopdLeft() {
+		return eopdLeft;
+	}
+
+	public EOPDProcessingPi getEopdRight() {
+		return eopdRight;
+	}
+
+	public DistNxProcessingPi getDistNx() {
+		return distNx;
+	}
+
+	public LSAProcessingPi getLsa() {
+		return lsa;
+	}
+
+	public Navigation getNav() {
+		return nav;
+	}
+
+	public CommunicationPi getComPi() {
+		return comPi;
+	}
+
 	public InitializeProgram(Logger logger) {
 		InitializeProgram.logger = logger;
 	}
@@ -74,18 +119,20 @@ public class InitializeProgram {
 			if (comPi instanceof RealCommunicationPi) {
 				// TODO: Angeschlossene Sensoren uebergeben
 				if (i == 0) {
-					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
+					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi,
+							absImu, distNx, eopdLeft, eopdLeft, lsa);
 				} else if (i == 1) {
-					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
+					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi,
+							absImu, distNx, eopdLeft, eopdLeft, lsa);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
 
 			} else {
 				if (i == 0) {
-					brickCon1 = new TestBrickControlPi();
+					brickCon1 = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
 				} else if (i == 1) {
-					brickCon2 = new TestBrickControlPi();
+					brickCon2 = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
 				} else {
 					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
 				}

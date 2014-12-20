@@ -3,6 +3,11 @@ package de.null_pointer.testmodules.testcommunication;
 import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
+import de.null_pointer.communication_pi.CommunicationPi;
+import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
+import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
+import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 import de.null_pointer.testmodules.virtualhardware.VirtualMotor;
 
 public class TestBrickControlPi extends BrickControlPi {
@@ -10,6 +15,13 @@ public class TestBrickControlPi extends BrickControlPi {
 	private VirtualMotor motorA = new VirtualMotor();
 	private VirtualMotor motorB = new VirtualMotor();
 	private VirtualMotor motorC = new VirtualMotor();
+
+	public TestBrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
+			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
+			EOPDProcessingPi eopdRight, LSAProcessingPi lsa) {
+
+		super(com, abs_Imu, distNx, eopdLeft, eopdRight, lsa);
+	}
 
 	// Getter werden zum Testen der Klasse benoetigt
 	public VirtualMotor getMotorA() {
