@@ -198,15 +198,12 @@ public class Node {
 	 *         neighbor.
 	 */
 	public void removeNeighbor(int orientation) {
-		int i = -1;
-		// Falls eine Exception auftritt, weist er der Variable i keinen neuen
-		// Wert zu, sondern benutzt -1
-		if (neighbors[i = orientation] == null) {
+		if (neighbors[orientation] == null) {
 			logger.warn("Nachbar-Eintrag war bereits null/ kein Nachbar vorhanden");
 		} else {
-			neighbors[i].removeNeighbor(this);
-			neighbors[i] = null;
-			tremauxCounter[i] = -2;
+			neighbors[orientation].removeNeighbor(this);
+			neighbors[orientation] = null;
+			tremauxCounter[orientation] = -2;
 		}
 	}
 
