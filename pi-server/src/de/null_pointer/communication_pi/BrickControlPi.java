@@ -12,7 +12,7 @@ import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 public class BrickControlPi {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
-	private RealCommunicationPi com = null;
+	private CommunicationPi com = null;
 	private Abs_ImuProcessingPi abs_Imu = null;
 	private DistNxProcessingPi distNx = null;
 	private EOPDProcessingPi eopdLeft = null;
@@ -21,7 +21,7 @@ public class BrickControlPi {
 
 	private boolean readyToProcessData;
 
-	public BrickControlPi(RealCommunicationPi com, Abs_ImuProcessingPi abs_Imu,
+	public BrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
 			EOPDProcessingPi eopdRight, LSAProcessingPi lsa) {
 		this.com = com;
