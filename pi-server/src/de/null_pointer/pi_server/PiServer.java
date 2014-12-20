@@ -20,7 +20,7 @@ public class PiServer {
 		logger.info("starting programm");
 
 		// Entscheidet anhand der Uebergabeparameter beim Start welche
-		// Programmteile ausgeführt werden
+		// Programmteile ausgefuehrt werden
 		for (String s : args) {
 
 			// ruft die GUI auf
@@ -29,7 +29,7 @@ public class PiServer {
 				vGUI.startGUI();
 			}
 
-			// comp steht für competition, führt das Wettkampfprogramm aus
+			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
 				logger.info("Wettkampfprogramm gestartet");
 				initProgramm.getArbitrator().start();
