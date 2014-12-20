@@ -1,3 +1,4 @@
+package de.null_pointer.pi_server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -73,9 +74,9 @@ public class InitializeProgram {
 			if (comPi instanceof RealCommunicationPi) {
 				// TODO: Angeschlossene Sensoren uebergeben
 				if (i == 0) {
-					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi);
+					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
 				} else if (i == 1) {
-					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi);
+					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}

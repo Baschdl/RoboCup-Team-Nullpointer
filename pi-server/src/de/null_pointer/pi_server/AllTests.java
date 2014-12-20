@@ -1,3 +1,4 @@
+package de.null_pointer.pi_server;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
