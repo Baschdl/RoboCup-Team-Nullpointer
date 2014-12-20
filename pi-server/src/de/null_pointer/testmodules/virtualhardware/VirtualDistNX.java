@@ -26,40 +26,57 @@ public class VirtualDistNX {
 
 	private void generateValue(int mode) {
 		int additionOrSubtraction = (int) Math.random()*10;
-		if(additionOrSubtraction>=5){
+		for (int i = 1; i < amountValues; i++) {
+		if(additionOrSubtraction>=5){ //addition
+			if(mode == 0){ //everythingOK
+				range = biggestValueOK - smallestValueOK;
+				value[0] = (int) Math.random() * range
+						+ smallestValueOK;
+				value[i] = (int) Math.random() * 10 + value[i-1];
+				if(value[i]>=biggestValueOK - 10){
+					additionOrSubtraction = 1;
+				}
+			}else if(mode == 1){ //noSpaceInFront
 			
-			if(mode == 0){
+				range = biggestValueNoSpace - smallestValueNoSpace;
+				value[0] = (int) Math.random() * range
+						+ smallestValueNoSpace;				
+				if(value[i-1]>=biggestValueNoSpace - 10){
+					additionOrSubtraction = 1;
+				}else{
+					value[i] = (int) Math.random() *10 + value[i-1];
+				}
+				
+			}
+			
+		}else if(additionOrSubtraction<5){ //subtraction
+			
+			if(mode == 0){ //everythingOK
 				range = biggestValueOK - smallestValueOK;
 				value[0] = (int) Math.random() * range
 						+ smallestValueOK;
 				
-				for (int i = 1; i < amountValues; i++) {
-
-					value[i] = (int) Math.random() * 10 + value[i-1];
+				
+				if(value[i-1]<=smallestValueOK + 10){
+					additionOrSubtraction = 1;
+				}else{
+					value[i] = (int) Math.random() * 10 - value[i-1];
 				}
-
-				//Ueberlegung mit Grenzwertueberschreitung fortfuehren
-				//entweder zweite Bedingung für Schleife oder ab bestimmtem Wert subtrahieren
-			}else if(mode == 1){
+			}else if(mode == 1){ //noSpaceInFront
 				range = biggestValueNoSpace - smallestValueNoSpace;
-				
-				
 				value[0] = (int) Math.random() * range
 						+ smallestValueNoSpace;
-				
-				for (int i = 1; i < amountValues; i++) {
-					
-					value[i] = (int) Math.random() *10 + value[i-1];
-
+				if(value[i-1]<=smallestValueNoSpace + 10){
+					additionOrSubtraction = 1;
+				}else{
+					value[i] = (int) Math.random() *10 - value[i-1];
 				}
+				
 			}
-			
-		}else if(additionOrSubtraction<5){
-			
 			
 			
 		}
-		
+		}
 		
 	}
 
