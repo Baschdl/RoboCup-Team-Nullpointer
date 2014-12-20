@@ -20,33 +20,33 @@ public class Node {
 	/**
 	 * The x coordinate of this node.
 	 */
-	public float x;
+	public int x;
 
 	/**
 	 * The y coordinate of this node.
 	 */
-	public float y;
-	
+	public int y;
+
+	/**
+	 * The z coordinate of this node.
+	 */
+	public int z;
+
 	/**
 	 * Indicates if intersection/ node is a Black Tile.
 	 */
 	private boolean blackTile = false;
-	
+
 	/**
 	 * Indicates if intersection/ node was already visited.
 	 */
 	private boolean visited = false;
 
 	/**
-	 * List of neighbors to this node.
-	 * 0 = North;
-	 * 1 = East;
-	 * 2 = South;
-	 * 3 = West;
+	 * List of neighbors to this node. 0 = North; 1 = East; 2 = South; 3 = West;
 	 */
 	private Node[] neighbors = new Node[4];
-	
-	
+
 	private int[] tremauxCounter = { 0, 0, 0, 0 };
 
 	/**
@@ -57,24 +57,25 @@ public class Node {
 	 * @param y
 	 *            The y coordinate of this node.
 	 */
-	public Node(float x, float y) {
+	public Node(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
+		this.z = z;
 	}
 
-	public boolean isBlackTile(){
+	public boolean isBlackTile() {
 		return blackTile;
 	}
-	
-	public void setBlackTile(){
+
+	public void setBlackTile() {
 		blackTile = true;
 	}
-	
-	public boolean isVisited(){
+
+	public boolean isVisited() {
 		return visited;
 	}
-	
-	public void setVisited(){
+
+	public void setVisited() {
 		visited = true;
 	}
 
@@ -94,8 +95,8 @@ public class Node {
 	public Node[] getNeighbors() {
 		return neighbors;
 	}
-	
-	public Node getNeighbor(int orientation){
+
+	public Node getNeighbor(int orientation) {
 		return neighbors[orientation];
 	}
 
@@ -124,16 +125,16 @@ public class Node {
 	 * @param neighbor
 	 *            The neighboring node to connect with.
 	 * @param orientation
-	 * 			  indicates the orientation of the added Node
+	 *            indicates the orientation of the added Node
 	 * @param abort
-	 * 			  has to be 0; used to prevent wrong error messages
+	 *            has to be 0; used to prevent wrong error messages
 	 * @return Returns false if the neighbor already existed, or if you try to
 	 *         add this node to itself as a neighbor.
 	 */
 	// TODO: addNeighbor()-Methode unbedingt mit jUnit testen
 	public boolean addNeighbor(Node neighbor, int orientation, int abort) {
 		// Check if Node is already connected
-		if(abort == 2){
+		if (abort == 2) {
 			return true;
 		}
 		for (int i = 0; i < neighbors.length; i++) {
@@ -162,6 +163,7 @@ public class Node {
 	/**
 	 * Removes a node from this node as neighbors, effectively disconnecting
 	 * them.
+	 * 
 	 * @param neighbor
 	 *            The neighboring node to disconnect from.
 	 * @return Returns false if the neighbor did not previously exist as a
@@ -189,6 +191,7 @@ public class Node {
 	/**
 	 * Removes a node from this node as neighbors, effectively disconnecting
 	 * them.
+	 * 
 	 * @param orientation
 	 *            Orientation of neighboring node to disconnect from.
 	 * @return Returns false if the neighbor did not previously exist as a
