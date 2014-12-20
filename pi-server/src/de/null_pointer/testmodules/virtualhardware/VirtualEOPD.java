@@ -26,5 +26,10 @@ public class VirtualEOPD {
 		String eopd[] = {"*"+eopdNumber+";1;100;0#","*"+eopdNumber+";1;80;0#","*"+eopdNumber+";1;46;0#","*"+eopdNumber+";1;30;0#","*"+eopdNumber+";1;20;0#","*"+eopdNumber+";1;10;0#","*"+eopdNumber+";1;5;0#","*"+eopdNumber+";1;6;0#","*"+eopdNumber+";1;10;0#","*"+eopdNumber+";1;4;0#","*"+eopdNumber+";1;2;0#","*"+eopdNumber+";1;3;0#","*"+eopdNumber+";1;9;0#","*"+eopdNumber+";1;8;0#","*"+eopdNumber+";1;11;0#","*"+eopdNumber+";1;12;0#","*"+eopdNumber+";1;14;0#","*"+eopdNumber+";1;16;0#"};
 		return eopd;
 	}	
+	
+	public String[] getCorrecting(){
+		String eopd[] = {""};
+		return eopd;
+	}
 
 }

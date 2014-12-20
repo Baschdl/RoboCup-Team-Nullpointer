@@ -28,15 +28,20 @@ public class VirtualAbsIMUACG {
 		return absIMU;
 	}
 	
-	public String[] get45DegreeLeft(){
+	public String[] get180DegreeTurn(){
 		return absIMU;
 	}
 	
-	public String[] get45DegreeRight(){
+	public String[] getCorrecting(){
 		return absIMU;
 	}
 	
+	public String[] getRamp(){
+		return absIMU;
+	}
 	
-	
+	public String[] getObstacle(){
+		return absIMU;
+	}
 	
 }
