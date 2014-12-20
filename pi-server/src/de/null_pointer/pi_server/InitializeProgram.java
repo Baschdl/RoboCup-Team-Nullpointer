@@ -130,13 +130,24 @@ public class InitializeProgram {
 
 			} else {
 				if (i == 0) {
-					brickCon1 = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
+					brickCon1 = new TestBrickControlPi(comPi, absImu, distNx,
+							eopdLeft, eopdLeft, lsa);
 				} else if (i == 1) {
-					brickCon2 = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft, eopdLeft, lsa);
+					brickCon2 = new TestBrickControlPi(comPi, absImu, distNx,
+							eopdLeft, eopdLeft, lsa);
 				} else {
 					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
 			}
+		}
+
+		if (brickCon1 != null) {
+			logger.info("Communication with Brick 1 started");
+			brickCon1.start();
+		}
+		if (brickCon2 != null) {
+			logger.info("Communication with Brick 2 started");
+			brickCon2.start();
 		}
 	}
 

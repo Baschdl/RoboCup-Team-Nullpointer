@@ -9,7 +9,7 @@ import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 
-public class BrickControlPi {
+public class BrickControlPi extends Thread {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
 	private CommunicationPi com = null;
@@ -19,7 +19,7 @@ public class BrickControlPi {
 	private EOPDProcessingPi eopdRight = null;
 	private LSAProcessingPi lsa = null;
 
-	private boolean readyToProcessData;
+	private boolean readyToProcessData = true;
 
 	public BrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
@@ -38,6 +38,31 @@ public class BrickControlPi {
 	public BrickControlPi() {
 	}
 
+	public void run() {
+		float[] message = { 0, 0, 0, 0 };
+		while (!readyToProcessData) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		while (readyToProcessData) {
+			message = receiveData();
+//			logger.info("brick Control: " + this);
+			if (message != null) {
+				processData(message);
+			}
+			try {
+				sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	/**
 	 * Erhaelt die vom Brick empfangenen Daten und gibt sie an die passenden
 	 * Klassen weiter.
@@ -46,6 +71,7 @@ public class BrickControlPi {
 	 *            Enthaelt die vom Brick gesendeten Daten.
 	 */
 	void processData(float[] receiveData) {
+		// logger.info("verarbeite Daten");
 		// gibt empfangene Daten weiter
 
 		// System.out.println("value processData:" +
@@ -55,7 +81,8 @@ public class BrickControlPi {
 			distNx.setDistance(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 2) {
 			// LSA
-			lsa.setLSA(Math.round(receiveData[1]-1), Math.round(receiveData[2]));
+			lsa.setLSA(Math.round(receiveData[1] - 1),
+					Math.round(receiveData[2]));
 		} else if (receiveData[0] == 3) {
 			// linker EOPD
 			eopdLeft.setEOPDdistance(Math.round(receiveData[1]));
@@ -64,17 +91,19 @@ public class BrickControlPi {
 			eopdRight.setEOPDdistance(Math.round(receiveData[1]));
 		} else if (receiveData[0] == 5) {
 			// AbsIMU-ACG
-			if(Math.round(receiveData[1]) >= 16){
-				abs_Imu.setAngle(Math.round(receiveData[2]), Math.round(receiveData[1])-16);
-			}else{
-				abs_Imu.setTiltData(Math.round(receiveData[2]), Math.round(receiveData[1])-11);
+			if (Math.round(receiveData[1]) >= 16) {
+				abs_Imu.setAngle(Math.round(receiveData[2]),
+						Math.round(receiveData[1]) - 16);
+			} else {
+				abs_Imu.setTiltData(Math.round(receiveData[2]),
+						Math.round(receiveData[1]) - 11);
 			}
-			
+
 		} else {
 			// System.out.println("process Data (no sensor) " +
 			// Arrays.toString(receiveData));
-			logger.error("process Data (no sensor) "
-					+ Arrays.toString(receiveData));
+			// logger.error("process Data (no sensor) "
+			// + Arrays.toString(receiveData));
 		}
 
 	}
@@ -128,6 +157,7 @@ public class BrickControlPi {
 			}
 		}
 		readyToProcessData = true;
+		notifyAll();
 		logger.debug("sendSensorData flag set to: " + readyToProcessData);
 	}
 
@@ -136,7 +166,7 @@ public class BrickControlPi {
 	 * 
 	 * @return Gibt die von checkString(...) weiter verarbeiteten Daten zurück
 	 */
-	float[] receiveData() {
+	public float[] receiveData() {
 		String dataString = null;
 		try {
 			// logger.info("Lese Zeile...");

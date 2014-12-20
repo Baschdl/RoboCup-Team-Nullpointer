@@ -21,12 +21,12 @@ public class VirtualCommunicationPi extends CommunicationPi {
 		try {
 			return incoming.getFirst();
 		} catch (NoSuchElementException e) {
-			try {
-				wait();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				wait();
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 			return "*0;0;0;0#";
 		}
 	}
