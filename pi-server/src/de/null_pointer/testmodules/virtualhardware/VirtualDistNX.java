@@ -30,7 +30,7 @@ public class VirtualDistNX {
 	 *            to generate OK-values --> mode = 0; to generate
 	 *            noSpaceInFront-values --> mode = 1
 	 */
-	private void generateValue(int mode) {
+	private void generateValues(int mode) {
 		int additionOrSubtraction = (int) Math.random() * 10;
 		if (mode == 0) {
 			range = biggestValueOK - smallestValueOK;
@@ -84,7 +84,7 @@ public class VirtualDistNX {
 	}
 
 	public String[] getOK() { // ok = mode 0
-		generateValue(0);
+		generateValues(0);
 
 		for (int i = 0; i < amountValues; i++) {
 
@@ -97,7 +97,7 @@ public class VirtualDistNX {
 	}
 
 	public String[] getNoSpaceInFront() { // getNoSpaceInFront = mode 1
-		generateValue(1);
+		generateValues(1);
 
 		for (int i = 0; i < amountValues; i++) {
 
