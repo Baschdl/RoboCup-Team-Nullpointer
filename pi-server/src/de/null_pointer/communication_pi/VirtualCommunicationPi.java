@@ -1,11 +1,11 @@
 package de.null_pointer.communication_pi;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class VirtualCommunicationPi extends CommunicationPi {
 	private boolean closed = false;
-	private ArrayList<String> dataArrayList = new ArrayList<String>();
+	private LinkedList<String> dataArrayList = new LinkedList<String>();
 
 	public boolean isClosed() {
 		return closed;
