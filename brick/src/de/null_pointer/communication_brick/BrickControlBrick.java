@@ -29,10 +29,13 @@ public class BrickControlBrick extends Thread {
 	private SensorPort sp_tsLeft;
 	private SensorPort sp_tsRight;
 
-	RealCommunicationBrick com = (RealCommunicationBrick) (new InitCommunicationBrick()
-			.initConnection());
+	CommunicationBrick com = null;
 
 	// ThreadSensor ths;
+
+	public BrickControlBrick(CommunicationBrick communication) {
+		this.com = communication;
+	}
 
 	public void run() {
 		int i = 0;
