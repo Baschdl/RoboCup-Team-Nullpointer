@@ -98,7 +98,7 @@ public class InitializeProgram {
 
 	public void initializeLogger() {
 		logger.setLevel(Level.INFO);
-		loadConfiguration("log4j.properties");
+		loadConfiguration("resources/log4j.properties");
 		logger.log(Level.INFO, "---");
 		logger.log(Level.INFO, "my Message is: it should work now");
 
