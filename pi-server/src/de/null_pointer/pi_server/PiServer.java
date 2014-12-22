@@ -1,4 +1,5 @@
 package de.null_pointer.pi_server;
+
 import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.JFDisplayValues;
@@ -8,21 +9,23 @@ public class PiServer {
 	private static Logger logger = Logger.getLogger("TST.SIM");
 
 	public static void main(String[] args) {
-		InitializeProgram initProgramm = new InitializeProgram(logger);
-		initProgramm.initializeLogger();
-		initProgramm.initializeCommunication();
-		initProgramm.initializeSensors();
-		initProgramm.initializeNavigation();
-		initProgramm.initializeBehavior();
+		InitializeProgram initProgram = new InitializeProgram(logger);
+		initProgram.initializeLogger();
+		initProgram.initializeCommunication();
+		initProgram.initializeSensors();
+		initProgram.initializeNavigation();
+		initProgram.initializeBehavior();
 
+		TestProgram testProgram = new TestProgram(initProgram);
 		JFDisplayValues vGUI = new JFDisplayValues();
 
 		logger.info("starting programm");
 
 		// Entscheidet anhand der Uebergabeparameter beim Start welche
 		// Programmteile ausgefuehrt werden
-		for (String s : args) {
-
+		String s = null;
+		for (int i = 0; i < args.length; i++) {
+			s = args[i];
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
 				logger.info("GUI gestartet");
@@ -32,7 +35,22 @@ public class PiServer {
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
 				logger.info("Wettkampfprogramm gestartet");
-				initProgramm.getArbitrator().start();
+				initProgram.getArbitrator().start();
+			}
+
+			// startet ein Testprogramm, der nachfolgende String gibt an welches
+			if (s.equals("-test")) {
+				i++;
+				s = args[i];
+				if (s.equals("forward")) {
+					testProgram.forward();
+				} else if (s.equals("backward")) {
+					testProgram.backward();
+				} else if (s.equals("rightturn")) {
+					testProgram.rightturn();
+				} else if (s.equals("leftturn")) {
+					testProgram.leftturn();
+				}
 			}
 
 		}
