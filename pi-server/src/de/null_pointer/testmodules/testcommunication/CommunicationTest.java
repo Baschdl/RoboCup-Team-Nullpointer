@@ -144,8 +144,8 @@ public class CommunicationTest {
 		ArrayList<ArrayList<String>> sensorData = new ArrayList<ArrayList<String>>();
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtAbsImu
 				.getDrivingForward())));
-		sensorData
-				.add(new ArrayList<String>(Arrays.asList(virtDistNX.getNoSpaceInFront())));
+		sensorData.add(new ArrayList<String>(Arrays.asList(virtDistNX
+				.getNoSpaceInFront())));
 		sensorData.add(new ArrayList<String>(
 				Arrays.asList(virtEOPDLeft.getOK())));
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
@@ -154,7 +154,8 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
-		//TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors anspricht
+		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
+		// anspricht
 		assertEquals(true, testInters.isActive());
 	}
 
@@ -175,15 +176,16 @@ public class CommunicationTest {
 				.getDrivingForward())));
 		sensorData
 				.add(new ArrayList<String>(Arrays.asList(virtDistNX.getOK())));
-		sensorData.add(new ArrayList<String>(
-				Arrays.asList(virtEOPDLeft.getIntersection())));
+		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDLeft
+				.getIntersection())));
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
 				.getOK())));
 		sensorData
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
-		//TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors anspricht
+		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
+		// anspricht
 		assertEquals(true, testInters.isActive());
 	}
 
@@ -202,7 +204,8 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
-		//TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors anspricht
+		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
+		// anspricht
 		assertEquals(true, testInters.isActive());
 	}
 
@@ -219,9 +222,9 @@ public class CommunicationTest {
 		}
 		for (int j = 0; j < maxNumberData; j++) {
 			for (int i = 0; i < sensors; i++) {
-				if (j != sensorData.get(i).size()) {
+				if (j < (sensorData.get(i).size())) {
 					data.add(sensorData.get(i).get(j));
-				} else {
+				} else if (j == (sensorData.get(i).size())) {
 					sensorData.remove(i);
 					sensors--;
 				}
