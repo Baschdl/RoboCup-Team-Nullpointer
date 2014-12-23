@@ -15,8 +15,7 @@ public class VirtualLSA {
 
 	/**
 	 * 
-	 * @param sensorN
-	 *            sensorNumber of the sensor of the LightSensorArray
+	 
 	 * @param maxValueWhite
 	 *            must not be bigger than 100
 	 * @param minValueWhite
@@ -26,10 +25,10 @@ public class VirtualLSA {
 	 * @param minValueBlack
 	 *            must not be smaller than 0
 	 */
-	public VirtualLSA(int sensorN, int maxValueWhite, int minValueWhite,
+	public VirtualLSA(int maxValueWhite, int minValueWhite,
 			int maxValueBlack, int minValueBlack) {
 
-		sensorNumber = sensorN;
+		
 		biggestValueWhite = maxValueWhite;
 		smallestValueWhite = minValueWhite;
 		biggestValueBlack = maxValueBlack;
@@ -115,8 +114,13 @@ public class VirtualLSA {
 		}
 
 	}
-
-	public String[] getBlack() {
+/**
+ * 
+ * @param sensorN sensorNumber of the sensor of the LightSensorArray
+ * @return random values for the case "sensor is black"
+ */
+	public String[] getBlack(int sensorN) {
+		sensorNumber = sensorN;
 		generateValues(0);
 
 		for (int i = 0; i < amountValues; i++) {
@@ -125,7 +129,14 @@ public class VirtualLSA {
 		return LSA;
 	}
 
-	public String[] getWhite() {
+	/**
+	 * 
+	 * @param sensorN sensorNumber of the sensor of the LightSensorArray
+	 * @return random values for the case "sensor is white"
+	 */
+	
+	public String[] getWhite(int sensorN) {
+		sensorNumber = sensorN;
 		generateValues(1);
 
 		for (int i = 0; i < amountValues; i++) {
@@ -134,8 +145,15 @@ public class VirtualLSA {
 		return LSA;
 
 	}
+	
+	/**
+	 * 
+	 * @param sensorN sensorNumber of the sensor of the LightSensorArray
+	 * @return random values for the case "sensor is not black and not white"
+	 */
 
-	public String[] getValuesBetweenWhiteAndBlack() {
+	public String[] getValuesBetweenWhiteAndBlack(int sensorN) {
+		sensorNumber = sensorN;
 		generateValues(2);
 
 		for (int i = 0; i < amountValues; i++) {
