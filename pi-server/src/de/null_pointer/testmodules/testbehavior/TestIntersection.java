@@ -14,8 +14,10 @@ public class TestIntersection extends Intersection {
 	public TestIntersection(MotorControlPi motorControl,
 			DistNxProcessingPi distnx, EOPDProcessingPi eopdLeft,
 			EOPDProcessingPi eopdRight, Abs_ImuProcessingPi absImu,
-			Navigation nav) {
-		super(motorControl, distnx, eopdLeft, eopdRight, absImu, nav);
+			Navigation nav, int minimalDistanceFront, int maximalDistanceSide) {
+
+		super(motorControl, distnx, eopdLeft, eopdRight, absImu, nav,
+				minimalDistanceFront, maximalDistanceSide);
 	}
 
 	public boolean isActive() {

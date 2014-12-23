@@ -94,6 +94,10 @@ public class InitializeProgram {
 		return comPi;
 	}
 
+	public Properties getPropPiServer() {
+		return propPiServer;
+	}
+
 	public InitializeProgram(Logger logger) {
 		InitializeProgram.logger = logger;
 	}
@@ -109,6 +113,10 @@ public class InitializeProgram {
 		// Spezifiziert welche Meldungen alles ausgegeben werden
 		// ALL | DEBUG | INFO | WARN | ERROR | FATAL | OFF:
 		// logger.setLevel(Level.INFO);
+	}
+
+	public void initializeProperties() {
+		propPiServer = loadConfiguration("resources/pi_server.properties");
 	}
 
 	public void initializeCommunication() {
@@ -158,7 +166,13 @@ public class InitializeProgram {
 	public void initializeSensors() {
 		motorControl = new MotorControlPi(brickCon1, brickCon2);
 
-		absImu = new Abs_ImuProcessingPi(-1, -1, -1);
+		absImu = new Abs_ImuProcessingPi(
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.InitializeProgram.dimension_horizontal")),
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.InitializeProgram.dimension_vertical")),
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.InitializeProgram.dimension_rotational")));
 		eopdLeft = new EOPDProcessingPi();
 		eopdRight = new EOPDProcessingPi();
 		distNx = new DistNxProcessingPi();
@@ -173,12 +187,25 @@ public class InitializeProgram {
 
 	public void initializeBehavior() {
 		// TODO: Reihenfolge richtig?
-		Behavior b1 = new MovingForward(motorControl);
+		Behavior b1 = new MovingForward(motorControl,
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.MovingForward.speed")));
 		Behavior b2 = new NextTile(absImu, nav);
-		Behavior b3 = new Slope(motorControl, absImu, nav);
+		Behavior b3 = new Slope(motorControl, absImu, nav,
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Slope.angleToTakeControl")));
 		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav);
-		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, nav);
+		Behavior b5 = new Intersection(
+				motorControl,
+				distNx,
+				eopdLeft,
+				eopdRight,
+				absImu,
+				nav,
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Intersection.minimalDistanceFront")),
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Intersection.maximalDistanceSide")));
 		Behavior b6 = new Victim(motorControl);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };

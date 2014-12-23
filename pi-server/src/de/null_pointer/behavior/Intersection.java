@@ -20,18 +20,22 @@ public class Intersection implements Behavior {
 	Abs_ImuProcessingPi absImu;
 	Navigation nav;
 
-	int minimalDistanceFront = 10;
-	int maximalDistanceSide = 20;
+	int minimalDistanceFront = -1;
+	int maximalDistanceSide = -1;
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
-			Abs_ImuProcessingPi absImu, Navigation nav) {
+			Abs_ImuProcessingPi absImu, Navigation nav,
+			int minimalDistanceFront, int maximalDistanceSide) {
 		this.motorControl = motorControl;
 		this.distnx = distnx;
 		this.eopdLeft = eopdLeft;
 		this.eopdRight = eopdRight;
 		this.absImu = absImu;
 		this.nav = nav;
+
+		this.minimalDistanceFront = minimalDistanceFront;
+		this.maximalDistanceSide = maximalDistanceSide;
 	}
 
 	@Override
@@ -42,15 +46,13 @@ public class Intersection implements Behavior {
 			return true;
 		} else if (actualDistance < 0) {
 			logger.error("No DistNx-Values (negative value)");
+		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
+			logger.info("Behavior Intersection: Hallway left");
+			return true;
+		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
+			logger.info("Behavior Intersection: Hallway right");
+			return true;
 		}
-		// TODO: passende EOPD-Methoden werden benoetigt
-		// else if (eopdLeft.getDistance() >= maximalDistanceSide) {
-		// logger.info("Behavior Intersection: Hallway left");
-		// return true;
-		// } else if (eopdLeft.getDistance() >= maximalDistanceSide) {
-		// logger.info("Behavior Intersection: Hallway right");
-		// return true;
-		// }
 		return false;
 	}
 

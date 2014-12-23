@@ -1,5 +1,7 @@
 package de.null_pointer.pi_server;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.JFDisplayValues;
@@ -11,12 +13,21 @@ public class PiServer {
 	public static void main(String[] args) {
 		InitializeProgram initProgram = new InitializeProgram(logger);
 		initProgram.initializeLogger();
+		Properties propPiServer = initProgram.getPropPiServer();
 		initProgram.initializeCommunication();
 		initProgram.initializeSensors();
 		initProgram.initializeNavigation();
 		initProgram.initializeBehavior();
 
-		TestProgram testProgram = new TestProgram(initProgram);
+		TestProgram testProgram = new TestProgram(initProgram,
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.TestProgram.linear.speed")),
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.TestProgram.turn.speed")),
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.TestProgram.difference")),
+				Integer.parseInt(propPiServer
+						.getProperty("Pi_server.TestProgram.duration")));
 		JFDisplayValues vGUI = new JFDisplayValues();
 
 		logger.info("starting programm");

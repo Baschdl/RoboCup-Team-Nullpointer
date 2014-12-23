@@ -10,17 +10,28 @@ public class TestProgram {
 	private BrickControlPi brickCon1 = null;
 	private BrickControlPi brickCon2 = null;
 
-	public TestProgram(InitializeProgram initProgram) {
+	private int speedLinear = -1;
+	private int speedTurn = -1;
+	private int difference = -1;
+	private int duration = -1;
+
+	public TestProgram(InitializeProgram initProgram, int speedLinear,
+			int speedTurn, int difference, int duration) {
 		this.initProgram = initProgram;
 		brickCon1 = this.initProgram.getBrickCon1();
 		brickCon2 = this.initProgram.getBrickCon2();
 		motorcontrol = this.initProgram.getMotorControl();
+
+		this.speedLinear = speedLinear;
+		this.speedTurn = speedTurn;
+		this.difference = difference;
+		this.duration = duration;
 	}
 
 	public void forward() {
-		motorcontrol.forward(200);
+		motorcontrol.forward(speedLinear);
 		try {
-			wait(1000);
+			wait(duration);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,9 +41,9 @@ public class TestProgram {
 	}
 
 	public void backward() {
-		motorcontrol.backward(200);
+		motorcontrol.backward(speedLinear);
 		try {
-			wait(1000);
+			wait(duration);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,9 +53,9 @@ public class TestProgram {
 	}
 
 	public void rightturn() {
-		motorcontrol.rightturn(200, 50);
+		motorcontrol.rightturn(speedTurn, difference);
 		try {
-			wait(1000);
+			wait(duration);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,9 +65,9 @@ public class TestProgram {
 	}
 
 	public void leftturn() {
-		motorcontrol.leftturn(200, 50);
+		motorcontrol.leftturn(speedTurn, difference);
 		try {
-			wait(1000);
+			wait(duration);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

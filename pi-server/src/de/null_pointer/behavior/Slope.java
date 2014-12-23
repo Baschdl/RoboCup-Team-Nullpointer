@@ -11,21 +11,24 @@ import lejos.robotics.subsumption.Behavior;
 public class Slope implements Behavior {
 	private static Logger logger = Logger.getLogger(Slope.class);
 
-	MotorControlPi motorControl;
-	Abs_ImuProcessingPi absImu;
-	Navigation nav;
+	private MotorControlPi motorControl = null;
+	private Abs_ImuProcessingPi absImu = null;
+	private Navigation nav = null;
+
+	private int angleToTakeControl = -1;
 
 	public Slope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu,
-			Navigation nav) {
+			Navigation nav, int angleToTakeControl) {
 		this.motorControl = motorControl;
 		this.absImu = absImu;
 		this.nav = nav;
+
+		this.angleToTakeControl = angleToTakeControl;
 	}
 
 	@Override
 	public boolean takeControl() {
-		// TODO: Benoetigt Neigung vom AbsImu
-		return false;
+		return (absImu.getTiltDataVertical() > angleToTakeControl);
 	}
 
 	@Override

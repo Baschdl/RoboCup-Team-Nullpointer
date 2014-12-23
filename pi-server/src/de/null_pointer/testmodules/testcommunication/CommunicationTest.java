@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -36,14 +37,11 @@ public class CommunicationTest {
 
 	TestBrickControlPi brickcontrol = null;
 
-	private VirtualAbsIMUACG virtAbsImu = new VirtualAbsIMUACG();
-	// TODO: Richtige Werte verwenden
-	private VirtualDistNX virtDistNX = new VirtualDistNX(800, 10);
-	// TODO: Richtige Nummern verwenden
-	private VirtualEOPD virtEOPDLeft = new VirtualEOPD(0);
-	private VirtualEOPD virtEOPDRight = new VirtualEOPD(1);
-	// TODO: Richtige Werte verwenden
-	private VirtualLSA virtLSA = new VirtualLSA(100, 80, 40, 0);
+	private VirtualAbsIMUACG virtAbsImu = null;
+	private VirtualDistNX virtDistNX = null;
+	private VirtualEOPD virtEOPDLeft = null;
+	private VirtualEOPD virtEOPDRight = null;
+	private VirtualLSA virtLSA = null;
 
 	private CommunicationPi comPi = null;
 	private Abs_ImuProcessingPi absImu = null;
@@ -53,6 +51,7 @@ public class CommunicationTest {
 	private LSAProcessingPi lsa = null;
 	private MotorControlPi motorControl = null;
 	private Navigation nav = null;
+	private Properties propPiServer = null;
 
 	private TestBlackTile testBlackTile = null;
 	private TestIntersection testInters = null;
@@ -78,13 +77,53 @@ public class CommunicationTest {
 		lsa = initProgramm.getLsa();
 		motorControl = initProgramm.getMotorControl();
 		nav = initProgramm.getNav();
+		propPiServer = initProgramm.getPropPiServer();
+
+		virtAbsImu = new VirtualAbsIMUACG();
+		virtDistNX = new VirtualDistNX(
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.distnx.maxDistance")),
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.distnx.minDistance")));
+		virtEOPDLeft = new VirtualEOPD(
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.eopdLeft.number")));
+		virtEOPDRight = new VirtualEOPD(
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.eopdRight.number")));
+		virtLSA = new VirtualLSA(
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.maxValueWhite")),
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueWhite")),
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.maxValueBlack")),
+				Integer.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueBlack")));
 
 		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav);
-		testInters = new TestIntersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, nav);
-		testMovFor = new TestMovingForward(motorControl);
+		testInters = new TestIntersection(
+				motorControl,
+				distNx,
+				eopdLeft,
+				eopdRight,
+				absImu,
+				nav,
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Intersection.minimalDistanceFront")),
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Intersection.maximalDistanceSide")));
+
+		testMovFor = new TestMovingForward(motorControl,
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.MovingForward.speed")));
+
 		testNextTile = new TestNextTile(absImu, nav);
-		testSlope = new TestSlope(motorControl, absImu, nav);
+
+		testSlope = new TestSlope(motorControl, absImu, nav,
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Slope.angleToTakeControl")));
+
 		testVictim = new TestVictim(motorControl);
 
 		brickcontrol = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,

@@ -10,8 +10,8 @@ public class TestSlope extends Slope {
 	private boolean active = false;
 
 	public TestSlope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu,
-			Navigation nav) {
-		super(motorControl, absImu, nav);
+			Navigation nav, int angleToTakeControl) {
+		super(motorControl, absImu, nav, angleToTakeControl);
 	}
 
 	public boolean isActive() {

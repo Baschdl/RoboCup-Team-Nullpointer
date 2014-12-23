@@ -7,8 +7,8 @@ public class TestMovingForward extends MovingForward {
 
 	private boolean active = false;
 
-	public TestMovingForward(MotorControlPi motorControl) {
-		super(motorControl);
+	public TestMovingForward(MotorControlPi motorControl, int speed) {
+		super(motorControl, speed);
 	}
 
 	public boolean isActive() {
