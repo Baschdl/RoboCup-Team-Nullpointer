@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
+import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import lejos.robotics.subsumption.Behavior;
@@ -16,6 +17,7 @@ public class Intersection implements Behavior {
 	DistNxProcessingPi distnx;
 	EOPDProcessingPi eopdLeft;
 	EOPDProcessingPi eopdRight;
+	Abs_ImuProcessingPi absImu;
 	Navigation nav;
 
 	int minimalDistanceFront = 10;
@@ -23,11 +25,12 @@ public class Intersection implements Behavior {
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
-			Navigation nav) {
+			Abs_ImuProcessingPi absImu, Navigation nav) {
 		this.motorControl = motorControl;
 		this.distnx = distnx;
 		this.eopdLeft = eopdLeft;
 		this.eopdRight = eopdRight;
+		this.absImu = absImu;
 		this.nav = nav;
 	}
 
@@ -67,11 +70,10 @@ public class Intersection implements Behavior {
 			findHallway();
 		}
 
-		// TODO: von dieser bis zur letzten KReuzung seitliche Verbindungen
+		// TODO: von dieser bis zur letzten Kreuzung seitliche Verbindungen
 		// kappen
 
-		// TODO: aktuelle Ausrichtung von Gyro erfragen
-		int directionToMove = nav.tremauxAlgorithm(-1, false);
+		int directionToMove = nav.tremauxAlgorithm(absImu.getHeading(), false);
 
 		// TODO: in die gegebene Richtung fahren
 	}
@@ -89,9 +91,7 @@ public class Intersection implements Behavior {
 	}
 
 	private void wallAhead() {
-		// TODO: ersetze "-1" durch passende Nummer fuer "vorne"/ Gyro
-		nav.removeNeighbor(-1);
-
+		nav.removeNeighbor(absImu.getHeading());
 		findHallway();
 
 	}

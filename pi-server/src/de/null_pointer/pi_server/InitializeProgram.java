@@ -172,9 +172,9 @@ public class InitializeProgram {
 		Behavior b1 = new MovingForward(motorControl);
 		Behavior b2 = new NextTile(absImu, nav);
 		Behavior b3 = new Slope(motorControl, absImu, nav);
-		Behavior b4 = new BlackTile(motorControl, lsa, nav);
+		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav);
 		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, nav);
+				eopdRight, absImu, nav);
 		Behavior b6 = new Victim(motorControl);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };

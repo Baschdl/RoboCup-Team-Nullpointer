@@ -79,9 +79,9 @@ public class CommunicationTest {
 		motorControl = initProgramm.getMotorControl();
 		nav = initProgramm.getNav();
 
-		testBlackTile = new TestBlackTile(motorControl, lsa, nav);
+		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav);
 		testInters = new TestIntersection(motorControl, distNx, eopdLeft,
-				eopdRight, nav);
+				eopdRight, absImu, nav);
 		testMovFor = new TestMovingForward(motorControl);
 		testNextTile = new TestNextTile(absImu, nav);
 		testSlope = new TestSlope(motorControl, absImu, nav);
