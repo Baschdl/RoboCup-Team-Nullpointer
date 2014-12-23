@@ -120,6 +120,9 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
+		if (testMovFor.takeControl()) {
+			testMovFor.action();
+		}
 		assertEquals(true, testMovFor.isActive());
 	}
 
@@ -164,6 +167,9 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
+		if (testSlope.takeControl()) {
+			testSlope.action();
+		}
 		assertEquals(true, testSlope.isActive());
 	}
 
@@ -196,6 +202,9 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
+		if (testInters.takeControl()) {
+			testInters.action();
+		}
 		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
 		// anspricht
 		assertEquals(true, testInters.isActive());
@@ -240,6 +249,9 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
+		if (testInters.takeControl()) {
+			testInters.action();
+		}
 		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
 		// anspricht
 		assertEquals(true, testInters.isActive());
@@ -274,6 +286,9 @@ public class CommunicationTest {
 				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
+		if (testInters.takeControl()) {
+			testInters.action();
+		}
 		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
 		// anspricht
 		assertEquals(true, testInters.isActive());
