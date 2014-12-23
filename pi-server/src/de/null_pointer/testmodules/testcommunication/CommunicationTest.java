@@ -43,7 +43,7 @@ public class CommunicationTest {
 	private VirtualEOPD virtEOPDLeft = new VirtualEOPD(0);
 	private VirtualEOPD virtEOPDRight = new VirtualEOPD(1);
 	// TODO: Richtige Werte verwenden
-	private VirtualLSA virtLSA = new VirtualLSA(4, 100, 80, 40, 0);
+	private VirtualLSA virtLSA = new VirtualLSA(100, 80, 40, 0);
 
 	private CommunicationPi comPi = null;
 	private Abs_ImuProcessingPi absImu = null;
@@ -103,7 +103,21 @@ public class CommunicationTest {
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
 				.getOK())));
 		sensorData
-				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(0))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(1))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(2))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(3))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(4))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(5))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(6))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
 		assertEquals(true, testMovFor.isActive());
@@ -133,7 +147,21 @@ public class CommunicationTest {
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
 				.getOK())));
 		sensorData
-				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(0))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(1))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(2))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(3))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(4))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(5))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(6))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
 		assertEquals(true, testSlope.isActive());
@@ -151,7 +179,21 @@ public class CommunicationTest {
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
 				.getOK())));
 		sensorData
-				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(0))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(1))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(2))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(3))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(4))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(5))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(6))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
 		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
@@ -181,7 +223,21 @@ public class CommunicationTest {
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
 				.getOK())));
 		sensorData
-				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(0))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(1))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(2))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(3))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(4))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(5))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(6))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
 		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
@@ -201,7 +257,21 @@ public class CommunicationTest {
 		sensorData.add(new ArrayList<String>(Arrays.asList(virtEOPDRight
 				.getIntersection())));
 		sensorData
-				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite())));
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(0))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(1))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(2))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(3))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(4))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(5))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(6))));
+		sensorData
+				.add(new ArrayList<String>(Arrays.asList(virtLSA.getWhite(7))));
 		ArrayList<String> comStrings = makeOneDimensionalList(sensorData);
 		sendData(comStrings);
 		// TODO: Weitere Ueberpruefung, ob richtiger Teil des Behaviors
