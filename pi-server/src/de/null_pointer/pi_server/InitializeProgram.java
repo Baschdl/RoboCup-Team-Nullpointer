@@ -44,6 +44,8 @@ public class InitializeProgram {
 	private Arbitrator arbitrator = null;
 	private CommunicationPi comPi = null;
 
+	private Properties propPiServer = null;
+
 	public Arbitrator getArbitrator() {
 		return arbitrator;
 	}
@@ -99,6 +101,8 @@ public class InitializeProgram {
 	public void initializeLogger() {
 		logger.setLevel(Level.INFO);
 		loadConfiguration("resources/log4j.properties");
+		propPiServer = loadConfiguration("resources/pi_server.properties");
+
 		logger.log(Level.INFO, "---");
 		logger.log(Level.INFO, "my Message is: it should work now");
 
@@ -182,7 +186,7 @@ public class InitializeProgram {
 		arbitrator = new Arbitrator(behavior);
 	}
 
-	private static void loadConfiguration(String configFile) {
+	private static Properties loadConfiguration(String configFile) {
 
 		Properties properties = new Properties();
 		InputStream input = null;
@@ -196,6 +200,7 @@ public class InitializeProgram {
 			logger.log(Level.ERROR, "configuration file not found "
 					+ configFile + " " + e.getMessage());
 		}
+		return properties;
 
 	}
 }
