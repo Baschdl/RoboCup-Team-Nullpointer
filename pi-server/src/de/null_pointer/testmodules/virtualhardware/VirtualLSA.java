@@ -61,7 +61,7 @@ public class VirtualLSA {
 			logger.error("mode > 2 - Invalid mode chosen!");
 		}
 
-		for (int i = 0; i < amountValues; i++) {
+		for (int i = 1; i < amountValues; i++) {
 
 			if (additionOrSubtraction >= 5) {// addition
 				if (mode == 0) {
