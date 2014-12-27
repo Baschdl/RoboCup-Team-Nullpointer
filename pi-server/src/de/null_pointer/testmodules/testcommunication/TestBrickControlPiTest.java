@@ -8,7 +8,7 @@ import de.null_pointer.testmodules.virtualhardware.VirtualMotor;
 
 public class TestBrickControlPiTest {
 
-	TestBrickControlPi classToTest = new TestBrickControlPi(null, null, null, null, null, null);
+	TestBrickControlPi classToTest = new TestBrickControlPi(null, null, null, null, null, null, null);
 	
 	@Test
 	public void testResolveMotorporta() {

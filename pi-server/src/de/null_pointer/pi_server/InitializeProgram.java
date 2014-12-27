@@ -24,6 +24,7 @@ import de.null_pointer.communication_pi.RealCommunicationPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
@@ -40,6 +41,7 @@ public class InitializeProgram {
 	private EOPDProcessingPi eopdRight = null;
 	private DistNxProcessingPi distNx = null;
 	private LSAProcessingPi lsa = null;
+	private AccumulatorProcessingPi accumulator = null;
 	private Navigation nav = null;
 	private Arbitrator arbitrator = null;
 	private CommunicationPi comPi = null;
@@ -86,6 +88,10 @@ public class InitializeProgram {
 		return lsa;
 	}
 
+	public AccumulatorProcessingPi getAccumulator() {
+		return accumulator;
+	}
+
 	public Navigation getNav() {
 		return nav;
 	}
@@ -119,50 +125,6 @@ public class InitializeProgram {
 		propPiServer = loadConfiguration("resources/pi_server.properties");
 	}
 
-	public void initializeCommunication() {
-
-		initCom = new InitCommunicationPi();
-
-		// TODO: Brick-IDs eintragen
-		String[] brickIDs = { null, null };
-
-		for (int i = 0; i < 2; i++) {
-			comPi = initCom.initConnection(brickIDs[i]);
-			if (comPi instanceof RealCommunicationPi) {
-				// TODO: Angeschlossene Sensoren uebergeben
-				if (i == 0) {
-					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi,
-							absImu, distNx, eopdLeft, eopdLeft, lsa);
-				} else if (i == 1) {
-					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi,
-							absImu, distNx, eopdLeft, eopdLeft, lsa);
-				} else {
-					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
-				}
-
-			} else {
-				if (i == 0) {
-					brickCon1 = new TestBrickControlPi(comPi, absImu, distNx,
-							eopdLeft, eopdLeft, lsa);
-				} else if (i == 1) {
-					brickCon2 = new TestBrickControlPi(comPi, absImu, distNx,
-							eopdLeft, eopdLeft, lsa);
-				} else {
-					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
-				}
-			}
-		}
-
-		if (brickCon1 != null) {
-			logger.info("Communication with Brick 1 started");
-			brickCon1.start();
-		}
-		if (brickCon2 != null) {
-			logger.info("Communication with Brick 2 started");
-			brickCon2.start();
-		}
-	}
-
 	public void initializeSensors() {
 		motorControl = new MotorControlPi(brickCon1, brickCon2);
 
@@ -177,6 +139,53 @@ public class InitializeProgram {
 		eopdRight = new EOPDProcessingPi();
 		distNx = new DistNxProcessingPi();
 		lsa = new LSAProcessingPi();
+		accumulator = new AccumulatorProcessingPi();
+	}
+
+	public void initializeCommunication() {
+
+		initCom = new InitCommunicationPi();
+
+		// TODO: Brick-IDs eintragen
+		String[] brickIDs = { null, null };
+
+		for (int i = 0; i < 2; i++) {
+			comPi = initCom.initConnection(brickIDs[i]);
+			if (comPi instanceof RealCommunicationPi) {
+				// TODO: Angeschlossene Sensoren uebergeben
+				if (i == 0) {
+					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi,
+							absImu, distNx, eopdLeft, eopdLeft, lsa,
+							accumulator);
+				} else if (i == 1) {
+					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi,
+							absImu, distNx, eopdLeft, eopdLeft, lsa,
+							accumulator);
+				} else {
+					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
+				}
+
+			} else {
+				if (i == 0) {
+					brickCon1 = new TestBrickControlPi(comPi, absImu, distNx,
+							eopdLeft, eopdLeft, lsa, accumulator);
+				} else if (i == 1) {
+					brickCon2 = new TestBrickControlPi(comPi, absImu, distNx,
+							eopdLeft, eopdLeft, lsa, accumulator);
+				} else {
+					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
+				}
+			}
+		}
+
+		if (brickCon1 != null) {
+			logger.info("Communication with Brick 1 started");
+			brickCon1.start();
+		}
+		if (brickCon2 != null) {
+			logger.info("Communication with Brick 2 started");
+			brickCon2.start();
+		}
 	}
 
 	public void initializeNavigation() {

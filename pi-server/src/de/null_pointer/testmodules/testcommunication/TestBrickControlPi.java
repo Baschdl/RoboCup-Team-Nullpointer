@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.communication_pi.CommunicationPi;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
@@ -18,9 +19,10 @@ public class TestBrickControlPi extends BrickControlPi {
 
 	public TestBrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
-			EOPDProcessingPi eopdRight, LSAProcessingPi lsa) {
+			EOPDProcessingPi eopdRight, LSAProcessingPi lsa,
+			AccumulatorProcessingPi accumulator) {
 
-		super(com, abs_Imu, distNx, eopdLeft, eopdRight, lsa);
+		super(com, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator);
 	}
 
 	// Getter werden zum Testen der Klasse benoetigt

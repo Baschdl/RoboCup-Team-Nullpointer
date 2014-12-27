@@ -16,6 +16,7 @@ import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.pi_server.InitializeProgram;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
@@ -49,6 +50,8 @@ public class CommunicationTest {
 	private EOPDProcessingPi eopdLeft = null;
 	private EOPDProcessingPi eopdRight = null;
 	private LSAProcessingPi lsa = null;
+	private AccumulatorProcessingPi accumulator = null;
+	
 	private MotorControlPi motorControl = null;
 	private Navigation nav = null;
 	private Properties propPiServer = null;
@@ -78,6 +81,7 @@ public class CommunicationTest {
 		motorControl = initProgramm.getMotorControl();
 		nav = initProgramm.getNav();
 		propPiServer = initProgramm.getPropPiServer();
+		accumulator = initProgramm.getAccumulator();
 
 		virtAbsImu = new VirtualAbsIMUACG();
 		virtDistNX = new VirtualDistNX(
@@ -127,7 +131,7 @@ public class CommunicationTest {
 		testVictim = new TestVictim(motorControl);
 
 		brickcontrol = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,
-				eopdRight, lsa);
+				eopdRight, lsa, accumulator);
 	}
 
 	@Test

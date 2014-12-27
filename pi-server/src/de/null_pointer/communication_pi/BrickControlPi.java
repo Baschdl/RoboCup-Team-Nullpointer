@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.apache.log4j.Logger;
 
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
@@ -18,18 +19,21 @@ public class BrickControlPi extends Thread {
 	private EOPDProcessingPi eopdLeft = null;
 	private EOPDProcessingPi eopdRight = null;
 	private LSAProcessingPi lsa = null;
+	private AccumulatorProcessingPi accumulator = null;
 
 	private boolean readyToProcessData = true;
 
 	public BrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
-			EOPDProcessingPi eopdRight, LSAProcessingPi lsa) {
+			EOPDProcessingPi eopdRight, LSAProcessingPi lsa,
+			AccumulatorProcessingPi accumulator) {
 		this.com = com;
 		this.abs_Imu = abs_Imu;
 		this.distNx = distNx;
 		this.eopdLeft = eopdLeft;
 		this.eopdRight = eopdRight;
 		this.lsa = lsa;
+		this.accumulator = accumulator;
 	}
 
 	/**
@@ -50,7 +54,7 @@ public class BrickControlPi extends Thread {
 		}
 		while (readyToProcessData) {
 			message = receiveData();
-//			logger.info("brick Control: " + this);
+			// logger.info("brick Control: " + this);
 			if (message != null) {
 				processData(message);
 			}
@@ -99,6 +103,8 @@ public class BrickControlPi extends Thread {
 						Math.round(receiveData[1]) - 11);
 			}
 
+		} else if (receiveData[0] == 6) {
+			accumulator.setMilliVolt(Math.round(receiveData[1]));
 		} else {
 			// System.out.println("process Data (no sensor) " +
 			// Arrays.toString(receiveData));
