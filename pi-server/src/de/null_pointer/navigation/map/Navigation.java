@@ -1,6 +1,10 @@
 package de.null_pointer.navigation.map;
 
+import org.apache.log4j.Logger;
+
 public class Navigation {
+
+	private static Logger logger = Logger.getLogger(Navigation.class);
 
 	private Node currentTile;
 
@@ -29,12 +33,15 @@ public class Navigation {
 
 		// check if maze is solved already
 		if (checkSolved(tremauxCounter)) {
+			logger.info("maze is solved");
 			return -2;
 			// method returns error, if there is no way to go
 		} else if (possibleDirections(tremauxCounter) == 0) {
+			logger.warn("there's no way to go");
 			return -1;
 			// check for dead end; if detected, robot reverses
 		} else if (possibleDirections(tremauxCounter) == 1) {
+			logger.info("dead end, turning around !");
 			return currentTile.invertOrientation(orientation);
 			// -> real intersection; check TremauxCounter to evaluate direction
 		} else {
@@ -44,26 +51,31 @@ public class Navigation {
 				// if tile was already visited and the previous corridor was
 				// only taken once, the robot reverses and passes it a second
 				// time
+				logger.info("already visited, turning around !");
 				currentTile.incTremauxCounter(currentTile
 						.invertOrientation(orientation));
 				return currentTile.invertOrientation(orientation);
 			} else if (currentTile.isVisited()) {
 				// if there is no corridor which was never passed, the robot
 				// takes the rightmost once passed corridor
-				if (rightmostDirection(orientation, tremauxCounter, 0) == -1) {
+				int direction = rightmostDirection(orientation, tremauxCounter,
+						0);
+				if (direction == -1) {
 					currentTile.incTremauxCounter(rightmostDirection(
 							orientation, tremauxCounter, 1));
+					logger.info("tile already visited, passing rightmost once visited corridor !");
 					return rightmostDirection(orientation, tremauxCounter, 1);
+				} else {
 					// if there is a corridor which was never passed, the robot
 					// takes the rightmost one
-				} else {
-					currentTile.incTremauxCounter(rightmostDirection(
-							orientation, tremauxCounter, 0));
+					logger.info("tile already visited, passing rightmost never passed corridor !");
+					currentTile.incTremauxCounter(direction);
 					return rightmostDirection(orientation, tremauxCounter, 0);
 				}
 			} else {
 				// tile was visited the first time; robot takes the rightmost
 				// direction
+				logger.info("tile was visited the first time, taking rightmost direction");
 				currentTile.incTremauxCounter(rightmostDirection(orientation,
 						tremauxCounter, 0));
 				return rightmostDirection(orientation, tremauxCounter, 0);
