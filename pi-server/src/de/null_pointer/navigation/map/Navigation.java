@@ -78,6 +78,7 @@ public class Navigation {
 				logger.info("tile was visited the first time, taking rightmost direction");
 				currentTile.incTremauxCounter(rightmostDirection(orientation,
 						tremauxCounter, 0));
+				currentTile.setVisited();
 				return rightmostDirection(orientation, tremauxCounter, 0);
 			}
 		}
