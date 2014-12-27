@@ -10,7 +10,7 @@ public class MotorControlPi {
 	private BrickControlPi brickCon1;
 	private BrickControlPi brickCon2;
 
-	//actualSpeed: positive: speed forward, negative: speed backward
+	// actualSpeed: positive: speed forward, negative: speed backward
 	private int actualSpeed = -1;
 	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3
 	private int mode = -1;
@@ -58,11 +58,10 @@ public class MotorControlPi {
 			speedCurve = 1;
 
 			logger.info("PC set all motors forward speed " + speed);
-			// TODO: Unserem aktuellen Roboter anpassen
-			// brickCon2.forward(speed, 'A');
-			// brickCon2.forward(speed, 'B');
-			// brickCon2.backward(speed, 'C');
-			// brickCon1.stop('A');
+			brickCon2.forward(speed, 'A');
+			brickCon1.backward(speed, 'A');
+			brickCon2.stop('B');
+			brickCon1.stop('B');
 			actualSpeed = speed;
 			mode = 0;
 		}
@@ -82,12 +81,10 @@ public class MotorControlPi {
 			speedCurve = 1;
 
 			logger.info("PC set all motors backward speed " + speed);
-			// TODO: Unserem aktuellen Roboter anpassen
-			// brickCon2.backward(speed, 'A');
-			// brickCon2.backward(speed, 'B');
-			// brickCon2.forward(speed, 'C');
-			// brickCon1.stop('A');
-			// TODO: Stimmt das so?
+			brickCon2.backward(speed, 'A');
+			brickCon1.forward(speed, 'A');
+			brickCon2.stop('B');
+			brickCon1.stop('B');
 			actualSpeed = -speed;
 			mode = 1;
 		}
@@ -102,7 +99,8 @@ public class MotorControlPi {
 	 *            Unterschied der Geschwindigkeit der linken und rechten
 	 *            Motoren. Beeinflusst den Wendekreis.
 	 */
-	// TODO: Ueberpruefen und moeglicherweise aendern
+	// TODO: Loeschen
+	@Deprecated
 	public void rightturn(int speed, int difference) {
 		if (this.speedCurve != speed && this.speedDifference != difference
 				&& mode != 2) {
@@ -134,7 +132,8 @@ public class MotorControlPi {
 	 *            Unterschied der Geschwindigkeit der linken und rechten
 	 *            Motoren. Beeinflusst den Wendekreis.
 	 */
-	// TODO: Ueberpruefen und moeglicherweise aendern
+	// TODO: Loeschen
+	@Deprecated
 	public void leftturn(int speed, int difference) {
 		if (this.speedCurve != speed && this.speedDifference != difference
 				&& mode != 3) {
@@ -167,11 +166,10 @@ public class MotorControlPi {
 		actualSpeed = 1;
 
 		logger.info("PC set motor rotate left angle " + angle);
-		// TODO: Unserem aktuellen Roboter anpassen
-		// brickCon1.rotate(angle, 'A');
-		// brickCon1.rotate(-angle, 'B');
-		// brickCon2.rotate(angle, 'A');
-		// brickCon2.rotate(-angle, 'B');
+		brickCon1.rotate(angle, 'A');
+		brickCon1.rotate(angle, 'B');
+		brickCon2.rotate(angle, 'A');
+		brickCon2.rotate(angle, 'B');
 	}
 
 	/**
@@ -187,11 +185,10 @@ public class MotorControlPi {
 		actualSpeed = 1;
 
 		logger.info("PC set motor rotate left angle " + angle);
-		// TODO: Unserem aktuellen Roboter anpassen
-		// brickCon1.rotate(-angle, 'A');
-		// brickCon1.rotate(angle, 'B');
-		// brickCon2.rotate(-angle, 'A');
-		// brickCon2.rotate(angle, 'B');
+		brickCon1.rotate(-angle, 'A');
+		brickCon1.rotate(-angle, 'B');
+		brickCon2.rotate(-angle, 'A');
+		brickCon2.rotate(-angle, 'B');
 	}
 
 	/**
@@ -205,11 +202,10 @@ public class MotorControlPi {
 			actualSpeed = 1;
 
 			logger.info("PC set all motor stop");
-			// TODO: Unserem aktuellen Roboter anpassen
-			// brickCon2.stop('A');
-			// brickCon2.stop('B');
-			// brickCon2.stop('C');
-			// brickCon1.stop('A');
+			brickCon1.stop('A');
+			brickCon1.stop('B');
+			brickCon2.stop('A');
+			brickCon2.stop('B');
 			notMoving = -10;
 
 		}
@@ -224,11 +220,10 @@ public class MotorControlPi {
 			speedDifference = 1;
 			speedCurve = 1;
 			actualSpeed = 1;
-			// TODO: Unserem aktuellen Roboter anpassen
-			// brickCon2.flt('A');
-			// brickCon2.flt('B');
-			// brickCon2.flt('C');
-			// brickCon1.flt('A');
+			brickCon1.flt('A');
+			brickCon1.flt('B');
+			brickCon2.flt('A');
+			brickCon2.flt('B');
 			notMoving = -10;
 
 		}
