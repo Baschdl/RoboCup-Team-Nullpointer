@@ -14,6 +14,7 @@ public class PiServer {
 		InitializeProgram initProgram = new InitializeProgram(logger);
 		initProgram.initializeLogger();
 		Properties propPiServer = initProgram.getPropPiServer();
+
 		initProgram.initializeSensors();
 		initProgram.initializeCommunication();
 		initProgram.initializeNavigation();

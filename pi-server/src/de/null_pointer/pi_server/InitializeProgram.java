@@ -126,8 +126,6 @@ public class InitializeProgram {
 	}
 
 	public void initializeSensors() {
-		motorControl = new MotorControlPi(brickCon1, brickCon2);
-
 		absImu = new Abs_ImuProcessingPi(
 				Integer.parseInt(propPiServer
 						.getProperty("Pi_server.InitializeProgram.dimension_horizontal")),
@@ -186,6 +184,8 @@ public class InitializeProgram {
 			logger.info("Communication with Brick 2 started");
 			brickCon2.start();
 		}
+
+		motorControl = new MotorControlPi(brickCon1, brickCon2);
 	}
 
 	public void initializeNavigation() {
