@@ -230,7 +230,7 @@ public class InitializeProgram {
 				Integer.parseInt(propPiServer
 						.getProperty("Behavior.Slope.angleToTakeControl")),
 				Integer.parseInt(propPiServer
-						.getProperty("Behavior.slope.speed")));
+						.getProperty("Behavior.Slope.speed")));
 		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav);
 		Behavior b5 = new Intersection(
 				motorControl,
