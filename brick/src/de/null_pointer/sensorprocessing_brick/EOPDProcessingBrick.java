@@ -50,12 +50,12 @@ public class EOPDProcessingBrick {
 	 * Readings and sends it if it has changed
 	 */
 	public void processData() {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 3; i++) {
 			values[i] = values[i + 1];
 		}
-		values[5] = eopd.readRawValue();
+		values[4] = eopd.readRawValue();
 		int buffer = 0;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 4; i++) {
 			buffer += values[i];
 		}
 		buffer /= 5;

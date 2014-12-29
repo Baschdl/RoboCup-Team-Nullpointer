@@ -29,19 +29,19 @@ public class LSAProcessingBrick {
 	 * Readings and sends them to pi-server if they have changed
 	 */
 	public void processData() {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 8; j++) {
 				values[j][j] = values[j + 1][j];
 			}
 		}
 		for (int i = 0; i < 8; i++) {
-			values[5] = lsa.getLightValues();
+			values[4] = lsa.getLightValues();
 		}
 
 		int[] buffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 4; j++) {
 				buffer[j] += values[j][i];
 			}
 		}
