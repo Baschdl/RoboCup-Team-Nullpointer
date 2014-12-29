@@ -178,10 +178,22 @@ public class InitializeProgram {
 		if (brickCon1 != null) {
 			logger.info("Communication with Brick 1 started");
 			brickCon1.start();
+			String sensor[] = {
+					propPiServer.getProperty("Brick.One.Sensorport.One"),
+					propPiServer.getProperty("Brick.One.Sensorport.Two"),
+					propPiServer.getProperty("Brick.One.Sensorport.Three"),
+					propPiServer.getProperty("Brick.One.Sensorport.Four") };
+			brickCon1.sendSensorData(sensor);
 		}
 		if (brickCon2 != null) {
 			logger.info("Communication with Brick 2 started");
 			brickCon2.start();
+			String sensor[] = {
+					propPiServer.getProperty("Brick.Two.Sensorport.One"),
+					propPiServer.getProperty("Brick.Two.Sensorport.Two"),
+					propPiServer.getProperty("Brick.Two.Sensorport.Three"),
+					propPiServer.getProperty("Brick.Two.Sensorport.Four") };
+			brickCon1.sendSensorData(sensor);
 		}
 
 		motorControl = new MotorControlPi(brickCon1, brickCon2);

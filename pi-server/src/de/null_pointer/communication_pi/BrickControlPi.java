@@ -147,19 +147,11 @@ public class BrickControlPi extends Thread {
 				// absimu_acg = controlClass.getAbsimu_acg();
 				sendCommand(10, 4, i + 1, 0);
 				// logger.debug("Gyro" + absimu_acg);
-			} else if (Sensor[i].equals("TouchSensorLinks")) {
+			} else if (Sensor[i].equals("Thermosensor")) {
 				// tsLeft = controlClass.getTsLeft();
 				sendCommand(10, 5, i + 1, 1);
 				// logger.debug("ts left" + tsLeft);
-			} else if (Sensor[i].equals("TouchSensorRechts")) {
-				// tsRight = controlClass.getTsRight();
-				sendCommand(10, 5, i + 1, 2);
-				// logger.debug("ts right" + tsRight);
-			} else if (Sensor[i].equals("NXTVoltmeter")) {
-				// nxt_vm = controlClass.getNxt_vm();
-				sendCommand(10, 6, i + 1, 0);
-				// logger.debug("NXT Voltmeter" + nxt_vm);
-			} else {
+			}  else {
 				logger.debug("Sensor existiert nicht");
 			}
 		}
