@@ -9,6 +9,10 @@ public class Abs_ImuProcessingBrick {
 	private AbsoluteIMU_ACG abs_imu = null;
 	private BrickControlBrick brickControl;
 
+	// TODO: noch anpassen !
+	private int dimension_horizontal = 0;
+	private int dimension_vertical = 1;
+
 	private int[] startGyro = new int[] { 0, 0, 0 };
 	private int[] gyro = new int[] { 0, 0, 0 };
 	private int[] angle = new int[] { 0, 0, 0 };
@@ -37,47 +41,51 @@ public class Abs_ImuProcessingBrick {
 	 * Processes GyroData of given Dimension (into an angle) and sends it to
 	 * pi-server, if it has changed
 	 * 
-	 * @param dimension
+	 * @param dimension_horizontal
 	 *            dimension to be processed; 0:x, 1:y, 2:z
 	 */
-	public void processData_Angle(int dimension) {
+	public void processData_Angle() {
 		// time since last call gets determined
-		time = System.currentTimeMillis() - oldTime[dimension];
+		time = System.currentTimeMillis() - oldTime[dimension_horizontal];
 		gyro = getGyro();
 
 		// Zero error gets corrected
-		gyro[dimension] -= startGyro[dimension];
+		gyro[dimension_horizontal] -= startGyro[dimension_horizontal];
 
 		// new angle gets calculated
-		deltaAngle[dimension] += gyro[dimension] * sensitivity;
-		angle[dimension] += deltaAngle[dimension] / (1000 / time);
+		deltaAngle[dimension_horizontal] += gyro[dimension_horizontal]
+				* sensitivity;
+		angle[dimension_horizontal] += deltaAngle[dimension_horizontal]
+				/ (1000 / time);
 
 		// angleExcludingPeriodicity gets calculated
-		angleExcludingPeriodicity = angle[dimension] % 360;
+		angleExcludingPeriodicity = angle[dimension_horizontal] % 360;
 
 		// new angle will only be sent away, if it has changed by +- 3 Degrees
-		if (angleExcludingPeriodicity <= oldAngleExcludingPeriodicity[dimension] - 3
-				|| angleExcludingPeriodicity >= oldAngleExcludingPeriodicity[dimension] + 3) {
-			brickControl.sendData(5, dimension + 16, angleExcludingPeriodicity);
-			oldAngleExcludingPeriodicity[dimension] = angleExcludingPeriodicity;
+		if (angleExcludingPeriodicity <= oldAngleExcludingPeriodicity[dimension_horizontal] - 3
+				|| angleExcludingPeriodicity >= oldAngleExcludingPeriodicity[dimension_horizontal] + 3) {
+			brickControl.sendData(5, dimension_horizontal + 16,
+					angleExcludingPeriodicity);
+			oldAngleExcludingPeriodicity[dimension_horizontal] = angleExcludingPeriodicity;
 		}
-		oldTime[dimension] = System.currentTimeMillis();
+		oldTime[dimension_horizontal] = System.currentTimeMillis();
 	}
 
 	/**
 	 * Processes TiltData of given dimension and sends it to pi-server, if it
 	 * has changed
 	 * 
-	 * @param dimension
+	 * @param dimension_vertical
 	 *            dimension to be processed; 0:x, 1:y, 2:z
 	 */
-	public void processData_TiltData(int dimension) {
+	public void processData_TiltData() {
 		int[] TiltData = abs_imu.getTiltData();
 		// new TiltData will only be sent away, if it has changed
-		if (TiltData[dimension] < oldTiltData[dimension]
-				|| TiltData[dimension] > oldTiltData[dimension]) {
-			brickControl.sendData(5, dimension + 11, TiltData[dimension]);
-			oldTiltData[dimension] = TiltData[dimension];
+		if (TiltData[dimension_vertical] < oldTiltData[dimension_vertical]
+				|| TiltData[dimension_vertical] > oldTiltData[dimension_vertical]) {
+			brickControl.sendData(5, dimension_vertical + 11,
+					TiltData[dimension_vertical]);
+			oldTiltData[dimension_vertical] = TiltData[dimension_vertical];
 		}
 	}
 

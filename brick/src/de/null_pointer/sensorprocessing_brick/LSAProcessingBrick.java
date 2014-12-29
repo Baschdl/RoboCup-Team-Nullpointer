@@ -5,51 +5,87 @@ import de.null_pointer.sensor.LightSensorArray;
 import lejos.nxt.I2CPort;
 
 public class LSAProcessingBrick {
-	
+
 	private LightSensorArray lsa = null;
 	private BrickControlBrick brickControl;
 
-	private int[][] values = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};
-	private int[] midValues = new int[]{-1,-1,-1,-1,-1,-1,-1,-1};
-	
-	public LSAProcessingBrick(BrickControlBrick brickControl, I2CPort port){
+	private int[][] values = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } };
+	private int[] midValues = new int[] { -1, -1, -1, -1, -1, -1, -1, -1 };
+
+	/**
+	 * @param brickControl
+	 *            Association to BrickControl
+	 * @param port
+	 *            the port the Lightsensor-Array is plugged into
+	 */
+	public LSAProcessingBrick(BrickControlBrick brickControl, I2CPort port) {
 		lsa = new LightSensorArray(port);
 		this.brickControl = brickControl;
 	}
-	
-	public int lsa_calibrateBlack(){
-		return lsa.calibrateBlack();
-	}
-	
-	public int lsa_calibrateWhite(){
-		return lsa.calibrateWhite();
-	}
-	
-	public void processData(){
-		for(int i = 0; i < 4; i++){
-			for(int j = 0; j < 8; j++){
-				values[j][j] = values[j+1][j];
+
+	/**
+	 * processes the sensor-readings, creates middle values of the last 5
+	 * Readings and sends them to pi-server if they have changed
+	 */
+	public void processData() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 8; j++) {
+				values[j][j] = values[j + 1][j];
 			}
 		}
-		for(int i = 0; i < 8; i++){
+		for (int i = 0; i < 8; i++) {
 			values[5] = lsa.getLightValues();
 		}
-		
-		int[] buffer  = {0,0,0,0,0,0,0,0};
-		
-		for(int i = 0; i < 8; i++){
-			for(int j = 0; j < 5; j++){
+
+		int[] buffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 5; j++) {
 				buffer[j] += values[j][i];
 			}
 		}
-		for(int i = 0; i < 8; i++){
+		for (int i = 0; i < 8; i++) {
 			buffer[i] /= 5;
 		}
-		for(int i = 0; i < 8; i++){
-			if(buffer[i] != midValues[i]){
+		for (int i = 0; i < 8; i++) {
+			if (buffer[i] != midValues[i]) {
 				midValues[i] = buffer[i];
 				brickControl.sendData(2, i + 1, midValues[i]);
 			}
+		}
+	}
+
+	/**
+	 * calibrates black value (should be on black surface)
+	 * 
+	 * @return 0 if no error occurred, negative number if error occurred
+	 */
+	public int calibrateBlack() {
+		return lsa.calibrateBlack();
+	}
+
+	/**
+	 * calibrates white value (should be on white surface)
+	 * 
+	 * @return 0 if no error occurred, negative number if error occurred
+	 */
+	public int calibrateWhite() {
+		return lsa.calibrateWhite();
+	}
+
+	/**
+	 * sets Lsa Sensor into sleep mode or wakes it up
+	 * 
+	 * @param sleep
+	 *            true: sleep false: wake up
+	 * @return 0 if no error occurred, negative number if error occurred
+	 */
+	public int sleep(boolean sleep) {
+		if (sleep) {
+			return lsa.sleep();
+		} else {
+			return lsa.wakeUp();
 		}
 	}
 }
