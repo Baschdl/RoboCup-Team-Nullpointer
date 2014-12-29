@@ -100,7 +100,7 @@ public class MotorControlPi {
 	 *            Motoren. Beeinflusst den Wendekreis.
 	 */
 	// TODO: Loeschen
-	@Deprecated
+	@SuppressWarnings("deprecation")
 	public void rightturn(int speed, int difference) {
 		if (this.speedCurve != speed && this.speedDifference != difference
 				&& mode != 2) {
@@ -133,7 +133,7 @@ public class MotorControlPi {
 	 *            Motoren. Beeinflusst den Wendekreis.
 	 */
 	// TODO: Loeschen
-	@Deprecated
+	@SuppressWarnings("deprecation")
 	public void leftturn(int speed, int difference) {
 		if (this.speedCurve != speed && this.speedDifference != difference
 				&& mode != 3) {
