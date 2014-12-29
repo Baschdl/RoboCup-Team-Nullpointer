@@ -145,7 +145,7 @@ public class InitializeProgram {
 		initCom = new InitCommunicationPi();
 
 		// TODO: Brick-IDs eintragen
-		String[] brickIDs = { null, null };
+		String[] brickIDs = { propPiServer.getProperty("Brick.One.USB.ID"), propPiServer.getProperty("Brick.Two.USB.ID") };
 
 		for (int i = 0; i < 2; i++) {
 			comPi = initCom.initConnection(brickIDs[i]);
