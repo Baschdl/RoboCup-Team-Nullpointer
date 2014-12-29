@@ -31,7 +31,7 @@ public class LSAProcessingBrick {
 	public void processData() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 8; j++) {
-				values[j][j] = values[j + 1][j];
+				values[i][j] = values[i + 1][j];
 			}
 		}
 		for (int i = 0; i < 8; i++) {
