@@ -52,8 +52,7 @@ public class SensorProcessingThread extends Thread {
 			if (counter < 10) {
 				counter++;
 			} else if (counter == 10) {
-				// TODO: sensorID + sourceOfData anpassen
-				brickControl.sendData(99, 99, 1);
+				brickControl.sendData(7, 1, 1);
 			}
 		}
 	}
