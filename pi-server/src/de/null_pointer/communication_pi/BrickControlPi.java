@@ -106,6 +106,8 @@ public class BrickControlPi extends Thread {
 
 		} else if (receiveData[0] == 6) {
 			accumulator.setMilliVolt(Math.round(receiveData[1]));
+		} else if (receiveData[0] == 7) {
+			sensorReady = false;
 		} else {
 			// System.out.println("process Data (no sensor) " +
 			// Arrays.toString(receiveData));
@@ -151,7 +153,7 @@ public class BrickControlPi extends Thread {
 				// tsLeft = controlClass.getTsLeft();
 				sendCommand(10, 5, i + 1, 1);
 				// logger.debug("ts left" + tsLeft);
-			}  else {
+			} else {
 				logger.debug("Sensor existiert nicht");
 			}
 		}
