@@ -16,9 +16,10 @@ public class Slope implements Behavior {
 	private Navigation nav = null;
 
 	private int angleToTakeControl = -1;
+	private int speed = -1;
 
 	public Slope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu,
-			Navigation nav, int angleToTakeControl) {
+			Navigation nav, int angleToTakeControl, int speed) {
 		this.motorControl = motorControl;
 		this.absImu = absImu;
 		this.nav = nav;
@@ -34,8 +35,9 @@ public class Slope implements Behavior {
 	@Override
 	public void action() {
 		logger.info("Steigung erkannt");
-		// TODO Auto-generated method stub
-
+		// TODO
+		nav.slope(absImu.getHeading(), 15, 15);
+		motorControl.forward(speed);
 	}
 
 	@Override

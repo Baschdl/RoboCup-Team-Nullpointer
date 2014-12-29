@@ -4,17 +4,24 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Odometer;
 import lejos.robotics.subsumption.Behavior;
 
 public class MovingForward implements Behavior {
 	private static Logger logger = Logger.getLogger(MovingForward.class);
 
 	private MotorControlPi motorControl = null;
+	private Odometer odometer = null;
 
 	private int speed = -1;
 
-	public MovingForward(MotorControlPi motorControl, int speed) {
+	private boolean moving = true;
+	private long time;
+
+	public MovingForward(MotorControlPi motorControl, Odometer odometer,
+			int speed) {
 		this.motorControl = motorControl;
+		this.odometer = odometer;
 
 		this.speed = speed;
 	}
@@ -26,15 +33,26 @@ public class MovingForward implements Behavior {
 
 	@Override
 	public void action() {
+		time = 0;
+		moving = true;
 		logger.debug("Bewege mich vorwaerts");
 		// TODO: Geschwindigkeit anpassen
 		motorControl.forward(speed);
-
+		while (moving) {
+			odometer.calculateDistance(time, speed);
+			time = System.currentTimeMillis();
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				logger.fatal("InterruptedException while sleep()");
+			}
+			time = System.currentTimeMillis() - time;
+		}
 	}
 
 	@Override
 	public void suppress() {
-
+		moving = false;
 	}
 
 }
