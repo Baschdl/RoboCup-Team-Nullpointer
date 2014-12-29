@@ -2,36 +2,25 @@ package de.null_pointer.communication_brick;
 
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.TouchSensor;
-import lejos.nxt.addon.EOPD;
-import lejos.nxt.addon.OpticalDistanceSensor;
-import de.null_pointer.sensor.AbsoluteIMU_ACG;
-import de.null_pointer.sensor.LightSensorArray;
-import de.null_pointer.sensor.NXTVoltMeter;
+import de.null_pointer.sensorprocessing_brick.Abs_ImuProcessingBrick;
+import de.null_pointer.sensorprocessing_brick.AccumulatorProcessingBrick;
+import de.null_pointer.sensorprocessing_brick.DistNxProcessingBrick;
+import de.null_pointer.sensorprocessing_brick.EOPDProcessingBrick;
+import de.null_pointer.sensorprocessing_brick.LSAProcessingBrick;
+import de.null_pointer.sensorprocessing_brick.SensorProcessingThread;
 
 public class BrickControlBrick extends Thread {
 
-	private OpticalDistanceSensor dist_nx;
-	private LightSensorArray lsa;
-	private AbsoluteIMU_ACG abs_imu;
-	private NXTVoltMeter nxt_vm;
-	private EOPD eopdLeft;
-	private EOPD eopdRight;
-	private TouchSensor tsLeft;
-	private TouchSensor tsRight;
+	private Abs_ImuProcessingBrick abs_imu;
+	private AccumulatorProcessingBrick accumulator;
+	private DistNxProcessingBrick distnx;
+	private EOPDProcessingBrick leftEOPD;
+	private EOPDProcessingBrick rightEOPD;
+	private LSAProcessingBrick lsa;
 
-	private SensorPort sp_dist_nx;
-	private SensorPort sp_lsa;
-	private SensorPort sp_abs_imu;
-	private SensorPort sp_nxt_vm;
-	private SensorPort sp_eopdLeft;
-	private SensorPort sp_eopdRight;
-	private SensorPort sp_tsLeft;
-	private SensorPort sp_tsRight;
+	SensorProcessingThread sensorProcessing = null;
 
 	CommunicationBrick com = null;
-
-	// ThreadSensor ths;
 
 	public BrickControlBrick(CommunicationBrick communication) {
 		this.com = communication;
@@ -45,13 +34,10 @@ public class BrickControlBrick extends Thread {
 				i++;
 			} else if (i == 3) {
 				this.receiveCommand();
-				// TODO: Abfrage der Sensoren
-				// letztes Jahr wurde dies in einer eigenen Klasse geregelt
-				//
-				// ths = new ThreadSensor(this, lsa, abs_imu, tsLeft, tsRight,
-				// eopdLeft, eopdRight, dist_nx, nxt_vm);
-				// ths.start();
-				// ths.setDaemon(true);
+				sensorProcessing = new SensorProcessingThread(this, abs_imu,
+						accumulator, distnx, leftEOPD, rightEOPD, lsa);
+				sensorProcessing.start();
+				sensorProcessing.setDaemon(true);
 				i++;
 			} else {
 				this.receiveCommand();
@@ -87,34 +73,22 @@ public class BrickControlBrick extends Thread {
 			processCommand(command);
 		} else {
 			System.err.println("Fehlerhafte Daten");
-
 		}
 
 	}
 
 	private void processCommand(int[] command) {
-		// array target,
-		// sendData("Brick processCommand" + Arrays.toString(command));
 		switch (command[0]) {
 		case 1:
 			switch (command[1]) {
 			case 1:
-				dist_nx.powerOn();
+				distnx.setPower(true);
 				break;
 			case 2:
-				dist_nx.powerOff();
-				break;
-			case 3:
-				sendData(1, 3, dist_nx.getRange());
-				break;
-			case 4:
-				float[] buf_Ranges = dist_nx.getRanges();
-				for (int i = 0, j = 4; i < buf_Ranges.length; i++, j++) {
-					sendData(1, j, buf_Ranges[i]);
-				}
+				distnx.setPower(false);
 				break;
 			case 5:
-				sendData(1, 5, dist_nx.getSensorModule());
+				sendData(1, 5, distnx.getSensorModule());
 				break;
 			default:
 				break;
@@ -123,10 +97,10 @@ public class BrickControlBrick extends Thread {
 		case 2:
 			switch (command[1]) {
 			case 1:
-				sendData(2, 10, lsa.wakeUp());
+				sendData(2, 10, lsa.sleep(false));
 				break;
 			case 2:
-				sendData(2, 11, lsa.sleep());
+				sendData(2, 11, lsa.sleep(true));
 				break;
 			case 3:
 				sendData(2, 12, lsa.calibrateBlack());
@@ -134,84 +108,37 @@ public class BrickControlBrick extends Thread {
 			case 4:
 				sendData(2, 13, lsa.calibrateWhite());
 				break;
-			case 5:
-				sendData(2, 9, lsa.getLightValue(command[2]));
+			default:
 				break;
 			}
 			break;
 		case 3:
 			switch (command[1]) {
 			case 1:
-				eopdLeft.setModeShort();
+				leftEOPD.setLongRange(false);
 				break;
 			case 2:
-				eopdLeft.setModeLong();
+				leftEOPD.setLongRange(true);
 				break;
 			}
 			break;
 		case 4:
 			switch (command[1]) {
 			case 1:
-				eopdRight.setModeShort();
+				rightEOPD.setLongRange(false);
 				break;
 			case 2:
-				eopdRight.setModeLong();
+				rightEOPD.setLongRange(true);
 				break;
 			}
 			break;
 		case 5:
 			switch (command[1]) {
-			case 1:
-				int[] buf_Tilt = abs_imu.getTiltData();
-				for (int i = 0; i < buf_Tilt.length; i++) {
-					sendData(5, i + 1, buf_Tilt[i]);
-				}
-				break;
-			case 2:
-				int[] buf_Accel = abs_imu.getAcceleration();
-				for (int i = 0, j = 4; i < buf_Accel.length; i++, j++) {
-					sendData(5, j, buf_Accel[i]);
-				}
-				break;
-			case 3:
-				sendData(5, 7, abs_imu.getCompassHeading());
-				break;
-			case 4:
-				int[] buf_MagField = abs_imu.getMagneticField();
-				for (int i = 0, j = 8; i < buf_MagField.length; i++, j++) {
-					sendData(5, j, buf_MagField[i]);
-				}
-				break;
-			case 5:
-				int[] buf_Gyro = abs_imu.getGyro();
-				for (int i = 0, j = 11; i < buf_Gyro.length; i++, j++) {
-					sendData(5, j, buf_Gyro[i]);
-				}
-				break;
 			case 6:
 				sendData(5, 14, abs_imu.getFilter());
 				break;
 			case 7:
 				sendData(5, 15, abs_imu.setFilter(command[2]));
-				break;
-			}
-			break;
-		case 8:
-			switch (command[1]) {
-			case 1:
-				sendData(8, 1, nxt_vm.getAbsoluteVoltage());
-				break;
-			case 2:
-				sendData(8, 1, nxt_vm.getRelativeVoltage());
-				break;
-			case 3:
-				sendData(8, 1, nxt_vm.getReferenceVoltage());
-				break;
-			case 4:
-				sendData(8, 1, nxt_vm.setReferenceVoltage(command[2]));
-				break;
-			case 5:
-				sendData(8, 1, nxt_vm.writeCurrentAbsoluteVoltage());
 				break;
 			}
 			break;
@@ -322,90 +249,29 @@ public class BrickControlBrick extends Thread {
 				sp = SensorPort.S4;
 				break;
 			}
-
 			switch (command[1]) {
 			case 1:
-				// sendData("Init - ODS start ");
-				sp_dist_nx = sp;
-				dist_nx = new OpticalDistanceSensor(sp_dist_nx);
-				// sendData("Init - ODS end ");
+				distnx = new DistNxProcessingBrick(this, sp);
 				break;
 			case 2:
-				// sendData("Init LightSensorArray ");
-				sp_lsa = sp;
-				lsa = new LightSensorArray(sp_lsa);
-				// initLsaThread();
+				lsa = new LSAProcessingBrick(this, sp);
 				break;
 			case 3:
 				switch (command[3]) {
 				case 1:
-					// sendData("Init EOPD left");
-					sp_eopdLeft = sp;
-					eopdLeft = new EOPD(sp_eopdLeft);
-
-					// SensorPort.S3.addSensorPortListener(sensor3);
-
+					leftEOPD = new EOPDProcessingBrick(this, sp, 3, true);
 					break;
-
 				case 2:
-					// sendData("Init EOPD right ");
-					sp_eopdRight = sp;
-					eopdRight = new EOPD(sp_eopdRight);
+					rightEOPD = new EOPDProcessingBrick(this, sp, 4, true);
 					break;
 				default:
 					break;
 				}
-				// if (sp == SensorPort.S1) {
-				// SensorPort.S1.addSensorPortListener(sensor1);
-				// } else
-				// if (sp == SensorPort.S2) {
-				// SensorPort.S2.addSensorPortListener(sensor2);
-				// }
-				// else if (sp == SensorPort.S3) {
-				// SensorPort.S3.addSensorPortListener(sensor3);
-				// } else if (sp == SensorPort.S4) {
-				// SensorPort.S4.addSensorPortListener(sensor4);
-				// }
 				break;
 			case 4:
-				// sendData("Init Absolute IMU ");
-				sp_abs_imu = sp;
-				abs_imu = new AbsoluteIMU_ACG(sp_abs_imu);
-				break;
-			case 5:
-
-				switch (command[3]) {
-				case 1:
-					// sendData("Init Touchsensor 1");
-					sp_tsLeft = sp;
-					tsLeft = new TouchSensor(sp_tsLeft);
-					break;
-				case 2:
-					sp_tsRight = sp;
-					// sendData("Init Touchsensor 2");
-					tsRight = new TouchSensor(sp_tsRight);
-					break;
-				default:
-					// sendData("Init - default should not be called 2");
-					break;
-				}
-				// if (sp == SensorPort.S1) {
-				// SensorPort.S1.addSensorPortListener(sensor1);
-				// } else if (sp == SensorPort.S2) {
-				// SensorPort.S2.addSensorPortListener(sensor2);
-				// } else if (sp == SensorPort.S3) {
-				// SensorPort.S3.addSensorPortListener(sensor3);
-				// } else if (sp == SensorPort.S4) {
-				// SensorPort.S4.addSensorPortListener(sensor4);
-				// }
-				break;
-			case 6:
-				// sendData("Init Voltmeter ");
-				sp_nxt_vm = sp;
-				nxt_vm = new NXTVoltMeter(sp_nxt_vm);
+				abs_imu = new Abs_ImuProcessingBrick(this, sp);
 				break;
 			default:
-				// sendData("Init - default should not be called 3");
 				break;
 			}
 			break;
@@ -419,15 +285,6 @@ public class BrickControlBrick extends Thread {
 			break;
 		}
 	}
-
-	// public void sendData(String message) {
-	// try {
-	// datatoPi.writeUTF("*" + 90 + ";" + 90 + "; NXT: " + message + "#");
-	// datatoPi.flush();
-	// } catch (IOException e) {
-	// System.err.println("IO Exception writing data");
-	// }
-	// }
 
 	public void sendData(int sensorID, int sourceOfData, int value) {
 
@@ -443,45 +300,4 @@ public class BrickControlBrick extends Thread {
 		com.sendString(sendString);
 	}
 
-	// Uebergabe von SensorPortListener-Wert
-	public void processData(SensorPort port) {
-		try {
-			if (port == sp_dist_nx) {
-				sendData(1, 1, dist_nx.getDistance());
-			} else if (port == sp_lsa) {
-				int buf[] = lsa.getLightValues();
-				for (int i = 0; i < 8; i++) {
-					sendData(2, i + 1, buf[i]);
-				}
-			} else if (port == sp_abs_imu) {
-				int buf[] = abs_imu.getTiltData();
-				for (int i = 0; i < 3; i++) {
-					sendData(5, i + 1, buf[i]);
-				}
-			} else if (port == sp_nxt_vm) {
-				sendData(8, 1, nxt_vm.getAbsoluteVoltage());
-			} else if (port == sp_eopdLeft) {
-				sendData(3, 1, eopdLeft.readRawValue());
-			} else if (port == sp_eopdRight) {
-				sendData(4, 1, eopdRight.readRawValue());
-			} else if (port == sp_tsLeft) {
-				if (tsLeft.isPressed()) {
-					sendData(6, 1, 1);
-				} else {
-					sendData(6, 1, 0);
-				}
-			} else if (port == sp_tsRight) {
-				if (tsRight.isPressed()) {
-					sendData(7, 1, 1);
-				} else {
-					sendData(7, 1, 0);
-				}
-			} else {
-				System.out.println("Nicht bekannter Port");
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-	}
 }
