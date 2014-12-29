@@ -145,7 +145,8 @@ public class InitializeProgram {
 		initCom = new InitCommunicationPi();
 
 		// TODO: Brick-IDs eintragen
-		String[] brickIDs = { propPiServer.getProperty("Brick.One.USB.ID"), propPiServer.getProperty("Brick.Two.USB.ID") };
+		String[] brickIDs = { propPiServer.getProperty("Brick.One.USB.ID"),
+				propPiServer.getProperty("Brick.Two.USB.ID") };
 
 		for (int i = 0; i < 2; i++) {
 			comPi = initCom.initConnection(brickIDs[i]);
@@ -218,6 +219,12 @@ public class InitializeProgram {
 		Behavior b6 = new Victim(motorControl);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
+
+		// Abritrator wird erst Initialisiert, wenn von beiden Bricks gemeldet
+		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
+		// wurden
+		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
+		}
 
 		arbitrator = new Arbitrator(behavior);
 	}

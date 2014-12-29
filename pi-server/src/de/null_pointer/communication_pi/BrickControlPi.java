@@ -22,6 +22,7 @@ public class BrickControlPi extends Thread {
 	private AccumulatorProcessingPi accumulator = null;
 
 	private boolean readyToProcessData = true;
+	private boolean sensorReady = true;
 
 	public BrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
@@ -429,6 +430,18 @@ public class BrickControlPi extends Thread {
 	public void resetMotor(char motorport) {
 		sendCommand(9, 1, 0, 6);
 
+	}
+
+	public boolean getSensorReady() {
+		return sensorReady;
+	}
+
+	public void setSensorReady(int bit) {
+		if (bit == 1) {
+			sensorReady = false;
+		} else {
+			sensorReady = true;
+		}
 	}
 
 }
