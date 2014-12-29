@@ -142,13 +142,11 @@ public class InitializeProgram {
 
 	public void initializeCommunication() {
 
-		initCom = new InitCommunicationPi();
-
-		// TODO: Brick-IDs eintragen
 		String[] brickIDs = { propPiServer.getProperty("Brick.One.USB.ID"),
 				propPiServer.getProperty("Brick.Two.USB.ID") };
 
 		for (int i = 0; i < 2; i++) {
+			initCom = new InitCommunicationPi();
 			comPi = initCom.initConnection(brickIDs[i]);
 			if (comPi instanceof RealCommunicationPi) {
 				// TODO: Angeschlossene Sensoren uebergeben
