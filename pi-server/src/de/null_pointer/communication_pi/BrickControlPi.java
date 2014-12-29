@@ -156,7 +156,7 @@ public class BrickControlPi extends Thread {
 			}
 		}
 		readyToProcessData = true;
-		notifyAll();
+		//notifyAll();
 		logger.debug("sendSensorData flag set to: " + readyToProcessData);
 	}
 

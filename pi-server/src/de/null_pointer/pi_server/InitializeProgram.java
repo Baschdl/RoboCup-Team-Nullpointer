@@ -44,7 +44,8 @@ public class InitializeProgram {
 	private AccumulatorProcessingPi accumulator = null;
 	private Navigation nav = null;
 	private Arbitrator arbitrator = null;
-	private CommunicationPi comPi = null;
+	private CommunicationPi comPi1 = null;
+	private CommunicationPi comPi2 = null;
 
 	private Properties propPiServer = null;
 
@@ -96,8 +97,12 @@ public class InitializeProgram {
 		return nav;
 	}
 
-	public CommunicationPi getComPi() {
-		return comPi;
+	public CommunicationPi getComPi1() {
+		return comPi1;
+	}
+
+	public CommunicationPi getComPi2() {
+		return comPi2;
 	}
 
 	public Properties getPropPiServer() {
@@ -147,27 +152,31 @@ public class InitializeProgram {
 
 		for (int i = 0; i < 2; i++) {
 			initCom = new InitCommunicationPi();
-			comPi = initCom.initConnection(brickIDs[i]);
-			if (comPi instanceof RealCommunicationPi) {
+			if (i == 0) {
+				comPi1 = initCom.initConnection(brickIDs[i]);
+			} else if (i == 1) {
+				comPi2 = initCom.initConnection(brickIDs[i]);
+			}
+			if (comPi1 instanceof RealCommunicationPi) {
 				// TODO: Angeschlossene Sensoren uebergeben
 				if (i == 0) {
-					brickCon1 = new BrickControlPi((RealCommunicationPi) comPi,
-							absImu, distNx, eopdLeft, eopdLeft, lsa,
-							accumulator);
+					brickCon1 = new BrickControlPi(
+							(RealCommunicationPi) comPi1, absImu, distNx,
+							eopdLeft, eopdLeft, lsa, accumulator);
 				} else if (i == 1) {
-					brickCon2 = new BrickControlPi((RealCommunicationPi) comPi,
-							absImu, distNx, eopdLeft, eopdLeft, lsa,
-							accumulator);
+					brickCon2 = new BrickControlPi(
+							(RealCommunicationPi) comPi2, absImu, distNx,
+							eopdLeft, eopdLeft, lsa, accumulator);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
 
 			} else {
 				if (i == 0) {
-					brickCon1 = new TestBrickControlPi(comPi, absImu, distNx,
+					brickCon1 = new TestBrickControlPi(comPi1, absImu, distNx,
 							eopdLeft, eopdLeft, lsa, accumulator);
 				} else if (i == 1) {
-					brickCon2 = new TestBrickControlPi(comPi, absImu, distNx,
+					brickCon2 = new TestBrickControlPi(comPi2, absImu, distNx,
 							eopdLeft, eopdLeft, lsa, accumulator);
 				} else {
 					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
@@ -177,23 +186,23 @@ public class InitializeProgram {
 
 		if (brickCon1 != null) {
 			logger.info("Communication with Brick 1 started");
-			brickCon1.start();
 			String sensor[] = {
 					propPiServer.getProperty("Brick.One.Sensorport.One"),
 					propPiServer.getProperty("Brick.One.Sensorport.Two"),
 					propPiServer.getProperty("Brick.One.Sensorport.Three"),
 					propPiServer.getProperty("Brick.One.Sensorport.Four") };
 			brickCon1.sendSensorData(sensor);
+			brickCon1.start();
 		}
 		if (brickCon2 != null) {
 			logger.info("Communication with Brick 2 started");
-			brickCon2.start();
 			String sensor[] = {
 					propPiServer.getProperty("Brick.Two.Sensorport.One"),
 					propPiServer.getProperty("Brick.Two.Sensorport.Two"),
 					propPiServer.getProperty("Brick.Two.Sensorport.Three"),
 					propPiServer.getProperty("Brick.Two.Sensorport.Four") };
-			brickCon1.sendSensorData(sensor);
+			brickCon2.sendSensorData(sensor);
+			brickCon2.start();
 		}
 
 		motorControl = new MotorControlPi(brickCon1, brickCon2);
