@@ -170,7 +170,7 @@ public class BrickControlPi extends Thread {
 	/**
 	 * Empfaengt einen String vom Brick
 	 * 
-	 * @return Gibt die von checkString(...) weiter verarbeiteten Daten zurück
+	 * @return Gibt die von checkString(...) weiter verarbeiteten Daten zurueck
 	 */
 	public float[] receiveData() {
 		String dataString = null;
@@ -187,7 +187,7 @@ public class BrickControlPi extends Thread {
 	}
 
 	/**
-	 * Ueberprueft den empfangenen String auf Validität und teilt ihn in seine
+	 * Ueberprueft den empfangenen String auf Validitaet und teilt ihn in seine
 	 * Einzelteile auf.
 	 * 
 	 * @param dataString
@@ -263,7 +263,7 @@ public class BrickControlPi extends Thread {
 	 *            Gibt an was passieren soll bzw. welche Methode auf dem Brick
 	 *            aufgerufen werden soll.
 	 * @param parameter
-	 *            Weitere Werte, die für die durch das Kommando ausgeloeste
+	 *            Weitere Werte, die fuer die durch das Kommando ausgeloeste
 	 *            Operation noetig sind.
 	 */
 	public void sendCommand(int recipient, int action, int parameter) {
@@ -282,7 +282,7 @@ public class BrickControlPi extends Thread {
 	 *            Gibt an was passieren soll bzw. welche Methode auf dem Brick
 	 *            aufgerufen werden soll.
 	 * @param parameter
-	 *            Weitere Werte, die für die durch das Kommando ausgeloeste
+	 *            Weitere Werte, die fuer die durch das Kommando ausgeloeste
 	 *            Operation noetig sind.
 	 * @param options
 	 *            Gibt z.B. bei den Motoren an in welche Richtung sie sich

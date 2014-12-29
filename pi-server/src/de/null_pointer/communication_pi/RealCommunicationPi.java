@@ -37,7 +37,7 @@ public class RealCommunicationPi extends CommunicationPi {
 	/**
 	 * Empfaengt einen String von einem Brick.
 	 * 
-	 * @return Gibt den aus dem DataInpuString gelesenen String zurück, bei
+	 * @return Gibt den aus dem DataInpuString gelesenen String zurueck, bei
 	 *         einer Exception den String "ENDE".
 	 */
 	@Override

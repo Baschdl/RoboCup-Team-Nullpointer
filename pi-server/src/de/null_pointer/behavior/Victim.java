@@ -22,7 +22,7 @@ public class Victim implements Behavior {
 		} catch (InterruptedException e) {
 			logger.fatal("InterruptedException while sleep()"); 
 		}
-		// TODO: Benoetigt Wärmesensor
+		// TODO: Benoetigt Waermesensor
 		return false;
 	}
 
