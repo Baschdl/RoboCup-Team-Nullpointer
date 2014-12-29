@@ -9,7 +9,7 @@ public class Brick {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println("Startet Kommunikation...");
+			System.out.println("Startet Kommunikation... ");
 			InitCommunicationBrick initCom = new InitCommunicationBrick();
 			BrickControlBrick comBrick = new BrickControlBrick(
 					initCom.initConnection());
