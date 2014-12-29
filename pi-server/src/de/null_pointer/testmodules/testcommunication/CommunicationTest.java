@@ -51,7 +51,7 @@ public class CommunicationTest {
 	private EOPDProcessingPi eopdRight = null;
 	private LSAProcessingPi lsa = null;
 	private AccumulatorProcessingPi accumulator = null;
-	
+
 	private MotorControlPi motorControl = null;
 	private Navigation nav = null;
 	private Properties propPiServer = null;
@@ -72,7 +72,8 @@ public class CommunicationTest {
 		initProgramm.initializeNavigation();
 		initProgramm.initializeBehavior();
 
-		comPi = initProgramm.getComPi();
+		// TODO: Richting einrichten
+		comPi = initProgramm.getComPi1();
 		absImu = initProgramm.getAbsImu();
 		distNx = initProgramm.getDistNx();
 		eopdLeft = initProgramm.getEopdLeft();
@@ -119,14 +120,16 @@ public class CommunicationTest {
 						.getProperty("Behavior.Intersection.maximalDistanceSide")));
 
 		testMovFor = new TestMovingForward(motorControl,
-				Integer.parseInt(propPiServer
+				initProgramm.getOdometer(), Integer.parseInt(propPiServer
 						.getProperty("Behavior.MovingForward.speed")));
 
 		testNextTile = new TestNextTile(absImu, nav);
 
 		testSlope = new TestSlope(motorControl, absImu, nav,
 				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Slope.angleToTakeControl")));
+						.getProperty("Behavior.Slope.angleToTakeControl")),
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.Slope.speed")));
 
 		testVictim = new TestVictim(motorControl);
 
