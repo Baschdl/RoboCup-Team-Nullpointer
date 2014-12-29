@@ -33,7 +33,7 @@ public class DistNxProcessingBrick {
 		}
 		values[4] = distNx.getDistance();
 		int buffer = 0;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 4; i++) {
 			buffer += values[i];
 		}
 		buffer /= 5;
