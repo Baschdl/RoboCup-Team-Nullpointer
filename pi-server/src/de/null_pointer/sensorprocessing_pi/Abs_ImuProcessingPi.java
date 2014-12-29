@@ -71,6 +71,11 @@ public class Abs_ImuProcessingPi {
 		}
 	}
 
+	/**
+	 * returns the current heading of the robot
+	 * 
+	 * @return 0 = N, 1 = O, 2 = S, 3 = W
+	 */
 	public int getHeading() {
 		synchronized (lockAngle) {
 			return heading;
