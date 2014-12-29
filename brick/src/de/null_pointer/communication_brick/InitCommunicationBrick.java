@@ -14,13 +14,13 @@ public class InitCommunicationBrick {
 	private DataOutputStream dataToPi;
 
 	public CommunicationBrick initConnection() {
-
+		System.out.println("Baue Verbindung auf...");
 		try {
 
 			con = USB.waitForConnection();
 			dataFromPi = con.openDataInputStream();
 			dataToPi = con.openDataOutputStream();
-
+			System.out.println("aufgebaut");
 			return new RealCommunicationBrick(dataFromPi, dataToPi);
 
 		} catch (Exception e) {

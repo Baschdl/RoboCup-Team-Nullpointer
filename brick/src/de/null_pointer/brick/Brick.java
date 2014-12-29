@@ -9,13 +9,15 @@ public class Brick {
 
 	public static void main(String[] args) {
 		try {
+			System.out.println("Startet Kommunikation...");
 			InitCommunicationBrick initCom = new InitCommunicationBrick();
 			BrickControlBrick comBrick = new BrickControlBrick(
 					initCom.initConnection());
+			System.out.println("Kommunikation gestartet");
 
 			comBrick.start();
 			comBrick.setDaemon(true);
-
+			System.out.println("Vorbereitungen beendet");
 			while (!Button.ESCAPE.isDown()) {
 				Delay.msDelay(500);
 			}
