@@ -28,7 +28,7 @@ public class DistNxProcessingBrick {
 	 * Readings and sends it to pi-server if it has changed
 	 */
 	public void processData() {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			values[i] = values[i + 1];
 		}
 		values[4] = distNx.getDistance();
