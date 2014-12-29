@@ -23,6 +23,7 @@ import de.null_pointer.communication_pi.InitCommunicationPi;
 import de.null_pointer.communication_pi.RealCommunicationPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
+import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -43,6 +44,7 @@ public class InitializeProgram {
 	private LSAProcessingPi lsa = null;
 	private AccumulatorProcessingPi accumulator = null;
 	private Navigation nav = null;
+	private Odometer odometer = null;
 	private Arbitrator arbitrator = null;
 	private CommunicationPi comPi1 = null;
 	private CommunicationPi comPi2 = null;
@@ -95,6 +97,10 @@ public class InitializeProgram {
 
 	public Navigation getNav() {
 		return nav;
+	}
+
+	public Odometer getOdometer() {
+		return odometer;
 	}
 
 	public CommunicationPi getComPi1() {
@@ -216,13 +222,15 @@ public class InitializeProgram {
 
 	public void initializeBehavior() {
 		// TODO: Reihenfolge richtig?
-		Behavior b1 = new MovingForward(motorControl,
+		Behavior b1 = new MovingForward(motorControl, odometer,
 				Integer.parseInt(propPiServer
 						.getProperty("Behavior.MovingForward.speed")));
 		Behavior b2 = new NextTile(absImu, nav);
 		Behavior b3 = new Slope(motorControl, absImu, nav,
 				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Slope.angleToTakeControl")));
+						.getProperty("Behavior.Slope.angleToTakeControl")),
+				Integer.parseInt(propPiServer
+						.getProperty("Behavior.slope.speed")));
 		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav);
 		Behavior b5 = new Intersection(
 				motorControl,
