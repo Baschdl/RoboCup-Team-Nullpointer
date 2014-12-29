@@ -9,8 +9,9 @@ public class LSAProcessingBrick {
 	private LightSensorArray lsa = null;
 	private BrickControlBrick brickControl;
 
-	private int[][] values = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } };
+	private int[][] values = { { 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 	private int[] midValues = new int[] { -1, -1, -1, -1, -1, -1, -1, -1 };
 
 	/**
@@ -34,14 +35,14 @@ public class LSAProcessingBrick {
 				values[i][j] = values[i + 1][j];
 			}
 		}
-		for (int i = 0; i < 5; i++) {
-			values[i] = lsa.getLightValues();
+		for (int i = 0; i < 8; i++) {
+			values[4] = lsa.getLightValues();
 		}
 
 		int[] buffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 4; j++) {
 				buffer[j] += values[j][i];
 			}
 		}
