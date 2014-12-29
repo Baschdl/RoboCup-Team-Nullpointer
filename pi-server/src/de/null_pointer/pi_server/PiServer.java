@@ -29,7 +29,6 @@ public class PiServer {
 						.getProperty("Pi_server.TestProgram.difference")),
 				Integer.parseInt(propPiServer
 						.getProperty("Pi_server.TestProgram.duration")));
-		JFDisplayValues vGUI = new JFDisplayValues();
 
 		logger.info("starting programm");
 
@@ -40,6 +39,8 @@ public class PiServer {
 			s = args[i];
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
+				JFDisplayValues vGUI = new JFDisplayValues();
+
 				logger.info("GUI gestartet");
 				vGUI.startGUI();
 			}
