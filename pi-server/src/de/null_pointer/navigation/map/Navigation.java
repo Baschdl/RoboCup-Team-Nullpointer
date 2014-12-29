@@ -41,8 +41,12 @@ public class Navigation {
 			return -1;
 			// check for dead end; if detected, robot reverses
 		} else if (possibleDirections(tremauxCounter) == 1) {
-			logger.info("dead end, turning around !");
-			return currentTile.invertOrientation(orientation);
+			logger.info("dead end, taking only possible direction !");
+			for (int i = 0; i < 4; i++) {
+				if (tremauxCounter[i] != -2) {
+					return i;
+				}
+			}
 			// -> real intersection; check TremauxCounter to evaluate direction
 		} else {
 			if (currentTile.isVisited()
@@ -56,11 +60,11 @@ public class Navigation {
 						.invertOrientation(orientation));
 				return currentTile.invertOrientation(orientation);
 			} else if (currentTile.isVisited()) {
-				// if there is no corridor which was never passed, the robot
-				// takes the rightmost once passed corridor
 				int direction = rightmostDirection(orientation, tremauxCounter,
 						0);
 				if (direction == -1) {
+					// if there is no corridor which was never passed, the robot
+					// takes the rightmost once passed corridor
 					currentTile.incTremauxCounter(rightmostDirection(
 							orientation, tremauxCounter, 1));
 					logger.info("tile already visited, passing rightmost once visited corridor !");
@@ -70,7 +74,7 @@ public class Navigation {
 					// takes the rightmost one
 					logger.info("tile already visited, passing rightmost never passed corridor !");
 					currentTile.incTremauxCounter(direction);
-					return rightmostDirection(orientation, tremauxCounter, 0);
+					return direction;
 				}
 			} else {
 				// tile was visited the first time; robot takes the rightmost
@@ -82,6 +86,7 @@ public class Navigation {
 				return rightmostDirection(orientation, tremauxCounter, 0);
 			}
 		}
+		return -1;
 	}
 
 	/**
@@ -92,7 +97,8 @@ public class Navigation {
 	 * @param tremauxCounter
 	 *            tremauxCounter of the to be checked tile
 	 * @param value
-	 * @return returns rightmost direction matching the given value
+	 * @return returns rightmost direction matching the given value, -1 if there
+	 *         is none
 	 */
 	private int rightmostDirection(int orientation, int[] tremauxCounter,
 			int value) {
