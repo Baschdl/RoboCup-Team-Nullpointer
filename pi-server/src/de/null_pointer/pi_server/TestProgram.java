@@ -1,5 +1,6 @@
 package de.null_pointer.pi_server;
 
+import lejos.util.Delay;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 
@@ -30,48 +31,28 @@ public class TestProgram {
 
 	public void forward() {
 		motorcontrol.forward(speedLinear);
-		try {
-			wait(duration);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
 
 	public void backward() {
 		motorcontrol.backward(speedLinear);
-		try {
-			wait(duration);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
 
 	public void rightturn() {
 		motorcontrol.rightturn(speedTurn, difference);
-		try {
-			wait(duration);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
 
 	public void leftturn() {
 		motorcontrol.leftturn(speedTurn, difference);
-		try {
-			wait(duration);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
