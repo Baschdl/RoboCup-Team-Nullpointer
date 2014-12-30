@@ -2,6 +2,7 @@ package de.null_pointer.communication_brick;
 
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
+import lejos.util.Delay;
 import de.null_pointer.sensorprocessing_brick.Abs_ImuProcessingBrick;
 import de.null_pointer.sensorprocessing_brick.AccumulatorProcessingBrick;
 import de.null_pointer.sensorprocessing_brick.DistNxProcessingBrick;
@@ -77,7 +78,7 @@ public class BrickControlBrick extends Thread {
 
 	}
 
-	private void processCommand(int[] command) {
+	private synchronized void processCommand(int[] command) {
 		switch (command[0]) {
 		case 1:
 			switch (command[1]) {
@@ -143,6 +144,8 @@ public class BrickControlBrick extends Thread {
 			}
 			break;
 		case 9:
+			System.out.println("Motor" + command[1] + ";" + command[2] + ";"
+					+ command[3]);
 			switch (command[1]) {
 			case 1:
 				if (command[2] != 0 && command[3] != 5) {
@@ -157,7 +160,6 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 3:
 					Motor.A.stop();
-					Motor.B.stop();
 					break;
 				case 4:
 					Motor.A.flt();
@@ -186,8 +188,6 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 3:
 					Motor.B.stop();
-					Motor.A.stop();
-
 					break;
 				case 4:
 					Motor.B.flt();
@@ -231,6 +231,7 @@ public class BrickControlBrick extends Thread {
 				break;
 
 			}
+			Delay.msDelay(1000);
 			break;
 		case 10:
 			SensorPort sp = null;
@@ -286,14 +287,14 @@ public class BrickControlBrick extends Thread {
 		}
 	}
 
-	public void sendData(int sensorID, int sourceOfData, int value) {
+	public synchronized void sendData(int sensorID, int sourceOfData, int value) {
 
 		String sendString = "*" + sensorID + ";" + sourceOfData + ";" + value
 				+ "#";
 		com.sendString(sendString);
 	}
 
-	public void sendData(int sensorID, int sourceOfData, float value) {
+	public synchronized void sendData(int sensorID, int sourceOfData, float value) {
 
 		String sendString = "*" + sensorID + ";" + sourceOfData + ";" + value
 				+ "#";
