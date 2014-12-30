@@ -154,6 +154,7 @@ public class BrickControlPi extends Thread {
 				sendCommand(10, 5, i + 1, 1);
 				// logger.debug("ts left" + tsLeft);
 			} else {
+				sendCommand(0, 0, 0, 0);
 				logger.debug("Sensor existiert nicht");
 			}
 		}
@@ -216,7 +217,7 @@ public class BrickControlPi extends Thread {
 					}
 				}
 				// Wandelt die Strings in Integer um und speichert sie ab
-				if (puf[i].matches("[0-9]+")) {
+				if (puf[i].matches("[-0-9]+")) {
 					dataInt[i] = Integer.parseInt(puf[i]);
 				} else {
 					logger.error("Ungueltige Zeichen im uebertragenen String (Buchstaben, mehrere/ falsche Separatoren...): "
