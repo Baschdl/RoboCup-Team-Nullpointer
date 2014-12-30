@@ -1,10 +1,14 @@
 package de.null_pointer.pi_server;
 
+import org.apache.log4j.Logger;
+
 import lejos.util.Delay;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 
 public class TestProgram {
+
+	private static Logger logger = Logger.getLogger(TestProgram.class);
 
 	private InitializeProgram initProgram = null;
 	private MotorControlPi motorcontrol = null;
@@ -30,8 +34,11 @@ public class TestProgram {
 	}
 
 	public void forward() {
+		logger.debug("Testprogramm: Vorwaerts");
 		motorcontrol.forward(speedLinear);
+		logger.debug("Testprogramm: Delay");
 		Delay.msDelay(duration);
+		logger.debug("Testprogramm: Flt");
 		motorcontrol.flt();
 
 	}

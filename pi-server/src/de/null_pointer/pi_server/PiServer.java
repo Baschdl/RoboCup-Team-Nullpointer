@@ -39,6 +39,7 @@ public class PiServer {
 			s = args[i];
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
+				logger.debug("Starte GUI");
 				JFDisplayValues vGUI = new JFDisplayValues();
 
 				logger.info("GUI gestartet");
@@ -53,15 +54,20 @@ public class PiServer {
 
 			// startet ein Testprogramm, der nachfolgende String gibt an welches
 			if (s.equals("-test")) {
+				logger.debug("Waehle Testprogramm aus");
 				i++;
 				s = args[i];
 				if (s.equals("forward")) {
+					logger.debug("Starte Testprogramm forward");
 					testProgram.forward();
 				} else if (s.equals("backward")) {
+					logger.debug("Starte Testprogramm backward");
 					testProgram.backward();
 				} else if (s.equals("rightturn")) {
+					logger.debug("Starte Testprogramm rightturn");
 					testProgram.rightturn();
 				} else if (s.equals("leftturn")) {
+					logger.debug("Starte Testprogramm leftturn");
 					testProgram.leftturn();
 				}
 			}

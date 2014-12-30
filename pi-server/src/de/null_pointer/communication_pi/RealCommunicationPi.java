@@ -64,9 +64,11 @@ public class RealCommunicationPi extends CommunicationPi {
 	@Override
 	public synchronized void sendString(String data) {
 		try {
-			
+			logger.debug("writeUTF");
 			dataToBrick.writeUTF(data);
+			logger.debug("flush");
 			dataToBrick.flush();
+			logger.debug("finished");
 			
 		} catch (IOException e) {
 

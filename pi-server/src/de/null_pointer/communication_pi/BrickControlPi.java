@@ -286,14 +286,16 @@ public class BrickControlPi extends Thread {
 	 */
 	private void sendCommand(int recipient, int action, int parameter,
 			int options) {
-
 		String command = "*" + recipient + ";" + action + ";" + parameter + ";"
 				+ options + "#";
+		logger.debug("Sende Kommando");
 		com.sendString(command);
+		logger.debug("Senden des Kommandos beendet");
 
 	}
 
 	public void forward(int speed, char motorport) {
+		logger.debug("Sende Kommando forward");
 		switch (motorport) {
 		case 'A':
 			sendCommand(9, 1, speed, 1);
@@ -308,10 +310,12 @@ public class BrickControlPi extends Thread {
 		default:
 			break;
 		}
+		logger.debug("Senden des Kommandos forward beendet");
 
 	}
 
 	public void backward(int speed, char motorport) {
+		logger.debug("Sende Kommando backward");
 		switch (motorport) {
 		case 'A':
 			sendCommand(9, 1, speed, 2);
@@ -326,10 +330,12 @@ public class BrickControlPi extends Thread {
 		default:
 			break;
 		}
+		logger.debug("Senden des Kommandos backward beendet");
 
 	}
 
 	public void stop(char motorport) {
+		logger.debug("Sende Kommando stop");
 		switch (motorport) {
 		case 'A':
 			sendCommand(9, 1, 0, 3);
@@ -344,10 +350,12 @@ public class BrickControlPi extends Thread {
 		default:
 			break;
 		}
+		logger.debug("Senden des Kommandos stop beendet");
 
 	}
 
 	public void flt(char motorport) {
+		logger.debug("Sende Kommando flt");
 		switch (motorport) {
 		case 'A':
 			sendCommand(9, 1, 0, 4);
@@ -362,10 +370,12 @@ public class BrickControlPi extends Thread {
 		default:
 			break;
 		}
+		logger.debug("Senden des Kommandos flt beendet");
 
 	}
 
 	public void rotate(int angle, char motorport) {
+		logger.debug("Sende Kommando rotate");
 		switch (motorport) {
 		case 'A':
 			sendCommand(9, 1, angle, 5);
@@ -380,6 +390,7 @@ public class BrickControlPi extends Thread {
 		default:
 			break;
 		}
+		logger.debug("Senden des Kommandos rotate beendet");
 	}
 
 	/**
