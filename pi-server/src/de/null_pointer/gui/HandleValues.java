@@ -37,6 +37,7 @@ public class HandleValues extends Thread{
 
 	public void run() {
 
+		valueGUI.startGUI();
 		while (true) {
 
 			readLSARaw();
@@ -45,7 +46,7 @@ public class HandleValues extends Thread{
 			readLeftEOPD();
 			readAbs_ImuCompass_Angle();
 			readAbs_ImuCompass_Heading();
-			valueGUI.startGUI();
+			
 
 		}
 
