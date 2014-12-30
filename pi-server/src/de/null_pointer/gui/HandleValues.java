@@ -5,7 +5,7 @@ import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 
-public class HandleValues {
+public class HandleValues extends Thread{
 
 	private int[] lsaraw = new int[8];
 	private int[] lsaraw_old = new int[8];
@@ -35,7 +35,7 @@ public class HandleValues {
 		this.distnxprocclass = distnxprocclass;
 	}
 
-	public void readValues() {
+	public void run() {
 
 		while (true) {
 
@@ -45,6 +45,7 @@ public class HandleValues {
 			readLeftEOPD();
 			readAbs_ImuCompass_Angle();
 			readAbs_ImuCompass_Heading();
+			valueGUI.startGUI();
 
 		}
 
@@ -52,8 +53,8 @@ public class HandleValues {
 
 	private void readLSARaw() {
 
-		lsaraw_old = lsaraw.clone();
-		lsaraw = lsaprocclass.getLSA().clone();
+		lsaraw_old = lsaraw;
+		lsaraw = lsaprocclass.getLSA();
 
 		if (lsaraw[0] != lsaraw_old[0] || lsaraw[1] != lsaraw_old[1]
 				|| lsaraw[2] != lsaraw_old[2] || lsaraw[3] != lsaraw_old[3]
@@ -79,14 +80,14 @@ public class HandleValues {
 
 	private void readRightEOPD() {
 
-		// valueGUI.showLeftEOPD(eopdprocclass.getRightEOPD());
-		// TODO EOPD-Klasse fertigstellen
+		valueGUI.showRightEOPD(eopdRightprocclass.getDistance());
+		
 
 	}
 
 	private void readLeftEOPD() {
 
-		// valueGUI.showRightEOPD(eopdprocclass.getLeftEOPD());
+		valueGUI.showLeftEOPD(eopdLeftprocclass.getDistance());
 
 	}
 

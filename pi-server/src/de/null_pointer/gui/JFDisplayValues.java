@@ -20,7 +20,6 @@ public class JFDisplayValues extends JFrame {
 	public JLabel jLEOPDleft;
 	public JLabel lblAbsoluteimuacgKompassHeading;
 	public JLabel jLAbsoluteIMU_ACG_Compass_Heading;
-	public HandleValues methodsClass;
 	private JLabel lblAbsoluteimuacgKompassWinkel;
 	private JLabel jLAbsoluteIMU_ACG_Compass_Angle;
 	
@@ -101,11 +100,9 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Angle);
 	}
 
-public void showLSARaw(int[] lsavalues){
+	public void showLSARaw(int[] lsavalues){
 		
-		jLLSA.setText(Arrays.toString(lsavalues));
-		//TODO Ausgeben der verarbeiteten Values --> Verarbeitungsklasse schreiben
-		
+		jLLSA.setText(Arrays.toString(lsavalues));		
 		
 	}
 	
@@ -116,16 +113,16 @@ public void showLSARaw(int[] lsavalues){
 		
 	}
 	
-	public void showRightEOPD(int value){
+	public void showRightEOPD(double value){
 		
 	
-		jLEOPDright.setText(Integer.toString(value));
+		jLEOPDright.setText(Double.toString(value));
 		
 	}
 	
-	public void showLeftEOPD(int value){
+	public void showLeftEOPD(double value){
 		
-		jLEOPDleft.setText(Integer.toString(value));
+		jLEOPDleft.setText(Double.toString(value));
 		
 	}
 	
