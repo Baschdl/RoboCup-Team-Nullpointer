@@ -48,11 +48,12 @@ public class SensorProcessingThread extends Thread {
 			if (lsa != null) {
 				lsa.processData();
 			}
-			
+
 			if (counter < 10) {
 				counter++;
 			} else if (counter == 10) {
 				brickControl.sendData(7, 1, 1);
+				counter++;
 			}
 		}
 	}
