@@ -12,16 +12,16 @@ public class VirtualDistNX {
 	int range;
 
 	/**
-	 * @param maxValue
+	 * @param biggestValueNoSpace
 	 *            must not be bigger than 800
-	 * @param minValue
+	 * @param smallestValueNoSpace
 	 *            has to be at least zero
 	 */
-	public VirtualDistNX(int maxValue, int minValue) {
+	public VirtualDistNX(int biggestValueNoSpace, int smallestValueNoSpace) {
 
-		biggestValueNoSpace = maxValue;
-		smallestValueNoSpace = minValue;
-		smallestValueOK = biggestValueNoSpace + 1;
+		this.biggestValueNoSpace = biggestValueNoSpace;
+		this.smallestValueNoSpace = smallestValueNoSpace;
+		this.smallestValueOK = this.biggestValueNoSpace + 1;
 
 	}
 

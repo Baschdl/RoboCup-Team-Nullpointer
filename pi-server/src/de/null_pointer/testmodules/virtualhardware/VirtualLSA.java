@@ -16,23 +16,23 @@ public class VirtualLSA {
 	/**
 	 * 
 	 
-	 * @param maxValueWhite
+	 * @param biggestValueWhite
 	 *            must not be bigger than 100
-	 * @param minValueWhite
+	 * @param smallestValueWhite
 	 *            must not be smaller than maxValueBlack + 1
-	 * @param maxValueBlack
+	 * @param biggestValueBlack
 	 *            must not be bigger than minValueWhite -1
-	 * @param minValueBlack
+	 * @param smallestValueBlack
 	 *            must not be smaller than 0
 	 */
-	public VirtualLSA(int maxValueWhite, int minValueWhite,
-			int maxValueBlack, int minValueBlack) {
+	public VirtualLSA(int biggestValueWhite, int smallestValueWhite,
+			int biggestValueBlack, int smallestValueBlack) {
 
 		
-		biggestValueWhite = maxValueWhite;
-		smallestValueWhite = minValueWhite;
-		biggestValueBlack = maxValueBlack;
-		smallestValueBlack = minValueBlack;
+		this.biggestValueWhite = biggestValueWhite;
+		this.smallestValueWhite = smallestValueWhite;
+		this.biggestValueBlack = biggestValueBlack;
+		this.smallestValueBlack = smallestValueBlack;
 
 	}
 
@@ -116,31 +116,31 @@ public class VirtualLSA {
 	}
 /**
  * 
- * @param sensorN sensorNumber of the sensor of the LightSensorArray
+ * @param sensorNumber: sensorNumber of the sensor of the LightSensorArray
  * @return random values for the case "sensor is black"
  */
-	public String[] getBlack(int sensorN) {
-		sensorNumber = sensorN;
+	public String[] getBlack(int sensorNumber) {
+		this.sensorNumber = sensorNumber;
 		generateValues(0);
 
 		for (int i = 0; i < amountValues; i++) {
-			LSA[i] = "*2;" + sensorNumber + ";" + value[i] + ";0#";
+			LSA[i] = "*2;" + this.sensorNumber + ";" + value[i] + ";0#";
 		}
 		return LSA;
 	}
 
 	/**
 	 * 
-	 * @param sensorN sensorNumber of the sensor of the LightSensorArray
+	 * @param sensorNumber: sensorNumber of the sensor of the LightSensorArray
 	 * @return random values for the case "sensor is white"
 	 */
 	
-	public String[] getWhite(int sensorN) {
-		sensorNumber = sensorN;
+	public String[] getWhite(int sensorNumber) {
+		this.sensorNumber = sensorNumber;
 		generateValues(1);
 
 		for (int i = 0; i < amountValues; i++) {
-			LSA[i] = "*2;" + sensorNumber + ";" + value[i] + ";0#";
+			LSA[i] = "*2;" + this.sensorNumber + ";" + value[i] + ";0#";
 		}
 		return LSA;
 
@@ -148,16 +148,16 @@ public class VirtualLSA {
 	
 	/**
 	 * 
-	 * @param sensorN sensorNumber of the sensor of the LightSensorArray
+	 * @param sensorNumber: sensorNumber of the sensor of the LightSensorArray
 	 * @return random values for the case "sensor is not black and not white"
 	 */
 
-	public String[] getValuesBetweenWhiteAndBlack(int sensorN) {
-		sensorNumber = sensorN;
+	public String[] getValuesBetweenWhiteAndBlack(int sensorNumber) {
+		this.sensorNumber = sensorNumber;
 		generateValues(2);
 
 		for (int i = 0; i < amountValues; i++) {
-			LSA[i] = "*2;" + sensorNumber + ";" + value[i] + ";0#";
+			LSA[i] = "*2;" + this.sensorNumber + ";" + value[i] + ";0#";
 		}
 
 		return LSA;
