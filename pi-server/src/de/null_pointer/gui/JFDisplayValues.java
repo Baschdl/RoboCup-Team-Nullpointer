@@ -31,15 +31,15 @@ public class JFDisplayValues extends JFrame {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("LSA Raw:");
 		lblNewLabel.setBounds(10, 11, 54, 14);
-		getContentPane().add(lblNewLabel, BorderLayout.NORTH);
+		getContentPane().add(lblNewLabel);
 
 		jLLSA = new JLabel("--");
-		jLLSA.setBounds(62, 11, 46, 14);
+		jLLSA.setBounds(83, 11, 82, 14);
 		getContentPane().add(jLLSA);
 
 		JLabel lblDistnxraw = new JLabel("DistNX-Raw:");
@@ -47,7 +47,7 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(lblDistnxraw);
 
 		jLDistNX = new JLabel("--");
-		jLDistNX.setBounds(82, 36, 46, 14);
+		jLDistNX.setBounds(82, 36, 83, 14);
 		getContentPane().add(jLDistNX);
 
 		lblEopdRechts = new JLabel("EOPD rechts:");
@@ -55,15 +55,15 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(lblEopdRechts);
 
 		jLEOPDright = new JLabel("--");
-		jLEOPDright.setBounds(82, 61, 46, 14);
+		jLEOPDright.setBounds(82, 61, 126, 14);
 		getContentPane().add(jLEOPDright);
 
 		lblEopdLinks = new JLabel("EOPD links:");
-		lblEopdLinks.setBounds(144, 61, 54, 14);
+		lblEopdLinks.setBounds(218, 61, 54, 14);
 		getContentPane().add(lblEopdLinks);
 
 		jLEOPDleft = new JLabel("--");
-		jLEOPDleft.setBounds(208, 61, 46, 14);
+		jLEOPDleft.setBounds(282, 61, 142, 14);
 		getContentPane().add(jLEOPDleft);
 
 		lblAbsoluteimuacgKompassHeading = new JLabel(
@@ -72,7 +72,7 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(lblAbsoluteimuacgKompassHeading);
 
 		jLAbsoluteIMU_ACG_Compass_Heading = new JLabel("--");
-		jLAbsoluteIMU_ACG_Compass_Heading.setBounds(218, 86, 46, 14);
+		jLAbsoluteIMU_ACG_Compass_Heading.setBounds(218, 86, 159, 14);
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Heading);
 
 		lblAbsoluteimuacgKompassWinkel = new JLabel(
@@ -81,7 +81,7 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(lblAbsoluteimuacgKompassWinkel);
 
 		jLAbsoluteIMU_ACG_Compass_Angle = new JLabel("--");
-		jLAbsoluteIMU_ACG_Compass_Angle.setBounds(189, 111, 46, 14);
+		jLAbsoluteIMU_ACG_Compass_Angle.setBounds(189, 111, 177, 14);
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Angle);
 
 		this.setVisible(true);
