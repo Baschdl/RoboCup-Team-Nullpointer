@@ -250,8 +250,8 @@ public class InitializeProgram {
 		// Abritrator wird erst Initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
 		// wurden
-		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
-		}
+		// while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
+		// }
 
 		arbitrator = new Arbitrator(behavior);
 	}
