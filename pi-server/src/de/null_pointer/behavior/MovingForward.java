@@ -1,5 +1,7 @@
 package de.null_pointer.behavior;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
@@ -9,6 +11,7 @@ import lejos.robotics.subsumption.Behavior;
 
 public class MovingForward implements Behavior {
 	private static Logger logger = Logger.getLogger(MovingForward.class);
+	private Properties  propPiServer = null;
 
 	private MotorControlPi motorControl = null;
 	private Odometer odometer = null;
@@ -18,12 +21,13 @@ public class MovingForward implements Behavior {
 	private boolean moving = true;
 	private long time;
 
-	public MovingForward(MotorControlPi motorControl, Odometer odometer,
-			int speed) {
+	public MovingForward(MotorControlPi motorControl, Odometer odometer, Properties propPiServer) {
 		this.motorControl = motorControl;
 		this.odometer = odometer;
-
-		this.speed = speed;
+		this.propPiServer = propPiServer;
+		
+		speed = Integer.parseInt(propPiServer
+				.getProperty("Behavior.MovingForward.speed"));
 	}
 
 	@Override

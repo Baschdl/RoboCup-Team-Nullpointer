@@ -55,7 +55,6 @@ public class BrickControlPi extends Thread {
 		}
 		while (readyToProcessData) {
 			message = receiveData();
-			// logger.info("brick Control: " + this);
 			if (message != null) {
 				processData(message);
 			}
@@ -76,7 +75,7 @@ public class BrickControlPi extends Thread {
 	 *            Enthaelt die vom Brick gesendeten Daten.
 	 */
 	void processData(float[] receiveData) {
-		// logger.info("verarbeite Daten");
+		logger.debug("verarbeite Daten");
 		// gibt empfangene Daten weiter
 
 		// System.out.println("value processData:" +
@@ -107,6 +106,7 @@ public class BrickControlPi extends Thread {
 		} else if (receiveData[0] == 6) {
 			accumulator.setMilliVolt(Math.round(receiveData[1]));
 		} else if (receiveData[0] == 7) {
+			logger.debug("Genuegend Werte uebermittelt: " + this);
 			sensorReady = false;
 		} else {
 			// System.out.println("process Data (no sensor) " +
@@ -159,7 +159,7 @@ public class BrickControlPi extends Thread {
 			}
 		}
 		readyToProcessData = true;
-		//notifyAll();
+		// notifyAll();
 		logger.debug("sendSensorData flag set to: " + readyToProcessData);
 	}
 
@@ -171,9 +171,9 @@ public class BrickControlPi extends Thread {
 	public float[] receiveData() {
 		String dataString = null;
 		try {
-			// logger.info("Lese Zeile...");
+			logger.debug("Lese Daten...");
 			dataString = com.receiveString();
-			// logger.info("gelesen.");
+			logger.debug("gelesen.");
 			return checkString(dataString);
 
 		} catch (Exception e) {
@@ -246,7 +246,9 @@ public class BrickControlPi extends Thread {
 	public void sendCommand(int recipient, int action) {
 		String command = "*" + recipient + ";" + action + ";" + "0" + ";" + "0"
 				+ "#";
+		logger.debug("Sende Kommando");
 		com.sendString(command);
+		logger.debug("Senden des Kommandos beendet");
 	}
 
 	/**
@@ -265,7 +267,9 @@ public class BrickControlPi extends Thread {
 	public void sendCommand(int recipient, int action, int parameter) {
 		String command = "*" + recipient + ";" + action + ";" + parameter + ";"
 				+ "0" + "#";
+		logger.debug("Sende Kommando");
 		com.sendString(command);
+		logger.debug("Senden des Kommandos beendet");
 	}
 
 	/**
@@ -440,14 +444,6 @@ public class BrickControlPi extends Thread {
 
 	public boolean getSensorReady() {
 		return sensorReady;
-	}
-
-	public void setSensorReady(int bit) {
-		if (bit == 1) {
-			sensorReady = false;
-		} else {
-			sensorReady = true;
-		}
 	}
 
 }

@@ -1,12 +1,18 @@
 package de.null_pointer.sensorprocessing_pi;
 
+import java.util.Properties;
+
 public class Abs_ImuProcessingPi {
 
-	public Abs_ImuProcessingPi(int dimension_horizontal,
-			int dimension_vertical, int dimension_rotational) {
-		this.dimension_horizontal = dimension_horizontal;
-		this.dimension_vertical = dimension_vertical;
-		this.dimension_rotational = dimension_rotational;
+	public Abs_ImuProcessingPi(Properties propPiServer) {
+		dimension_horizontal = Integer
+				.parseInt(propPiServer
+						.getProperty("Pi_server.InitializeProgram.dimension_horizontal"));
+		dimension_vertical = Integer.parseInt(propPiServer
+				.getProperty("Pi_server.InitializeProgram.dimension_vertical"));
+		dimension_rotational = Integer
+				.parseInt(propPiServer
+						.getProperty("Pi_server.InitializeProgram.dimension_rotational"));
 	}
 
 	private int dimension_horizontal = -1;

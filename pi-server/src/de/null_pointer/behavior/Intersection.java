@@ -1,5 +1,7 @@
 package de.null_pointer.behavior;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
@@ -25,8 +27,7 @@ public class Intersection implements Behavior {
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
-			Abs_ImuProcessingPi absImu, Navigation nav,
-			int minimalDistanceFront, int maximalDistanceSide) {
+			Abs_ImuProcessingPi absImu, Navigation nav, Properties propPiServer) {
 		this.motorControl = motorControl;
 		this.distnx = distnx;
 		this.eopdLeft = eopdLeft;
@@ -34,8 +35,10 @@ public class Intersection implements Behavior {
 		this.absImu = absImu;
 		this.nav = nav;
 
-		this.minimalDistanceFront = minimalDistanceFront;
-		this.maximalDistanceSide = maximalDistanceSide;
+		minimalDistanceFront = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.minimalDistanceFront"));
+		maximalDistanceSide = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.maximalDistanceSide"));
 	}
 
 	@Override

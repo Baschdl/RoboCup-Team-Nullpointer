@@ -137,13 +137,7 @@ public class InitializeProgram {
 	}
 
 	public void initializeSensors() {
-		absImu = new Abs_ImuProcessingPi(
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.InitializeProgram.dimension_horizontal")),
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.InitializeProgram.dimension_vertical")),
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.InitializeProgram.dimension_rotational")));
+		absImu = new Abs_ImuProcessingPi(propPiServer);
 		eopdLeft = new EOPDProcessingPi();
 		eopdRight = new EOPDProcessingPi();
 		distNx = new DistNxProcessingPi();
@@ -222,27 +216,12 @@ public class InitializeProgram {
 
 	public void initializeBehavior() {
 		// TODO: Reihenfolge richtig?
-		Behavior b1 = new MovingForward(motorControl, odometer,
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.MovingForward.speed")));
+		Behavior b1 = new MovingForward(motorControl, odometer, propPiServer);
 		Behavior b2 = new NextTile(absImu, nav);
-		Behavior b3 = new Slope(motorControl, absImu, nav,
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Slope.angleToTakeControl")),
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Slope.speed")));
+		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
 		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav);
-		Behavior b5 = new Intersection(
-				motorControl,
-				distNx,
-				eopdLeft,
-				eopdRight,
-				absImu,
-				nav,
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Intersection.minimalDistanceFront")),
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Intersection.maximalDistanceSide")));
+		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
+				eopdRight, absImu, nav, propPiServer);
 		Behavior b6 = new Victim(motorControl);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
@@ -250,8 +229,8 @@ public class InitializeProgram {
 		// Abritrator wird erst Initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
 		// wurden
-		// while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
-		// }
+		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
+		}
 
 		arbitrator = new Arbitrator(behavior);
 	}
