@@ -18,8 +18,6 @@ public class PiServer {
 
 		initProgram.initializeSensors();
 		initProgram.initializeCommunication();
-		initProgram.initializeNavigation();
-		initProgram.initializeBehavior();
 
 		TestProgram testProgram = new TestProgram(initProgram,
 				Integer.parseInt(propPiServer
@@ -41,7 +39,9 @@ public class PiServer {
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
 				logger.debug("Starte GUI");
-				Thread vGUI = new Thread(new HandleValues(initProgram.getLsa(), initProgram.getAbsImu(), initProgram.getEopdLeft(), initProgram.getEopdRight(), initProgram.getDistNx()));
+				HandleValues vGUI = new HandleValues(initProgram.getLsa(),
+						initProgram.getAbsImu(), initProgram.getEopdLeft(),
+						initProgram.getEopdRight(), initProgram.getDistNx());
 				logger.info("GUI gestartet");
 				vGUI.start();
 			}
@@ -49,6 +49,9 @@ public class PiServer {
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
 				logger.info("Wettkampfprogramm gestartet");
+				initProgram.initializeNavigation();
+				initProgram.initializeBehavior();
+
 				initProgram.getArbitrator().start();
 			}
 
