@@ -120,7 +120,7 @@ public class InitializeProgram {
 	}
 
 	public void initializeLogger() {
-		logger.setLevel(Level.ALL);
+		logger.setLevel(Level.INFO);
 		loadConfiguration("resources/log4j.properties");
 		propPiServer = loadConfiguration("resources/pi_server.properties");
 

@@ -78,8 +78,7 @@ public class BrickControlPi extends Thread {
 		logger.debug("verarbeite Daten");
 		// gibt empfangene Daten weiter
 
-		// System.out.println("value processData:" +
-		// Arrays.toString(receiveData));
+		logger.debug("value processData:" + Arrays.toString(receiveData));
 		if (receiveData[0] == 1) {
 			// Dist-Nx
 			distNx.setDistance(Math.round(receiveData[2]));
@@ -173,7 +172,7 @@ public class BrickControlPi extends Thread {
 		try {
 			logger.debug("Lese Daten...");
 			dataString = com.receiveString();
-			logger.debug("gelesen.");
+			logger.debug("gelesen: " + dataString);
 			return checkString(dataString);
 
 		} catch (Exception e) {
