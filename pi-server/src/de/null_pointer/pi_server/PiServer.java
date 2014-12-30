@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import de.null_pointer.gui.HandleValues;
 import de.null_pointer.gui.JFDisplayValues;
 
 public class PiServer {
@@ -40,10 +41,9 @@ public class PiServer {
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
 				logger.debug("Starte GUI");
-				JFDisplayValues vGUI = new JFDisplayValues();
-
+				Thread vGUI = new Thread(new HandleValues(initProgram.getLsa(), initProgram.getAbsImu(), initProgram.getEopdLeft(), initProgram.getEopdRight(), initProgram.getDistNx()));
 				logger.info("GUI gestartet");
-				vGUI.startGUI();
+				vGUI.start();
 			}
 
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
