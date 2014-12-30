@@ -1,5 +1,7 @@
 package de.null_pointer.testmodules.testbehavior;
 
+import java.util.Properties;
+
 import de.null_pointer.behavior.Intersection;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
@@ -14,10 +16,10 @@ public class TestIntersection extends Intersection {
 	public TestIntersection(MotorControlPi motorControl,
 			DistNxProcessingPi distnx, EOPDProcessingPi eopdLeft,
 			EOPDProcessingPi eopdRight, Abs_ImuProcessingPi absImu,
-			Navigation nav, int minimalDistanceFront, int maximalDistanceSide) {
+			Navigation nav, Properties propPiServer) {
 
 		super(motorControl, distnx, eopdLeft, eopdRight, absImu, nav,
-				minimalDistanceFront, maximalDistanceSide);
+				propPiServer);
 	}
 
 	public boolean isActive() {

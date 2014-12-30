@@ -107,29 +107,15 @@ public class CommunicationTest {
 						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueBlack")));
 
 		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav);
-		testInters = new TestIntersection(
-				motorControl,
-				distNx,
-				eopdLeft,
-				eopdRight,
-				absImu,
-				nav,
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Intersection.minimalDistanceFront")),
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Intersection.maximalDistanceSide")));
+		testInters = new TestIntersection(motorControl, distNx, eopdLeft,
+				eopdRight, absImu, nav, propPiServer);
 
 		testMovFor = new TestMovingForward(motorControl,
-				initProgramm.getOdometer(), Integer.parseInt(propPiServer
-						.getProperty("Behavior.MovingForward.speed")));
+				initProgramm.getOdometer(), propPiServer);
 
 		testNextTile = new TestNextTile(absImu, nav);
 
-		testSlope = new TestSlope(motorControl, absImu, nav,
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Slope.angleToTakeControl")),
-				Integer.parseInt(propPiServer
-						.getProperty("Behavior.Slope.speed")));
+		testSlope = new TestSlope(motorControl, absImu, nav, propPiServer);
 
 		testVictim = new TestVictim(motorControl);
 

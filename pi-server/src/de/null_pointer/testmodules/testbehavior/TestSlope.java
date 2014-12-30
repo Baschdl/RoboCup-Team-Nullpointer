@@ -1,5 +1,7 @@
 package de.null_pointer.testmodules.testbehavior;
 
+import java.util.Properties;
+
 import de.null_pointer.behavior.Slope;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
@@ -10,8 +12,8 @@ public class TestSlope extends Slope {
 	private boolean active = false;
 
 	public TestSlope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu,
-			Navigation nav, int angleToTakeControl, int speed) {
-		super(motorControl, absImu, nav, angleToTakeControl, speed);
+			Navigation nav, Properties propPiServer) {
+		super(motorControl, absImu, nav, propPiServer);
 	}
 
 	public boolean isActive() {
