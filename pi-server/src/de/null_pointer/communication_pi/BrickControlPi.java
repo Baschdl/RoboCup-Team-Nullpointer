@@ -88,10 +88,10 @@ public class BrickControlPi extends Thread {
 					Math.round(receiveData[2]));
 		} else if (receiveData[0] == 3) {
 			// linker EOPD
-			eopdLeft.setEOPDdistance(Math.round(receiveData[1]));
+			eopdLeft.setEOPDdistance(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 4) {
 			// rechter EOPD
-			eopdRight.setEOPDdistance(Math.round(receiveData[1]));
+			eopdRight.setEOPDdistance(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 5) {
 			// AbsIMU-ACG
 			if (Math.round(receiveData[1]) >= 16) {
