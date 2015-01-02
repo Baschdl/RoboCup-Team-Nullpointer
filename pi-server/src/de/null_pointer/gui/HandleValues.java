@@ -7,15 +7,6 @@ import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 
 public class HandleValues extends Thread {
 
-	private int[] lsaraw = new int[8];
-	private int[] lsaraw_old = new int[8];
-	private int distnxraw;
-	private int distnxraw_old;
-	private int absimuacg_heading;
-	private int absimuacg_heading_old;
-	private int absimuacg_angle;
-	private int absimuacg_angle_old;
-
 	private JFDisplayValues valueGUI = new JFDisplayValues();
 	private LSAProcessingPi lsaprocclass = null;
 	private Abs_ImuProcessingPi absimuprocclass = null;
@@ -38,6 +29,11 @@ public class HandleValues extends Thread {
 	public void run() {
 		while (true) {
 
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			readLSARaw();
 			readDistNXRaw();
 			readRightEOPD();
@@ -51,29 +47,14 @@ public class HandleValues extends Thread {
 
 	private void readLSARaw() {
 
-		lsaraw_old = lsaraw;
-		lsaraw = lsaprocclass.getLSA();
-
-		if (lsaraw[0] != lsaraw_old[0] || lsaraw[1] != lsaraw_old[1]
-				|| lsaraw[2] != lsaraw_old[2] || lsaraw[3] != lsaraw_old[3]
-				|| lsaraw[4] != lsaraw_old[4] || lsaraw[5] != lsaraw_old[5]
-				|| lsaraw[6] != lsaraw_old[6] || lsaraw[7] != lsaraw_old[7]) {
-
-			valueGUI.showLSARaw(lsaraw);
-
-		}
+		valueGUI.showLSARaw(lsaprocclass.getLSA());
 
 	}
 
 	private void readDistNXRaw() {
-		distnxraw_old = distnxraw;
-		distnxraw = distnxprocclass.getDistance();
 
-		if (distnxraw != distnxraw_old) {
+			valueGUI.showDistNXRaw(distnxprocclass.getDistance());
 
-			valueGUI.showDistNXRaw(distnxraw);
-
-		}
 	}
 
 	private void readRightEOPD() {
@@ -89,23 +70,15 @@ public class HandleValues extends Thread {
 	}
 
 	private void readAbs_ImuCompass_Heading() {
-		absimuacg_heading_old = absimuacg_heading;
-		absimuacg_heading = absimuprocclass.getHeading();
-		if (absimuacg_heading != absimuacg_heading_old) {
-			valueGUI.showAbsoluteIMUACG_compass_heading(absimuacg_heading);
-		}
+
+		valueGUI.showAbsoluteIMUACG_compass_heading(absimuprocclass.getHeading());
 	}
 
 	private void readAbs_ImuCompass_Angle() {
 
-		absimuacg_angle_old = absimuacg_angle;
-		absimuacg_angle = absimuprocclass.getAngleHorizontal();
-		if (absimuacg_angle != absimuacg_angle_old) {
+		valueGUI.showAbsoluteIMUACG_compass_angle(absimuprocclass
+				.getAngleHorizontal());
 
-			valueGUI.showAbsoluteIMUACG_compass_angle(absimuprocclass
-					.getAngleHorizontal());
-
-		}
 	}
 
 }
