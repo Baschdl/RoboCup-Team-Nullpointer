@@ -46,7 +46,7 @@ public class BrickControlBrick extends Thread {
 		}
 	}
 
-	public synchronized void receiveCommand() {
+	public void receiveCommand() {
 		int[] command = new int[4];
 
 		// System.out.println("Lesen...");
@@ -78,7 +78,7 @@ public class BrickControlBrick extends Thread {
 
 	}
 
-	private synchronized void processCommand(int[] command) {
+	private void processCommand(int[] command) {
 		switch (command[0]) {
 		case 1:
 			switch (command[1]) {
@@ -231,7 +231,7 @@ public class BrickControlBrick extends Thread {
 				break;
 
 			}
-			Delay.msDelay(1000);
+			Delay.msDelay(1);
 			break;
 		case 10:
 			SensorPort sp = null;
@@ -287,14 +287,14 @@ public class BrickControlBrick extends Thread {
 		}
 	}
 
-	public synchronized void sendData(int sensorID, int sourceOfData, int value) {
+	public void sendData(int sensorID, int sourceOfData, int value) {
 
 		String sendString = "*" + sensorID + ";" + sourceOfData + ";" + value
 				+ "#";
 		com.sendString(sendString);
 	}
 
-	public synchronized void sendData(int sensorID, int sourceOfData, float value) {
+	public void sendData(int sensorID, int sourceOfData, float value) {
 
 		String sendString = "*" + sensorID + ";" + sourceOfData + ";" + value
 				+ "#";
