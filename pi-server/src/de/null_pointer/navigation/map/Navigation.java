@@ -1,5 +1,7 @@
 package de.null_pointer.navigation.map;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 public class Navigation {
@@ -8,7 +10,11 @@ public class Navigation {
 
 	private Node currentTile;
 
-	public Navigation(int dimensionX, int dimensionY) {
+	public Navigation(Properties propPiServer) {
+		int dimensionX = Integer.parseInt(propPiServer
+				.getProperty("Navigation.Navigation.mapWidth"));
+		int dimensionY = Integer.parseInt(propPiServer
+				.getProperty("Navigation.Navigation.mapHeight"));
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 	}
 
