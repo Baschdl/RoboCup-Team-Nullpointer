@@ -209,9 +209,8 @@ public class InitializeProgram {
 	}
 
 	public void initializeNavigation() {
-		int widthMap = 11;
-		int heightMap = 11;
-		nav = new Navigation(widthMap, heightMap);
+		nav = new Navigation(propPiServer);
+		odometer = new Odometer(accumulator, absImu, propPiServer);
 	}
 
 	public void initializeBehavior() {
