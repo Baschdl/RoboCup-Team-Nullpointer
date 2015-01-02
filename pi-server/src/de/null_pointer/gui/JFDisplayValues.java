@@ -39,7 +39,7 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(lblNewLabel);
 
 		jLLSA = new JLabel("--");
-		jLLSA.setBounds(97, 11, 82, 14);
+		jLLSA.setBounds(97, 11, 248, 14);
 		getContentPane().add(jLLSA);
 
 		JLabel lblDistnxraw = new JLabel("DistNX-Raw:");
