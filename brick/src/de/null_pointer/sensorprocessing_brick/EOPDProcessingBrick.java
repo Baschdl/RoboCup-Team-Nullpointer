@@ -20,7 +20,7 @@ public class EOPDProcessingBrick {
 	 *            ID of the EOPD sensor; decides wether it is the right or the
 	 *            left one
 	 * @param port
-	 *            the port the Abs_Imu is plugged into
+	 *            the port the EOPD sensor is plugged into
 	 * @param longRange
 	 *            defines if the EOPD operates in longRange-mode
 	 */
