@@ -8,7 +8,6 @@ import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 public class HandleValues extends Thread {
 
 	private int[] lsaraw = new int[8];
-	private int[] lsaraw_old = new int[8];
 	private int distnxraw;
 	private int distnxraw_old;
 	private int absimuacg_heading;
@@ -38,6 +37,11 @@ public class HandleValues extends Thread {
 	public void run() {
 		while (true) {
 
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			readLSARaw();
 			readDistNXRaw();
 			readRightEOPD();
@@ -51,17 +55,9 @@ public class HandleValues extends Thread {
 
 	private void readLSARaw() {
 
-		lsaraw_old = lsaraw;
 		lsaraw = lsaprocclass.getLSA();
 
-		if (lsaraw[0] != lsaraw_old[0] || lsaraw[1] != lsaraw_old[1]
-				|| lsaraw[2] != lsaraw_old[2] || lsaraw[3] != lsaraw_old[3]
-				|| lsaraw[4] != lsaraw_old[4] || lsaraw[5] != lsaraw_old[5]
-				|| lsaraw[6] != lsaraw_old[6] || lsaraw[7] != lsaraw_old[7]) {
-
-			valueGUI.showLSARaw(lsaraw);
-
-		}
+		valueGUI.showLSARaw(lsaraw);
 
 	}
 
