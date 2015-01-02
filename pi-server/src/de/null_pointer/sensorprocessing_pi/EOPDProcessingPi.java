@@ -15,7 +15,7 @@ public class EOPDProcessingPi {
 	public void setEOPDdistance(int value) {
 		synchronized (lockDistance) {
 			// Wert zur Streckeneinteilung ggf. anpassen
-			distance = 30000 / Math.sqrt(value);
+			distance = 150 / Math.sqrt(value);
 		}
 	}
 }
