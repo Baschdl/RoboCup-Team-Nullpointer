@@ -4,17 +4,6 @@ import java.util.Properties;
 
 public class Abs_ImuProcessingPi {
 
-	public Abs_ImuProcessingPi(Properties propPiServer) {
-		dimension_horizontal = Integer
-				.parseInt(propPiServer
-						.getProperty("Pi_server.InitializeProgram.dimension_horizontal"));
-		dimension_vertical = Integer.parseInt(propPiServer
-				.getProperty("Pi_server.InitializeProgram.dimension_vertical"));
-		dimension_rotational = Integer
-				.parseInt(propPiServer
-						.getProperty("Pi_server.InitializeProgram.dimension_rotational"));
-	}
-
 	private int dimension_horizontal = -1;
 	private int dimension_vertical = -1;
 	private int dimension_rotational = -1;
@@ -28,6 +17,18 @@ public class Abs_ImuProcessingPi {
 
 	private final Object lockAngle = new Object();
 	private final Object lockTiltData = new Object();
+
+	public Abs_ImuProcessingPi(Properties propPiServer) {
+		dimension_horizontal = Integer
+				.parseInt(propPiServer
+						.getProperty("SensorProcessing_Pi.Abs_ImuProcessingPi.dimension_horizontal"));
+		dimension_vertical = Integer
+				.parseInt(propPiServer
+						.getProperty("SensorProcessing_Pi.Abs_ImuProcessingPi.dimension_vertical"));
+		dimension_rotational = Integer
+				.parseInt(propPiServer
+						.getProperty("SensorProcessing_Pi.Abs_ImuProcessingPi.dimension_rotational"));
+	}
 
 	public void setAngle(int angle, int dimension) {
 		synchronized (lockAngle) {
