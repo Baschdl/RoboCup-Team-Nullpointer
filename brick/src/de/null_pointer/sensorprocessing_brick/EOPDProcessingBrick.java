@@ -55,7 +55,7 @@ public class EOPDProcessingBrick {
 		}
 		values[4] = eopd.readRawValue();
 		int buffer = 0;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			buffer += values[i];
 		}
 		buffer /= 5;
