@@ -5,7 +5,6 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.HandleValues;
-import de.null_pointer.gui.JFDisplayValues;
 
 public class PiServer {
 
@@ -19,15 +18,7 @@ public class PiServer {
 		initProgram.initializeSensors();
 		initProgram.initializeCommunication();
 
-		TestProgram testProgram = new TestProgram(initProgram,
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.TestProgram.linear.speed")),
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.TestProgram.turn.speed")),
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.TestProgram.difference")),
-				Integer.parseInt(propPiServer
-						.getProperty("Pi_server.TestProgram.duration")));
+		TestProgram testProgram = new TestProgram(initProgram, propPiServer);
 
 		logger.info("starting programm");
 

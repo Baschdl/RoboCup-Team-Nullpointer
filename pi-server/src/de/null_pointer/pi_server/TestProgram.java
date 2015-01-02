@@ -1,5 +1,7 @@
 package de.null_pointer.pi_server;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import lejos.util.Delay;
@@ -20,17 +22,21 @@ public class TestProgram {
 	private int difference = -1;
 	private int duration = -1;
 
-	public TestProgram(InitializeProgram initProgram, int speedLinear,
-			int speedTurn, int difference, int duration) {
+	public TestProgram(InitializeProgram initProgram, Properties propPiServer) {
+
 		this.initProgram = initProgram;
 		brickCon1 = this.initProgram.getBrickCon1();
 		brickCon2 = this.initProgram.getBrickCon2();
 		motorcontrol = this.initProgram.getMotorControl();
 
-		this.speedLinear = speedLinear;
-		this.speedTurn = speedTurn;
-		this.difference = difference;
-		this.duration = duration;
+		speedLinear = Integer.parseInt(propPiServer
+				.getProperty("Pi_server.TestProgram.linear.speed"));
+		speedTurn = Integer.parseInt(propPiServer
+				.getProperty("Pi_server.TestProgram.turn.speed"));
+		difference = Integer.parseInt(propPiServer
+				.getProperty("Pi_server.TestProgram.difference"));
+		duration = Integer.parseInt(propPiServer
+				.getProperty("Pi_server.TestProgram.duration"));
 	}
 
 	public void forward() {
