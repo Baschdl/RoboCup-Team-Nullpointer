@@ -35,10 +35,9 @@ public class LSAProcessingBrick {
 				values[i][j] = values[i + 1][j];
 			}
 		}
-		for (int i = 0; i < 8; i++) {
-			values[4] = lsa.getLightValues();
-		}
-
+		
+		values[4] = lsa.getLightValues();
+		
 		int[] buffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 		for (int i = 0; i < 4; i++) {
