@@ -1,5 +1,7 @@
 package de.null_pointer.navigation.map;
 
+import java.util.Properties;
+
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 
@@ -7,6 +9,8 @@ public class Odometer {
 
 	private AccumulatorProcessingPi accumulator = null;
 	private Abs_ImuProcessingPi abs_imu = null;
+
+	Properties propPiServer = null;
 
 	private double distanceCounter = 0;
 
@@ -17,11 +21,12 @@ public class Odometer {
 	private double tmpDistance = 0;
 
 	public Odometer(AccumulatorProcessingPi accumulator,
-			Abs_ImuProcessingPi abs_imu, int wheelRadius) {
+			Abs_ImuProcessingPi abs_imu, Properties propPiServer) {
 		this.accumulator = accumulator;
 		this.abs_imu = abs_imu;
 
-		this.wheelRadius = wheelRadius;
+		wheelRadius = Double.parseDouble(propPiServer
+				.getProperty("Navigation.Odometer.wheelRadius"));
 	}
 
 	/**
