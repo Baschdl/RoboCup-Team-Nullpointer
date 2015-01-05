@@ -1,6 +1,8 @@
 package de.null_pointer.sensorprocessing_brick;
 
 import lejos.nxt.I2CPort;
+import lejos.nxt.LCD;
+import lejos.util.Delay;
 import de.null_pointer.communication_brick.BrickControlBrick;
 import de.null_pointer.sensor.AbsoluteIMU_ACG;
 
@@ -10,7 +12,7 @@ public class Abs_ImuProcessingBrick {
 	private BrickControlBrick brickControl;
 
 	// TODO: noch anpassen !
-	private int dimension_horizontal = 0;
+	private int dimension_horizontal = 2;
 	private int dimension_vertical = 1;
 
 	private int[] startGyro = new int[] { 0, 0, 0 };
@@ -33,6 +35,8 @@ public class Abs_ImuProcessingBrick {
 	 */
 	public Abs_ImuProcessingBrick(BrickControlBrick brickControl, I2CPort port) {
 		abs_imu = new AbsoluteIMU_ACG(port);
+		abs_imu.setSensitivity2G();
+		Delay.msDelay(100);
 		startGyro = getGyro();
 		this.brickControl = brickControl;
 	}
@@ -48,9 +52,12 @@ public class Abs_ImuProcessingBrick {
 		// time since last call gets determined
 		time = System.currentTimeMillis() - oldTime[dimension_horizontal];
 		gyro = getGyro();
+		LCD.clear();
+		LCD.drawInt(gyro[dimension_horizontal], 0, 0);
 
 		// Zero error gets corrected
-		gyro[dimension_horizontal] -= startGyro[dimension_horizontal];
+//		gyro[dimension_horizontal] -= startGyro[dimension_horizontal];
+//		LCD.drawInt(gyro[dimension_horizontal], 0, 1);
 
 		// new angle gets calculated
 		deltaAngle[dimension_horizontal] += gyro[dimension_horizontal]
