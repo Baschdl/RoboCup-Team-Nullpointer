@@ -38,6 +38,9 @@ public class Abs_ImuProcessingBrick {
 		abs_imu.setSensitivity2G();
 		Delay.msDelay(100);
 		startGyro = getGyro();
+		if (gyro[dimension_horizontal] > 60000) {
+			gyro[dimension_horizontal] -= 65535;
+		}
 		this.brickControl = brickControl;
 	}
 
@@ -52,12 +55,15 @@ public class Abs_ImuProcessingBrick {
 		// time since last call gets determined
 		time = System.currentTimeMillis() - oldTime[dimension_horizontal];
 		gyro = getGyro();
+		if (gyro[dimension_horizontal] > 60000) {
+			gyro[dimension_horizontal] -= 65535;
+		}
 		LCD.clear();
 		LCD.drawInt(gyro[dimension_horizontal], 0, 0);
 
 		// Zero error gets corrected
-//		gyro[dimension_horizontal] -= startGyro[dimension_horizontal];
-//		LCD.drawInt(gyro[dimension_horizontal], 0, 1);
+		gyro[dimension_horizontal] -= startGyro[dimension_horizontal];
+		LCD.drawInt(gyro[dimension_horizontal], 0, 1);
 
 		// new angle gets calculated
 		deltaAngle[dimension_horizontal] += gyro[dimension_horizontal]
