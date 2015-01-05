@@ -66,8 +66,8 @@ public class Abs_ImuProcessingBrick {
 		LCD.drawInt(gyro[dimension_horizontal], 0, 1);
 
 		// new angle gets calculated
-		deltaAngle[dimension_horizontal] += gyro[dimension_horizontal]
-				* sensitivity;
+		deltaAngle[dimension_horizontal] = (int) Math
+				.round(gyro[dimension_horizontal] * sensitivity);
 		angle[dimension_horizontal] += deltaAngle[dimension_horizontal]
 				/ (1000 / time);
 
