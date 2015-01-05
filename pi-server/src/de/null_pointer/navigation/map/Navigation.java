@@ -15,6 +15,11 @@ public class Navigation {
 				.getProperty("Navigation.Navigation.mapWidth"));
 		int dimensionY = Integer.parseInt(propPiServer
 				.getProperty("Navigation.Navigation.mapHeight"));
+
+	}
+
+	// Konstruktor fuer Testzwecke
+	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 	}
 
