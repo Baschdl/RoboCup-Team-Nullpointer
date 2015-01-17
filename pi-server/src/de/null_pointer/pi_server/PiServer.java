@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.HandleValues;
+import de.null_pointer.navigation.test.GuiNavigation;
 
 public class PiServer {
 
@@ -29,12 +30,20 @@ public class PiServer {
 			s = args[i];
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
-				logger.debug("Starte GUI");
-				HandleValues vGUI = new HandleValues(initProgram.getLsa(),
-						initProgram.getAbsImu(), initProgram.getEopdLeft(),
-						initProgram.getEopdRight(), initProgram.getDistNx());
-				logger.info("GUI gestartet");
-				vGUI.start();
+				i++;
+				s = args[i];
+				if (s.equals("navigation")) {
+					logger.debug("Starte Navigation-GUI");
+					GuiNavigation navGUI = new GuiNavigation();
+					logger.info("Navigation-GUI gestartet");
+				} else {
+					logger.debug("Starte GUI");
+					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
+							initProgram.getAbsImu(), initProgram.getEopdLeft(),
+							initProgram.getEopdRight(), initProgram.getDistNx());
+					logger.info("GUI gestartet");
+					vGUI.start();
+				}
 			}
 
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
