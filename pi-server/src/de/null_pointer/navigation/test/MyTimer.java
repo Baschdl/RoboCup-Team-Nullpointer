@@ -15,6 +15,13 @@ public class MyTimer {
 
 	public MyTimer(Handler handler) {
 		this.handler = handler;
+	}
+	
+	public void stop(){
+		t.stop();
+	}
+	
+	public void start(){
 		t.start();
 	}
 

@@ -7,6 +7,9 @@ public class Handler {
 	private GuiNavigation gui = null;
 	private Navigation navi = null;
 
+	private int sizeMapX = -1;
+	private int sizeMapY = -1;
+
 	private int[][] values = null;
 
 	private int currentX = -1;
@@ -15,6 +18,12 @@ public class Handler {
 
 	public Handler(GuiNavigation gui, int sizeMapY, int sizeMapX) {
 		this.gui = gui;
+		this.sizeMapX = sizeMapX;
+		this.sizeMapY = sizeMapY;
+		initValues();
+	}
+
+	private void initValues() {
 		currentX = sizeMapX / 2;
 		currentY = sizeMapY / 2;
 		navi = new Navigation(currentX, currentY);
@@ -25,14 +34,23 @@ public class Handler {
 						&& j % 2 == 0
 						|| (i == 0 || i == sizeMapY - 1 || j == 0 || j == sizeMapX - 1)) {
 					values[i][j] = -1;
-					gui.setColor(i, j, values[i][j]);
+					gui.setColor(i, j, -1);
 				} else {
 					values[i][j] = 0;
+					gui.setColor(i, j, 0);
 				}
 			}
 		}
-		this.gui.setColor(currentY, currentX, 1);
+		gui.setColor(currentY, currentX, 1);
 		gui.repaint();
+	}
+
+	public void setValues(int[][] values) {
+		this.values = values;
+	}
+
+	public int[][] getValues() {
+		return values;
 	}
 
 	public void setValue(int row, int col, int phase, int button) {
@@ -95,5 +113,10 @@ public class Handler {
 		}
 
 		gui.setColor(currentY, currentX, 2);
+	}
+
+	public void reset() {
+		heading = 0;
+		initValues();
 	}
 }

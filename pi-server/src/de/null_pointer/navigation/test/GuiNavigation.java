@@ -28,11 +28,18 @@ public class GuiNavigation extends javax.swing.JFrame {
 	private JTable table = null;
 
 	private Handler handler = null;
+	private MyTimer timer = null;
+	
+	JButton jBladen;
+	JButton jBspeichern;
+	JButton jBSimulieren;
+	JButton jBreset;
 
 	public GuiNavigation() {
 		super();
 		initGUI();
 		handler = new Handler(this, sizeMapY, sizeMapX);
+		timer = new MyTimer(handler);
 	}
 
 	private void initGUI() {
@@ -58,9 +65,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 	}
 
 	private void createButtons() {
-		JButton jBladen;
-		JButton jBspeichern;
-		JButton jBSimulieren;
+		
 
 		{
 			jBSimulieren = new JButton();
@@ -69,8 +74,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 			jBSimulieren.setBounds(0, 0, 130, 30);
 			jBSimulieren.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					phase = 1;
-					MyTimer timer = new MyTimer(handler);
+					simulatePressed();
 				}
 			});
 		}
@@ -85,6 +89,17 @@ public class GuiNavigation extends javax.swing.JFrame {
 			getContentPane().add(jBladen);
 			jBladen.setText("Laden");
 			jBladen.setBounds(260, 0, 130, 30);
+		}
+		{
+			jBreset = new JButton();
+			getContentPane().add(jBreset);
+			jBreset.setText("Reset");
+			jBreset.setBounds(sizeX - 150, 0, 130, 30);
+			jBreset.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					resetPressed();
+				}
+			});
 		}
 	}
 
@@ -135,6 +150,21 @@ public class GuiNavigation extends javax.swing.JFrame {
 	private void handleEvent(int row, int column, int button) {
 		System.out.println("r: " + row + ", c: " + column);
 		handler.setValue(row, column, phase, button);
+	}
+	
+	private void simulatePressed(){
+		phase = 1;
+		timer.start();
+		jBspeichern.setEnabled(false);
+		jBladen.setEnabled(false);
+	}
+	
+	private void resetPressed(){
+		timer.stop();
+		handler.reset();
+		phase = 0;
+		jBspeichern.setEnabled(true);
+		jBladen.setEnabled(true);
 	}
 
 	public void setColor(int row, int col, int value) {
