@@ -59,8 +59,8 @@ public class MotorControlPi {
 
 			logger.info("PC set all motors forward speed " + speed);
 			brickCon2.forward(speed, 'A');
-			brickCon1.backward(speed, 'A');
-			brickCon2.stop('B');
+			brickCon2.backward(speed, 'B');
+			brickCon1.stop('A');
 			brickCon1.stop('B');
 			actualSpeed = speed;
 			mode = 0;
@@ -82,8 +82,8 @@ public class MotorControlPi {
 
 			logger.info("PC set all motors backward speed " + speed);
 			brickCon2.backward(speed, 'A');
-			brickCon1.forward(speed, 'A');
-			brickCon2.stop('B');
+			brickCon2.forward(speed, 'B');
+			brickCon1.stop('A');
 			brickCon1.stop('B');
 			actualSpeed = -speed;
 			mode = 1;
