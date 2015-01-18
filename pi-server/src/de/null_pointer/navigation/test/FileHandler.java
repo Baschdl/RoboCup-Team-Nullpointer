@@ -4,9 +4,11 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
@@ -67,45 +69,66 @@ public class FileHandler {
 	}
 
 	public void loadFile(Frame actualWindow) {
-		String data;
-		BufferedReader file = null;
+
 		FileDialog fDialog = new FileDialog(actualWindow,
 				"Choose file to load", FileDialog.LOAD);
 		fDialog.setVisible(true);
 
-		int[][] tempValues = null;
-		int[] tempData = null;
-
 		if (fDialog.getFile() != null) {
 			try {
-				file = new BufferedReader(new FileReader(fDialog.getDirectory()
+				readData(new FileReader(fDialog.getDirectory()
 						+ fDialog.getFile()));
-				int i = -1;
-				while ((data = file.readLine()) != null) {
-					if (i == -1) {
-						tempData = parseData(readData(data, 2));
-						tempValues = new int[tempData[1]][tempData[0]];
-					} else {
-						tempValues[i] = parseData(readData(data,
-								tempValues[i].length));
-					}
-					i++;
-				}
-			} catch (Exception e) {
-				logger.error("Fehler beim Lesen der Datei");
-			} finally {
-				try {
-					if (file != null) {
-						file.close();
-					}
-				} catch (IOException e) {
-				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			handler.setValues(tempValues);
 		}
 	}
 
-	private String[] readData(String dataString, int numberData) {
+	public void loadFile(String location) {
+		try {
+			readData(new FileReader(location));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void readData(Reader reader) {
+		String data;
+		BufferedReader file = null;
+
+		int[][] tempValues = null;
+		int[] tempData = null;
+
+		try {
+			file = new BufferedReader(reader);
+			int i = -1;
+			while ((data = file.readLine()) != null) {
+				if (i == -1) {
+					tempData = parseData(splitData(data, 2));
+					tempValues = new int[tempData[1]][tempData[0]];
+				} else {
+					tempValues[i] = parseData(splitData(data,
+							tempValues[i].length));
+				}
+				i++;
+			}
+		} catch (Exception e) {
+			logger.error("Fehler beim Lesen der Datei");
+		} finally {
+			try {
+				if (file != null) {
+					file.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+		handler.setValues(tempValues);
+	}
+
+	private String[] splitData(String dataString, int numberData) {
 		String puf[] = new String[numberData];
 		// TODO: Siehe Unterrichtsmaterial, Kommentare ergaenzen
 		int index1 = 0, index2 = 0;

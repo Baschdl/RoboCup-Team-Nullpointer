@@ -1,4 +1,5 @@
 package de.null_pointer.pi_server;
+
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -15,9 +16,11 @@ import de.null_pointer.behavior.NextTileTest;
 import de.null_pointer.behavior.SlopeTest;
 import de.null_pointer.behavior.VictimTest;
 import de.null_pointer.communication_pi.BrickControlPiTest;
+import de.null_pointer.navigation.map.NavigationTest;
 import de.null_pointer.navigation.map.NodeTest;
-import de.null_pointer.testmodules.testcommunication.TestBrickControlPiTest;
+import de.null_pointer.navigation.test.NavigationIntegrationTest;
 import de.null_pointer.testmodules.testcommunication.CommunicationTest;
+import de.null_pointer.testmodules.testcommunication.TestBrickControlPiTest;
 
 @RunWith(Suite.class)
 // In die geschweiften Klammern muessen weitere Testklassen mit Kommas getrennt
@@ -25,7 +28,8 @@ import de.null_pointer.testmodules.testcommunication.CommunicationTest;
 @SuiteClasses({ BrickControlPiTest.class, NodeTest.class,
 		TestBrickControlPiTest.class, MovingForwardTest.class,
 		BlackTileTest.class, IntersectionTest.class, NextTileTest.class,
-		SlopeTest.class, VictimTest.class, CommunicationTest.class })
+		SlopeTest.class, VictimTest.class, CommunicationTest.class,
+		NavigationTest.class, NavigationIntegrationTest.class })
 public class AllTests {
 
 	private static Logger logger = Logger.getRootLogger();
