@@ -209,4 +209,8 @@ public class GuiNavigation extends javax.swing.JFrame {
 		}
 		this.repaint();
 	}
+
+	public void setText(int currentY, int currentX, String string) {
+		table.setValueAt(string, currentY, currentX);
+	}
 }

@@ -45,7 +45,7 @@ public class Handler {
 	private void initValues() {
 		currentX = sizeMapX / 2;
 		currentY = sizeMapY / 2;
-		navi = new Navigation(currentX, currentY);
+		navi = new Navigation(currentX + 1, currentY + 1);
 		values = new int[sizeMapY][sizeMapX];
 		for (int i = 0; i < sizeMapY; i++) {
 			for (int j = 0; j < sizeMapX; j++) {
@@ -114,21 +114,27 @@ public class Handler {
 
 	public void simulate() {
 		if (values[currentY - 1][currentX] == -1) {
+			System.out.println("l0");
 			navi.removeNeighbor(0);
 		}
+		if (values[currentY][currentX + 1] == -1) {
+			System.out.println("l1");
+			navi.removeNeighbor(1);
+		}
 		if (values[currentY + 1][currentX] == -1) {
+			System.out.println("l2");
 			navi.removeNeighbor(2);
 		}
 		if (values[currentY][currentX - 1] == -1) {
+			System.out.println("l3");
 			navi.removeNeighbor(3);
 		}
-		if (values[currentY][currentX + 1] == -1) {
-			navi.removeNeighbor(1);
-		}
-
 		heading = navi.tremauxAlgorithm(heading, false);
-		System.out.println("sim: " + heading);
 		navi.switchTile(heading);
+
+		if (gui != null) {
+			gui.setColor(currentY, currentX, 2);
+		}
 
 		switch (heading) {
 		case 0: {
@@ -150,7 +156,7 @@ public class Handler {
 
 		values[currentY][currentX] = 2;
 		if (gui != null) {
-			gui.setColor(currentY, currentX, 2);
+			gui.setColor(currentY, currentX, 1);
 		}
 	}
 
@@ -196,5 +202,9 @@ public class Handler {
 
 	public void load() {
 		fileHandler.loadFile(gui);
+	}
+
+	public FileHandler getFileHandler() {
+		return fileHandler;
 	}
 }
