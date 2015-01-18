@@ -30,8 +30,6 @@ public class GuiNavigation extends javax.swing.JFrame {
 	private JTable table = null;
 
 	private Handler handler = null;
-	private MyTimer timer = null;
-	private FileHandler fileHandler = null;
 
 	JButton jBladen;
 	JButton jBspeichern;
@@ -43,8 +41,6 @@ public class GuiNavigation extends javax.swing.JFrame {
 		super();
 		initGUI();
 		handler = new Handler(this, sizeMapY, sizeMapX);
-		fileHandler = new FileHandler(handler);
-		timer = new MyTimer(handler);
 	}
 
 	private void initGUI() {
@@ -167,7 +163,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	private void simulatePressed() {
 		phase = 1;
-		timer.start();
+		handler.startTimer();
 		jBspeichern.setEnabled(false);
 		jBladen.setEnabled(false);
 	}
@@ -176,7 +172,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 		if (phase == 0) {
 			handler.reset(true);
 		} else {
-			timer.stop();
+			handler.stopTimer();
 			handler.reset(false);
 			phase = 0;
 			jBspeichern.setEnabled(true);
@@ -185,11 +181,11 @@ public class GuiNavigation extends javax.swing.JFrame {
 	}
 
 	private void savePressed() {
-		fileHandler.saveFile(this);
+		handler.save();
 	}
 
 	private void loadPressed() {
-		fileHandler.loadFile(this);
+		handler.load();
 	}
 
 	public void setColor(int row, int col, int value) {

@@ -7,6 +7,9 @@ public class Handler {
 	private GuiNavigation gui = null;
 	private Navigation navi = null;
 
+	private MyTimer timer = null;
+	private FileHandler fileHandler = null;
+
 	private int sizeMapX = -1;
 	private int sizeMapY = -1;
 
@@ -18,6 +21,8 @@ public class Handler {
 
 	public Handler(GuiNavigation gui, int sizeMapY, int sizeMapX) {
 		this.gui = gui;
+		timer = new MyTimer(this, 1000);
+		fileHandler = new FileHandler(this);
 		this.sizeMapX = sizeMapX;
 		this.sizeMapY = sizeMapY;
 		initValues();
@@ -30,6 +35,8 @@ public class Handler {
 	 * @param sizeMapX
 	 */
 	public Handler(int sizeMapY, int sizeMapX) {
+		// TODO Zeitwert ggf. anpassen
+		timer = new MyTimer(this, 1000);
 		this.sizeMapX = sizeMapX;
 		this.sizeMapY = sizeMapY;
 		initValues();
@@ -66,10 +73,11 @@ public class Handler {
 
 	public void setValues(int[][] values) {
 		this.values = values;
-
-		for (int i = 0; i < sizeMapY; i++) {
-			for (int j = 0; j < sizeMapX; j++) {
-				gui.setColor(i, j, values[i][j]);
+		if (gui != null) {
+			for (int i = 0; i < sizeMapY; i++) {
+				for (int j = 0; j < sizeMapX; j++) {
+					gui.setColor(i, j, values[i][j]);
+				}
 			}
 		}
 	}
@@ -172,5 +180,21 @@ public class Handler {
 			}
 		}
 
+	}
+
+	public void startTimer() {
+		timer.start();
+	}
+
+	public void stopTimer() {
+		timer.stop();
+	}
+
+	public void save() {
+		fileHandler.saveFile(gui);
+	}
+
+	public void load() {
+		fileHandler.loadFile(gui);
 	}
 }
