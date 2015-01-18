@@ -41,12 +41,19 @@ public class Handler {
 				}
 			}
 		}
+		values[currentY][currentX] = 1;
 		gui.setColor(currentY, currentX, 1);
 		gui.repaint();
 	}
 
 	public void setValues(int[][] values) {
 		this.values = values;
+
+		for (int i = 0; i < sizeMapY; i++) {
+			for (int j = 0; j < sizeMapX; j++) {
+				gui.setColor(i, j, values[i][j]);
+			}
+		}
 	}
 
 	public int[][] getValues() {
