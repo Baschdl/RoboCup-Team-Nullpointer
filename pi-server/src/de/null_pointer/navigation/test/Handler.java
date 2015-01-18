@@ -112,11 +112,31 @@ public class Handler {
 		}
 		}
 
+		values[currentY][currentX] = 2;
 		gui.setColor(currentY, currentX, 2);
 	}
 
-	public void reset() {
-		heading = 0;
-		initValues();
+	public void reset(boolean fullReset) {
+		if (fullReset) {
+			heading = 0;
+			initValues();
+		} else {
+			heading = 0;
+			currentX = sizeMapX / 2;
+			currentY = sizeMapY / 2;
+			navi = new Navigation(currentX, currentY);
+
+			for (int i = 0; i < sizeMapY; i++) {
+				for (int j = 0; j < sizeMapX; j++) {
+					if (values[i][j] == 1 || values[i][j] == 2) {
+						values[i][j] = 0;
+						gui.setColor(i, j, 0);
+					}
+				}
+			}
+			gui.setColor(currentY, currentX, 1);
+			gui.repaint();
+		}
+
 	}
 }

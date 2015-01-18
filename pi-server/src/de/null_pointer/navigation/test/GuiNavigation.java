@@ -29,16 +29,19 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	private Handler handler = null;
 	private MyTimer timer = null;
-	
+	private FileHandler fileHandler = null;
+
 	JButton jBladen;
 	JButton jBspeichern;
 	JButton jBSimulieren;
+	JButton jBfullReset;
 	JButton jBreset;
 
 	public GuiNavigation() {
 		super();
 		initGUI();
 		handler = new Handler(this, sizeMapY, sizeMapX);
+		fileHandler = new FileHandler(handler);
 		timer = new MyTimer(handler);
 	}
 
@@ -65,7 +68,6 @@ public class GuiNavigation extends javax.swing.JFrame {
 	}
 
 	private void createButtons() {
-		
 
 		{
 			jBSimulieren = new JButton();
@@ -83,12 +85,22 @@ public class GuiNavigation extends javax.swing.JFrame {
 			getContentPane().add(jBspeichern);
 			jBspeichern.setText("Speichern");
 			jBspeichern.setBounds(130, 0, 130, 30);
+			jBspeichern.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					savePressed();
+				}
+			});
 		}
 		{
 			jBladen = new JButton();
 			getContentPane().add(jBladen);
 			jBladen.setText("Laden");
 			jBladen.setBounds(260, 0, 130, 30);
+			jBladen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					loadPressed();
+				}
+			});
 		}
 		{
 			jBreset = new JButton();
@@ -151,20 +163,32 @@ public class GuiNavigation extends javax.swing.JFrame {
 		System.out.println("r: " + row + ", c: " + column);
 		handler.setValue(row, column, phase, button);
 	}
-	
-	private void simulatePressed(){
+
+	private void simulatePressed() {
 		phase = 1;
 		timer.start();
 		jBspeichern.setEnabled(false);
 		jBladen.setEnabled(false);
 	}
-	
-	private void resetPressed(){
-		timer.stop();
-		handler.reset();
-		phase = 0;
-		jBspeichern.setEnabled(true);
-		jBladen.setEnabled(true);
+
+	private void resetPressed() {
+		if (phase == 0) {
+			handler.reset(true);
+		} else {
+			timer.stop();
+			handler.reset(false);
+			phase = 0;
+			jBspeichern.setEnabled(true);
+			jBladen.setEnabled(true);
+		}
+	}
+
+	private void savePressed() {
+		fileHandler.saveFile(this);
+	}
+
+	private void loadPressed() {
+		fileHandler.loadFile(this);
 	}
 
 	public void setColor(int row, int col, int value) {
