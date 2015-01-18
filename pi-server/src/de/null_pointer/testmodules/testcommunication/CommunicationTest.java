@@ -88,26 +88,14 @@ public class CommunicationTest {
 		odometer = initProgramm.getOdometer();
 
 		virtAbsImu = new VirtualAbsIMUACG();
-		virtDistNX = new VirtualDistNX(
-				Integer.parseInt(propPiServer
-						.getProperty("Testmodules.Testcommunication.CommunicationTest.distnx.maxDistance")),
-				Integer.parseInt(propPiServer
-						.getProperty("Testmodules.Testcommunication.CommunicationTest.distnx.minDistance")));
+		virtDistNX = new VirtualDistNX(propPiServer);
 		virtEOPDLeft = new VirtualEOPD(
 				Integer.parseInt(propPiServer
 						.getProperty("Testmodules.Testcommunication.CommunicationTest.eopdLeft.number")));
 		virtEOPDRight = new VirtualEOPD(
 				Integer.parseInt(propPiServer
 						.getProperty("Testmodules.Testcommunication.CommunicationTest.eopdRight.number")));
-		virtLSA = new VirtualLSA(
-				Integer.parseInt(propPiServer
-						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.maxValueWhite")),
-				Integer.parseInt(propPiServer
-						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueWhite")),
-				Integer.parseInt(propPiServer
-						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.maxValueBlack")),
-				Integer.parseInt(propPiServer
-						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueBlack")));
+		virtLSA = new VirtualLSA(propPiServer);
 
 		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav,
 				odometer, propPiServer);

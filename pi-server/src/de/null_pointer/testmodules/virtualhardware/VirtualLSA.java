@@ -1,5 +1,7 @@
 package de.null_pointer.testmodules.virtualhardware;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 public class VirtualLSA {
@@ -15,7 +17,7 @@ public class VirtualLSA {
 
 	/**
 	 * 
-	 
+	 * 
 	 * @param biggestValueWhite
 	 *            must not be bigger than 100
 	 * @param smallestValueWhite
@@ -25,15 +27,24 @@ public class VirtualLSA {
 	 * @param smallestValueBlack
 	 *            must not be smaller than 0
 	 */
-	public VirtualLSA(int biggestValueWhite, int smallestValueWhite,
-			int biggestValueBlack, int smallestValueBlack) {
 
-		
-		this.biggestValueWhite = biggestValueWhite;
-		this.smallestValueWhite = smallestValueWhite;
-		this.biggestValueBlack = biggestValueBlack;
-		this.smallestValueBlack = smallestValueBlack;
-
+	public VirtualLSA(Properties propPiServer) {
+		// biggestValueWhite must not be bigger than 100
+		// smallestValueWhite must not be smaller than maxValueBlack + 1
+		// biggestValueBlack must not be bigger than minValueWhite -1
+		// smallestValueBlack must not be smaller than 0
+		biggestValueWhite = Integer
+				.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.maxValueWhite"));
+		smallestValueWhite = Integer
+				.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueWhite"));
+		biggestValueBlack = Integer
+				.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.maxValueBlack"));
+		smallestValueBlack = Integer
+				.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueBlack"));
 	}
 
 	/**
@@ -114,11 +125,13 @@ public class VirtualLSA {
 		}
 
 	}
-/**
- * 
- * @param sensorNumber: sensorNumber of the sensor of the LightSensorArray
- * @return random values for the case "sensor is black"
- */
+
+	/**
+	 * 
+	 * @param sensorNumber
+	 *            : sensorNumber of the sensor of the LightSensorArray
+	 * @return random values for the case "sensor is black"
+	 */
 	public String[] getBlack(int sensorNumber) {
 		this.sensorNumber = sensorNumber;
 		generateValues(0);
@@ -131,10 +144,11 @@ public class VirtualLSA {
 
 	/**
 	 * 
-	 * @param sensorNumber: sensorNumber of the sensor of the LightSensorArray
+	 * @param sensorNumber
+	 *            : sensorNumber of the sensor of the LightSensorArray
 	 * @return random values for the case "sensor is white"
 	 */
-	
+
 	public String[] getWhite(int sensorNumber) {
 		this.sensorNumber = sensorNumber;
 		generateValues(1);
@@ -145,10 +159,11 @@ public class VirtualLSA {
 		return LSA;
 
 	}
-	
+
 	/**
 	 * 
-	 * @param sensorNumber: sensorNumber of the sensor of the LightSensorArray
+	 * @param sensorNumber
+	 *            : sensorNumber of the sensor of the LightSensorArray
 	 * @return random values for the case "sensor is not black and not white"
 	 */
 
