@@ -23,6 +23,18 @@ public class Handler {
 		initValues();
 	}
 
+	/**
+	 * Konstruktor fuer Testzwecke
+	 * 
+	 * @param sizeMapY
+	 * @param sizeMapX
+	 */
+	public Handler(int sizeMapY, int sizeMapX) {
+		this.sizeMapX = sizeMapX;
+		this.sizeMapY = sizeMapY;
+		initValues();
+	}
+
 	private void initValues() {
 		currentX = sizeMapX / 2;
 		currentY = sizeMapY / 2;
@@ -34,16 +46,22 @@ public class Handler {
 						&& j % 2 == 0
 						|| (i == 0 || i == sizeMapY - 1 || j == 0 || j == sizeMapX - 1)) {
 					values[i][j] = -1;
-					gui.setColor(i, j, -1);
+					if (gui != null) {
+						gui.setColor(i, j, -1);
+					}
 				} else {
 					values[i][j] = 0;
-					gui.setColor(i, j, 0);
+					if (gui != null) {
+						gui.setColor(i, j, 0);
+					}
 				}
 			}
 		}
 		values[currentY][currentX] = 1;
-		gui.setColor(currentY, currentX, 1);
-		gui.repaint();
+		if (gui != null) {
+			gui.setColor(currentY, currentX, 1);
+			gui.repaint();
+		}
 	}
 
 	public void setValues(int[][] values) {
@@ -81,7 +99,9 @@ public class Handler {
 		}
 
 		values[row][col] = value;
-		gui.setColor(row, col, value);
+		if (gui != null) {
+			gui.setColor(row, col, value);
+		}
 	}
 
 	public void simulate() {
@@ -99,7 +119,7 @@ public class Handler {
 		}
 
 		heading = navi.tremauxAlgorithm(heading, false);
-		System.out.println("sim: "+heading);
+		System.out.println("sim: " + heading);
 		navi.switchTile(heading);
 
 		switch (heading) {
@@ -121,7 +141,9 @@ public class Handler {
 		}
 
 		values[currentY][currentX] = 2;
-		gui.setColor(currentY, currentX, 2);
+		if (gui != null) {
+			gui.setColor(currentY, currentX, 2);
+		}
 	}
 
 	public void reset(boolean fullReset) {
@@ -138,12 +160,16 @@ public class Handler {
 				for (int j = 0; j < sizeMapX; j++) {
 					if (values[i][j] == 1 || values[i][j] == 2) {
 						values[i][j] = 0;
-						gui.setColor(i, j, 0);
+						if (gui != null) {
+							gui.setColor(i, j, 0);
+						}
 					}
 				}
 			}
-			gui.setColor(currentY, currentX, 1);
-			gui.repaint();
+			if (gui != null) {
+				gui.setColor(currentY, currentX, 1);
+				gui.repaint();
+			}
 		}
 
 	}
