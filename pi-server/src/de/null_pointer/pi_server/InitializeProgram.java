@@ -218,7 +218,7 @@ public class InitializeProgram {
 		Behavior b1 = new MovingForward(motorControl, odometer, propPiServer);
 		Behavior b2 = new NextTile(absImu, nav);
 		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
-		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav);
+		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav, odometer, propPiServer);
 		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, nav, propPiServer);
 		Behavior b6 = new Victim(motorControl);

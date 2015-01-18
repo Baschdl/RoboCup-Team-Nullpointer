@@ -14,6 +14,7 @@ import org.junit.Test;
 import de.null_pointer.communication_pi.CommunicationPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
+import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.pi_server.InitializeProgram;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
@@ -55,6 +56,7 @@ public class CommunicationTest {
 	private MotorControlPi motorControl = null;
 	private Navigation nav = null;
 	private Properties propPiServer = null;
+	private Odometer odometer = null;
 
 	private TestBlackTile testBlackTile = null;
 	private TestIntersection testInters = null;
@@ -83,6 +85,7 @@ public class CommunicationTest {
 		nav = initProgramm.getNav();
 		propPiServer = initProgramm.getPropPiServer();
 		accumulator = initProgramm.getAccumulator();
+		odometer = initProgramm.getOdometer();
 
 		virtAbsImu = new VirtualAbsIMUACG();
 		virtDistNX = new VirtualDistNX(
@@ -106,7 +109,8 @@ public class CommunicationTest {
 				Integer.parseInt(propPiServer
 						.getProperty("Testmodules.Testcommunication.CommunicationTest.lsa.minValueBlack")));
 
-		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav);
+		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav,
+				odometer, propPiServer);
 		testInters = new TestIntersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, nav, propPiServer);
 

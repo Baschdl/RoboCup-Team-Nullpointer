@@ -1,11 +1,18 @@
 package de.null_pointer.navigation.map;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
+import de.null_pointer.pi_server.InitializeProgram;
+
 public class NavigationTest {
-	private Navigation testNavigation = new Navigation(7, 7);
+	private InitializeProgram initProgram;
+	private Navigation testNavigation;
+
+	public NavigationTest() {
+		initProgram = new InitializeProgram(null);
+		initProgram.initializeProperties();
+		testNavigation = new Navigation(initProgram.getPropPiServer());
+	}
 
 	@Test
 	public void testTremauxAlgorithm0() {
