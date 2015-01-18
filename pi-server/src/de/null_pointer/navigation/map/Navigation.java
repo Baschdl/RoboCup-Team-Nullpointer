@@ -277,6 +277,15 @@ public class Navigation {
 	/**
 	 * used for testing purposes
 	 * 
+	 * @return
+	 */
+	public int[] getTremauxCounter() {
+		return currentTile.getTremauxCounter();
+	}
+
+	/**
+	 * used for testing purposes
+	 * 
 	 * @param tremaux
 	 */
 	public void setTremauxCounter(int[] tremaux) {
@@ -361,4 +370,5 @@ public class Navigation {
 
 		return initialNode;
 	}
+
 }
