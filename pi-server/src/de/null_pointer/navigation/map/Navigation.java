@@ -15,12 +15,12 @@ public class Navigation {
 				.getProperty("Navigation.Navigation.mapWidth"));
 		int dimensionY = Integer.parseInt(propPiServer
 				.getProperty("Navigation.Navigation.mapHeight"));
-
 	}
 
 	// Konstruktor fuer Testzwecke
 	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		currentTile.setVisited();
 	}
 
 	/**
@@ -35,12 +35,15 @@ public class Navigation {
 	 *         wrong and -2, if the maze is solved
 	 */
 	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat) {
-
-		if (blackTileRetreat == false) {
+		int direction = -1;
+		if (blackTileRetreat == false && currentTile.isVisited() == false) {
 			currentTile.incTremauxCounter(currentTile
 					.invertOrientation(orientation));
 		}
 		int[] tremauxCounter = currentTile.getTremauxCounter();
+
+		System.out.println("tremaux: " + tremauxCounter[0] + tremauxCounter[1]
+				+ tremauxCounter[2] + tremauxCounter[3]);
 
 		// check if maze is solved already
 		if (checkSolved(tremauxCounter)) {
@@ -70,34 +73,44 @@ public class Navigation {
 				currentTile.incTremauxCounter(currentTile
 						.invertOrientation(orientation));
 				return currentTile.invertOrientation(orientation);
+
 			} else if (currentTile.isVisited()) {
-				int direction = rightmostDirection(orientation, tremauxCounter,
-						0);
+
+				direction = rightmostDirection(orientation, tremauxCounter, 0);
+
 				if (direction == -1) {
 					// if there is no corridor which was never passed, the robot
 					// takes the rightmost once passed corridor
-					currentTile.incTremauxCounter(rightmostDirection(
-							orientation, tremauxCounter, 1));
+
+					direction = rightmostDirection(orientation, tremauxCounter,
+							1);
+
+					currentTile.incTremauxCounter(direction);
 					logger.info("tile already visited, passing rightmost once visited corridor !");
-					return rightmostDirection(orientation, tremauxCounter, 1);
+					return direction;
+
 				} else {
 					// if there is a corridor which was never passed, the robot
 					// takes the rightmost one
+
 					logger.info("tile already visited, passing rightmost never passed corridor !");
 					currentTile.incTremauxCounter(direction);
 					return direction;
+
 				}
 			} else {
 				// tile was visited the first time; robot takes the rightmost
 				// direction
-				logger.info("tile was visited the first time, taking rightmost direction");
-				currentTile.incTremauxCounter(rightmostDirection(orientation,
-						tremauxCounter, 0));
+
+				direction = rightmostDirection(orientation, tremauxCounter, 0);
+				logger.info("tile was visited the first time, taking rightmost direction; d: "
+						+ direction);
+				currentTile.incTremauxCounter(direction);
 				currentTile.setVisited();
-				return rightmostDirection(orientation, tremauxCounter, 0);
+				return direction;
 			}
 		}
-		return -1;
+		return direction; // will be -1
 	}
 
 	/**
@@ -111,14 +124,17 @@ public class Navigation {
 	 * @return returns rightmost direction matching the given value, -1 if there
 	 *         is none
 	 */
-	private int rightmostDirection(int orientation, int[] tremauxCounter,
+	public int rightmostDirection(int orientation, int[] tremauxCounter,
 			int value) {
+
 		if (tremauxCounter[rightleftDirection(orientation, true)] == value) {
 			return rightleftDirection(orientation, true);
 		} else if (tremauxCounter[orientation] == value) {
 			return orientation;
 		} else if (tremauxCounter[rightleftDirection(orientation, false)] == value) {
 			return rightleftDirection(orientation, false);
+		} else if (tremauxCounter[currentTile.invertOrientation(orientation)] == value) {
+			return currentTile.invertOrientation(orientation);
 		}
 		return -1;
 	}
@@ -130,12 +146,12 @@ public class Navigation {
 	 *            (false) direction
 	 * @return either the left or the right direction of given orientation
 	 */
-	private int rightleftDirection(int orientation, boolean right) {
+	public int rightleftDirection(int orientation, boolean right) {
 		if (right) {
 			if (orientation == 3) {
 				return 0;
 			} else {
-				return orientation + 1;
+				return (orientation + 1);
 			}
 		} else {
 			if (orientation == 0) {
@@ -256,6 +272,15 @@ public class Navigation {
 
 	public void switchTile(int orientation) {
 		currentTile = currentTile.getNeighbor(orientation);
+	}
+
+	/**
+	 * used for testing purposes
+	 * 
+	 * @param tremaux
+	 */
+	public void setTremauxCounter(int[] tremaux) {
+		currentTile.setTremauxCounter(tremaux);
 	}
 
 	/**

@@ -79,6 +79,15 @@ public class Node {
 		visited = true;
 	}
 
+	/**
+	 * used for testing purposes
+	 * 
+	 * @param tremaux
+	 */
+	public void setTremauxCounter(int[] tremaux) {
+		tremauxCounter = tremaux;
+	}
+
 	public int[] getTremauxCounter() {
 		return tremauxCounter;
 	}
@@ -216,4 +225,5 @@ public class Node {
 		}
 		return calculated_orientation;
 	}
+
 }
