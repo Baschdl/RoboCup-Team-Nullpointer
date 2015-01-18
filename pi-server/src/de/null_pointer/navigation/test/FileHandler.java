@@ -47,7 +47,7 @@ public class FileHandler {
 
 				for (int i = 0; i < rows; i++) {
 					data = new StringBuffer(Integer.toString(values[i][0]));
-					for (int j = 1; j < values[i].length; i++) {
+					for (int j = 1; j < values[i].length; j++) {
 						data.append(";" + Integer.toString(values[i][j]));
 					}
 					data.append("\r\n");
