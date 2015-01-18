@@ -1,5 +1,7 @@
 package de.null_pointer.testmodules.virtualhardware;
 
+import java.util.Properties;
+
 public class VirtualDistNX {
 
 	private int biggestValueNoSpace = 800;
@@ -17,10 +19,13 @@ public class VirtualDistNX {
 	 * @param smallestValueNoSpace
 	 *            has to be at least zero
 	 */
-	public VirtualDistNX(int biggestValueNoSpace, int smallestValueNoSpace) {
-
-		this.biggestValueNoSpace = biggestValueNoSpace;
-		this.smallestValueNoSpace = smallestValueNoSpace;
+	public VirtualDistNX(Properties propPiServer) {
+		biggestValueNoSpace = Integer
+				.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.distnx.maxDistance"));
+		smallestValueNoSpace = Integer
+				.parseInt(propPiServer
+						.getProperty("Testmodules.Testcommunication.CommunicationTest.distnx.minDistance"));
 		this.smallestValueOK = this.biggestValueNoSpace + 1;
 
 	}
@@ -44,7 +49,7 @@ public class VirtualDistNX {
 			if (additionOrSubtraction >= 5) { // addition
 				if (mode == 0) { // everythingOK
 
-					if (value[i-1] >= biggestValueOK - 10) {
+					if (value[i - 1] >= biggestValueOK - 10) {
 						additionOrSubtraction = 1;
 					} else {
 						value[i] = (int) Math.random() * 10 + value[i - 1];
