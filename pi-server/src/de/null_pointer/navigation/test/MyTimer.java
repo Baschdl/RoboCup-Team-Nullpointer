@@ -7,22 +7,33 @@ public class MyTimer {
 
 	Handler handler = null;
 
-	Timer t = new Timer(1000, new java.awt.event.ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			handler.simulate();
-		}
-	});
+	Timer timer = null;
 
-	public MyTimer(Handler handler) {
+	/**
+	 * 
+	 * @param handler
+	 * @param period
+	 *            time between two actions
+	 */
+	public MyTimer(Handler handler, int period) {
 		this.handler = handler;
+		timer = new Timer(period, new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				timerAction();
+			}
+		});
 	}
-	
-	public void stop(){
-		t.stop();
+
+	public void stop() {
+		timer.stop();
 	}
-	
-	public void start(){
-		t.start();
+
+	public void start() {
+		timer.start();
+	}
+
+	private void timerAction() {
+		handler.simulate();
 	}
 
 }
