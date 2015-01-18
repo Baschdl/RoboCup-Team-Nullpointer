@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -68,7 +70,6 @@ public class GuiNavigation extends javax.swing.JFrame {
 	}
 
 	private void createButtons() {
-
 		{
 			jBSimulieren = new JButton();
 			getContentPane().add(jBSimulieren);

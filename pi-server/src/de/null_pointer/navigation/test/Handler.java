@@ -92,13 +92,14 @@ public class Handler {
 			navi.removeNeighbor(2);
 		}
 		if (values[currentY][currentX - 1] == -1) {
-			navi.removeNeighbor(1);
+			navi.removeNeighbor(3);
 		}
 		if (values[currentY][currentX + 1] == -1) {
-			navi.removeNeighbor(3);
+			navi.removeNeighbor(1);
 		}
 
 		heading = navi.tremauxAlgorithm(heading, false);
+		System.out.println("sim: "+heading);
 		navi.switchTile(heading);
 
 		switch (heading) {
@@ -107,7 +108,7 @@ public class Handler {
 			break;
 		}
 		case 1: {
-			currentX -= 2;
+			currentX += 2;
 			break;
 		}
 		case 2: {
@@ -115,7 +116,7 @@ public class Handler {
 			break;
 		}
 		case 3: {
-			currentX += 2;
+			currentX -= 2;
 		}
 		}
 
