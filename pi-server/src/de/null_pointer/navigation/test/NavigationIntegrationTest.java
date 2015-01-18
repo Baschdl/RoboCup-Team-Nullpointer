@@ -40,6 +40,7 @@ public class NavigationIntegrationTest {
 							+ "/src/resources/maps/turn-left.map");
 			handler.startTimer();
 
+			// maximale Ausfuehrungszeit sind 8100ms
 			Thread.sleep(10000);
 
 			handler.stopTimer();
@@ -57,6 +58,7 @@ public class NavigationIntegrationTest {
 							+ "/src/resources/maps/turn-right.map");
 			handler.startTimer();
 
+			// maximale Ausfuehrungszeit sind 8100ms
 			Thread.sleep(10000);
 
 			handler.stopTimer();
@@ -74,6 +76,7 @@ public class NavigationIntegrationTest {
 							+ "/src/resources/maps/lab1.map");
 			handler.startTimer();
 
+			// maximale Ausfuehrungszeit sind 8100ms
 			Thread.sleep(10000);
 
 			handler.stopTimer();

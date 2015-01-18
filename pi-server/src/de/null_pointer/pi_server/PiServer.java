@@ -7,6 +7,20 @@ import org.apache.log4j.Logger;
 import de.null_pointer.gui.HandleValues;
 import de.null_pointer.navigation.test.GuiNavigation;
 
+/* Setup:
+ * 
+ * required libraries:
+ * - JRE
+ * - JUnit 4
+ * - LeJOS PC Libraries
+ * - log4j-1.2.17 (in /lib)
+ * - org.eclipse.jdt.annotation_1.1.0.v20130513-1648 (in /lib)
+ * 
+ * Classpath- User Entries:
+ * /pi-server/src/resources/
+ * 
+ */
+
 public class PiServer {
 
 	private static Logger logger = Logger.getLogger("TST.SIM");
