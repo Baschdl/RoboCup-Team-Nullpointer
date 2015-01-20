@@ -10,8 +10,8 @@ public class Brick {
 
 	private static String[] mainMenuStrings = { "connect", "sensors",
 			"calibrate", "exit" };
-	private static String[] sensorMenuStrings = { "DistNX", "EOPD right",
-			"EOPD left", "LSA", "'AbsIMU", "Thermal", "return" };
+	private static String[] sensorMenuStrings = { "DistNX", "EOPD",
+			"LSA", "'AbsIMU", "Thermal", "return" };
 	private static String[] calibrationMenuStrings = { "LSA white",
 			"LSA black", "return" };
 
@@ -19,7 +19,9 @@ public class Brick {
 	private static TextMenu sensorMenu = new TextMenu(sensorMenuStrings);
 	private static TextMenu calibrationMenu = new TextMenu(
 			calibrationMenuStrings);
-
+	private static AllValues allVal = new AllValues();
+	private static Calibrate calibration = new Calibrate();
+	
 	public static void main(String[] args) {
 		while (true) {
 			mainMenu();
@@ -65,18 +67,21 @@ public class Brick {
 	private static void showSensors() {
 		switch (sensorMenu.select()) {
 		case 0:
+			allVal.showDistNX();
 			break;
 		case 1:
+			allVal.showEOPD();
 			break;
 		case 2:
+			allVal.showValuesLSA();
 			break;
 		case 3:
+			allVal.showAbsIMU();
 			break;
 		case 4:
+			allVal.showThermal();
 			break;
 		case 5:
-			break;
-		case 6:
 			// return
 			break;
 		}
@@ -85,8 +90,10 @@ public class Brick {
 	private static void calibrateSensors() {
 		switch (calibrationMenu.select()) {
 		case 0:
+			calibration.calibrateWhite();
 			break;
 		case 1:
+			calibration.calibrateBlack();
 			break;
 		case 2:
 			// return
