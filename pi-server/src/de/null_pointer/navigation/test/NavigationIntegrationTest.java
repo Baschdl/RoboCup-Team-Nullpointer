@@ -69,11 +69,47 @@ public class NavigationIntegrationTest {
 	}
 
 	@Test
-	public void testRightLabyrinth1Exception() {
+	public void testLabyrinth1Exception() {
 		try {
 			handler.getFileHandler().loadFile(
 					new File("").getAbsolutePath()
 							+ "/src/resources/maps/lab1.map");
+			handler.startTimer();
+
+			// maximale Ausfuehrungszeit sind 8100ms
+			Thread.sleep(10000);
+
+			handler.stopTimer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not have thrown any exception");
+		}
+	}
+	
+	@Test
+	public void testLabyrinth2Exception() {
+		try {
+			handler.getFileHandler().loadFile(
+					new File("").getAbsolutePath()
+							+ "/src/resources/maps/lab2.map");
+			handler.startTimer();
+
+			// maximale Ausfuehrungszeit sind 8100ms
+			Thread.sleep(10000);
+
+			handler.stopTimer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not have thrown any exception");
+		}
+	}
+	
+	@Test
+	public void testOneWayException() {
+		try {
+			handler.getFileHandler().loadFile(
+					new File("").getAbsolutePath()
+							+ "/src/resources/maps/one-way.map");
 			handler.startTimer();
 
 			// maximale Ausfuehrungszeit sind 8100ms
