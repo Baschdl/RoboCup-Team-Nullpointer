@@ -18,8 +18,8 @@ import javax.swing.table.TableColumnModel;
 
 public class GuiNavigation extends javax.swing.JFrame {
 
-	private int sizeX = 710;
-	private int sizeY = 720;
+	private int sizeX = 707;
+	private int sizeY = 713;
 	private int sizeMapY = 19;
 	private int sizeMapX = 19;
 
@@ -147,17 +147,16 @@ public class GuiNavigation extends javax.swing.JFrame {
 					int row = target.rowAtPoint(e.getPoint());
 					int column = target.columnAtPoint(e.getPoint());
 					if (SwingUtilities.isRightMouseButton(e)) {
-						handleEvent(row, column, 1);
+						handleMouseClick(row, column, 1);
 					} else {
-						handleEvent(row, column, 0);
+						handleMouseClick(row, column, 0);
 					}
 				}
 			}
 		});
 	}
 
-	private void handleEvent(int row, int column, int button) {
-		System.out.println("r: " + row + ", c: " + column);
+	private void handleMouseClick(int row, int column, int button) {
 		handler.setValue(row, column, phase, button);
 	}
 
@@ -208,9 +207,5 @@ public class GuiNavigation extends javax.swing.JFrame {
 		}
 		}
 		this.repaint();
-	}
-
-	public void setText(int currentY, int currentX, String string) {
-		table.setValueAt(string, currentY, currentX);
 	}
 }

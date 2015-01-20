@@ -208,7 +208,7 @@ public class Node {
 	 */
 	public void removeNeighbor(int orientation) {
 		if (neighbors[orientation] == null) {
-			//logger.warn("Nachbar-Eintrag war bereits null/ kein Nachbar vorhanden");
+			// logger.warn("Nachbar-Eintrag war bereits null/ kein Nachbar vorhanden");
 		} else {
 			neighbors[orientation].removeNeighbor(this);
 			neighbors[orientation] = null;

@@ -36,10 +36,7 @@ public class Navigation {
 	 */
 	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat) {
 		int direction = -1;
-		if (blackTileRetreat == false && currentTile.isVisited() == false) {
-			currentTile.incTremauxCounter(currentTile
-					.invertOrientation(orientation));
-		}
+
 		int[] tremauxCounter = currentTile.getTremauxCounter();
 
 		System.out.println("tremaux: " + tremauxCounter[0] + tremauxCounter[1]
@@ -48,17 +45,18 @@ public class Navigation {
 		// check if maze is solved already
 		if (checkSolved(tremauxCounter)) {
 			logger.info("maze is solved");
-			return -2;
+			direction = -2;
 			// method returns error, if there is no way to go
 		} else if (possibleDirections(tremauxCounter) == 0) {
 			logger.warn("there's no way to go");
-			return -1;
+			direction = -1;
 			// check for dead end; if detected, robot reverses
 		} else if (possibleDirections(tremauxCounter) == 1) {
 			logger.info("dead end, taking only possible direction !");
 			for (int i = 0; i < 4; i++) {
 				if (tremauxCounter[i] != -2) {
-					return i;
+					direction = i;
+					break;
 				}
 			}
 			// -> real intersection; check TremauxCounter to evaluate direction
@@ -87,8 +85,6 @@ public class Navigation {
 
 					currentTile.incTremauxCounter(direction);
 					logger.info("tile already visited, passing rightmost once visited corridor !");
-					return direction;
-
 				} else {
 					// if there is a corridor which was never passed, the robot
 					// takes the rightmost one
@@ -107,10 +103,14 @@ public class Navigation {
 						+ direction);
 				currentTile.incTremauxCounter(direction);
 				currentTile.setVisited();
-				return direction;
 			}
 		}
-		return direction; // will be -1
+
+		if (blackTileRetreat == false && currentTile.isVisited() == false) {
+			currentTile.incTremauxCounter(currentTile
+					.invertOrientation(orientation));
+		}
+		return direction;
 	}
 
 	/**
@@ -272,6 +272,9 @@ public class Navigation {
 
 	public void switchTile(int orientation) {
 		currentTile = currentTile.getNeighbor(orientation);
+		if (currentTile == null) {
+			logger.warn("CurrentTile is NULL !");
+		}
 	}
 
 	/**
@@ -304,12 +307,13 @@ public class Navigation {
 	private Node initializeMap(int dimensionX, int dimensionY, int startX,
 			int startY, int startZ) {
 
+		logger.debug("initialising Node-Map...");
 		Node initialNode = new Node(startX, startY, startZ);
 
 		Node rowPointer = initialNode;
 		Node columnPointer = initialNode;
-		Node drowPointer = initialNode;
-		Node dcolumnPointer = initialNode;
+		Node secondRowPointer = initialNode;
+		Node secondColumnPointer = initialNode;
 
 		int x = (dimensionX - 1) / 2;
 		int y = (dimensionY - 1) / 2;
@@ -325,6 +329,8 @@ public class Navigation {
 			for (int c = 1; c <= x; c++) {
 				columnPointer.addNeighbor(new Node(startX + (i * c * 30),
 						startY, startZ), o, 0);
+				logger.debug("created Node: x:" + (startX + (i * c * 30))
+						+ " y: " + startY);
 				columnPointer = columnPointer.getNeighbor(o);
 			}
 			columnPointer = initialNode;
@@ -353,19 +359,23 @@ public class Navigation {
 						columnPointer.addNeighbor(
 								new Node(startX + (i * c * 30), startY
 										+ (i2 * r * 30), startZ), o, 0);
+						logger.debug("created Node: x:"
+								+ (startX + (i * c * 30)) + " y: "
+								+ (startY + (i2 * r * 30)));
 						columnPointer = columnPointer.getNeighbor(o);
-						dcolumnPointer = dcolumnPointer.getNeighbor(o);
-						columnPointer.addNeighbor(dcolumnPointer, o2, 0);
+						secondColumnPointer = secondColumnPointer
+								.getNeighbor(o);
+						columnPointer.addNeighbor(secondColumnPointer, o2, 0);
 					}
 					columnPointer = rowPointer;
-					dcolumnPointer = drowPointer;
+					secondColumnPointer = secondRowPointer;
 				}
-				drowPointer = rowPointer;
+				secondRowPointer = rowPointer;
 			}
 			rowPointer = initialNode;
-			drowPointer = initialNode;
+			secondRowPointer = initialNode;
 			columnPointer = initialNode;
-			dcolumnPointer = initialNode;
+			secondColumnPointer = initialNode;
 		}
 
 		return initialNode;

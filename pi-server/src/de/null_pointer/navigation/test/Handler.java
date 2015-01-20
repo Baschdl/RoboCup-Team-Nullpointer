@@ -46,7 +46,7 @@ public class Handler {
 	private void initValues() {
 		currentX = sizeMapX / 2;
 		currentY = sizeMapY / 2;
-		navi = new Navigation(currentX + 2, currentY + 2);
+		navi = new Navigation(currentX, currentY);
 		values = new int[sizeMapY][sizeMapX];
 		for (int i = 0; i < sizeMapY; i++) {
 			for (int j = 0; j < sizeMapX; j++) {
@@ -115,8 +115,10 @@ public class Handler {
 
 	public void simulate() {
 		int[] tremauxCounter = navi.getTremauxCounter();
-		System.out.println("tremaux a: " + tremauxCounter[0] + tremauxCounter[1]
-				+ tremauxCounter[2] + tremauxCounter[3]);
+
+		System.out.println("tremaux a: " + tremauxCounter[0]
+				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
+
 		if (values[currentY - 1][currentX] == -1) {
 			System.out.println("l0");
 			navi.removeNeighbor(0);
@@ -133,15 +135,16 @@ public class Handler {
 			System.out.println("l3");
 			navi.removeNeighbor(3);
 		}
-		System.out.println("tremaux b: " + tremauxCounter[0] + tremauxCounter[1]
-				+ tremauxCounter[2] + tremauxCounter[3]);
-		
+
+		System.out.println("tremaux b: " + tremauxCounter[0]
+				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
+
 		heading = navi.tremauxAlgorithm(heading, false);
 		navi.switchTile(heading);
-		
-		System.out.println("tremaux c: " + tremauxCounter[0] + tremauxCounter[1]
-				+ tremauxCounter[2] + tremauxCounter[3]);
-		
+
+		System.out.println("tremaux c: " + tremauxCounter[0]
+				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
+
 		if (gui != null) {
 			gui.setColor(currentY, currentX, 2);
 		}
@@ -163,8 +166,7 @@ public class Handler {
 			currentX -= 2;
 		}
 		}
-
-		values[currentY][currentX] = 2;
+		
 		if (gui != null) {
 			gui.setColor(currentY, currentX, 1);
 		}
@@ -178,7 +180,7 @@ public class Handler {
 			heading = 0;
 			currentX = sizeMapX / 2;
 			currentY = sizeMapY / 2;
-			navi = new Navigation(currentX, currentY);
+			navi = new Navigation(15, 15);
 
 			for (int i = 0; i < sizeMapY; i++) {
 				for (int j = 0; j < sizeMapX; j++) {
