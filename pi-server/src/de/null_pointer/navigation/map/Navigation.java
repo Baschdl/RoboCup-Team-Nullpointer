@@ -39,9 +39,6 @@ public class Navigation {
 
 		int[] tremauxCounter = currentTile.getTremauxCounter();
 
-		System.out.println("tremaux: " + tremauxCounter[0] + tremauxCounter[1]
-				+ tremauxCounter[2] + tremauxCounter[3]);
-
 		// check if maze is solved already
 		if (checkSolved(tremauxCounter)) {
 			logger.info("maze is solved");

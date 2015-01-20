@@ -72,7 +72,7 @@ public class CoordinateDialog extends JDialog {
 		}
 	}
 
-	public void setDebugArea(String message) {
+	public void setTextDebugArea(String message) {
 		areaDebug.setText(message);
 	}
 }

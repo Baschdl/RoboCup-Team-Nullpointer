@@ -115,37 +115,49 @@ public class Handler {
 
 	public void simulate() {
 		int[] tremauxCounter = navi.getTremauxCounter();
+		StringBuffer debugMessage = new StringBuffer("");
 
-		System.out.println("tremaux a: " + tremauxCounter[0]
-				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
+		debugMessage.append("tremaux a: " + tremauxCounter[0]
+				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]
+				+ "\n");
 
 		if (values[currentY - 1][currentX] == -1) {
-			System.out.println("l0");
+			debugMessage.append("l0 ");
 			navi.removeNeighbor(0);
 		}
 		if (values[currentY][currentX + 1] == -1) {
-			System.out.println("l1");
+			debugMessage.append("l1 ");
 			navi.removeNeighbor(1);
 		}
 		if (values[currentY + 1][currentX] == -1) {
-			System.out.println("l2");
+			debugMessage.append("l2 ");
 			navi.removeNeighbor(2);
 		}
 		if (values[currentY][currentX - 1] == -1) {
-			System.out.println("l3");
+			debugMessage.append("l3 ");
 			navi.removeNeighbor(3);
 		}
+		debugMessage.append("\n");
 
-		System.out.println("tremaux b: " + tremauxCounter[0]
-				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
+		debugMessage.append("tremaux b: " + tremauxCounter[0]
+				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]
+				+ "\n");
 
 		heading = navi.tremauxAlgorithm(heading, false);
 		navi.switchTile(heading);
 
-		dialog.updateOrientationAreas(navi.getCurrentTile());
+		debugMessage.append("tremaux c: " + tremauxCounter[0]
+				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]
+				+ "\n");
 
-		System.out.println("tremaux c: " + tremauxCounter[0]
-				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
+		debugMessage.append("x: " + currentX + " y: " + currentY);
+		if (dialog != null) {
+			dialog.updateOrientationAreas(navi.getCurrentTile());
+		}
+
+		if (dialog != null) {
+			dialog.setTextDebugArea(debugMessage.toString());
+		}
 
 		values[currentY][currentX] = 2;
 		if (gui != null) {
@@ -170,7 +182,7 @@ public class Handler {
 		}
 		}
 
-		values[currentY][currentX] = 2;
+		values[currentY][currentX] = 1;
 		if (gui != null) {
 			gui.setColor(currentY, currentX, 1);
 		}
