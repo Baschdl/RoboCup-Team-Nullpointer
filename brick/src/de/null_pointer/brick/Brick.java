@@ -21,7 +21,9 @@ public class Brick {
 			calibrationMenuStrings);
 
 	public static void main(String[] args) {
-		mainMenu();
+		while (true) {
+			mainMenu();
+		}
 	}
 
 	private static void mainMenu() {
@@ -76,7 +78,6 @@ public class Brick {
 			break;
 		case 6:
 			// return
-			mainMenu();
 			break;
 		}
 	}
@@ -89,7 +90,6 @@ public class Brick {
 			break;
 		case 2:
 			// return
-			mainMenu();
 			break;
 		}
 
