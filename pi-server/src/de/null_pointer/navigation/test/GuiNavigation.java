@@ -24,6 +24,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 	private int sizeMapX = 19;
 
 	private int phase = 0;
+	private boolean timerActive = false;
 
 	private DefaultTableModel tableModel = null;
 	private CellRenderer renderer = null;
@@ -31,11 +32,12 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	private Handler handler = null;
 
-	JButton jBladen;
-	JButton jBspeichern;
-	JButton jBSimulieren;
+	JButton jBload;
+	JButton jBsave;
+	JButton jBSimulate;
 	JButton jBfullReset;
 	JButton jBreset;
+	JButton jBstartStop;
 
 	public GuiNavigation() {
 		super();
@@ -67,33 +69,33 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	private void createButtons() {
 		{
-			jBSimulieren = new JButton();
-			getContentPane().add(jBSimulieren);
-			jBSimulieren.setText("Simulieren");
-			jBSimulieren.setBounds(0, 0, 130, 30);
-			jBSimulieren.addActionListener(new ActionListener() {
+			jBSimulate = new JButton();
+			getContentPane().add(jBSimulate);
+			jBSimulate.setText("Simulate");
+			jBSimulate.setBounds(0, 0, 130, 30);
+			jBSimulate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					simulatePressed();
 				}
 			});
 		}
 		{
-			jBspeichern = new JButton();
-			getContentPane().add(jBspeichern);
-			jBspeichern.setText("Speichern");
-			jBspeichern.setBounds(130, 0, 130, 30);
-			jBspeichern.addActionListener(new ActionListener() {
+			jBsave = new JButton();
+			getContentPane().add(jBsave);
+			jBsave.setText("Save");
+			jBsave.setBounds(130, 0, 130, 30);
+			jBsave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					savePressed();
 				}
 			});
 		}
 		{
-			jBladen = new JButton();
-			getContentPane().add(jBladen);
-			jBladen.setText("Laden");
-			jBladen.setBounds(260, 0, 130, 30);
-			jBladen.addActionListener(new ActionListener() {
+			jBload = new JButton();
+			getContentPane().add(jBload);
+			jBload.setText("Load");
+			jBload.setBounds(260, 0, 130, 30);
+			jBload.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					loadPressed();
 				}
@@ -107,6 +109,18 @@ public class GuiNavigation extends javax.swing.JFrame {
 			jBreset.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					resetPressed();
+				}
+			});
+		}
+		{
+			jBstartStop = new JButton();
+			getContentPane().add(jBstartStop);
+			jBstartStop.setText("stop");
+			jBstartStop.setBounds(sizeX - 250, 0, 100, 30);
+			jBstartStop.setVisible(false);
+			jBstartStop.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					startStopPressed();
 				}
 			});
 		}
@@ -162,9 +176,13 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	private void simulatePressed() {
 		phase = 1;
+		handler.initDialog();
+
 		handler.startTimer();
-		jBspeichern.setEnabled(false);
-		jBladen.setEnabled(false);
+		timerActive = true;
+		jBsave.setEnabled(false);
+		jBload.setEnabled(false);
+		jBstartStop.setVisible(true);
 	}
 
 	private void resetPressed() {
@@ -172,10 +190,13 @@ public class GuiNavigation extends javax.swing.JFrame {
 			handler.reset(true);
 		} else {
 			handler.stopTimer();
+			handler.killDialog();
 			handler.reset(false);
 			phase = 0;
-			jBspeichern.setEnabled(true);
-			jBladen.setEnabled(true);
+			timerActive = false;
+			jBstartStop.setVisible(false);
+			jBsave.setEnabled(true);
+			jBload.setEnabled(true);
 		}
 	}
 
@@ -185,6 +206,18 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	private void loadPressed() {
 		handler.load();
+	}
+
+	private void startStopPressed() {
+		if (timerActive) {
+			handler.stopTimer();
+			timerActive = false;
+			jBstartStop.setText("start");
+		} else {
+			handler.startTimer();
+			timerActive = true;
+			jBstartStop.setText("stop");
+		}
 	}
 
 	public void setColor(int row, int col, int value) {
@@ -207,5 +240,9 @@ public class GuiNavigation extends javax.swing.JFrame {
 		}
 		}
 		this.repaint();
+	}
+
+	public void setText(int row, int col, String text) {
+		table.setValueAt(text, row, col);
 	}
 }

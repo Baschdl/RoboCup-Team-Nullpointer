@@ -246,6 +246,15 @@ public class Navigation {
 		currentTile.addNeighbor(buffer, orientation, 0);
 	}
 
+	/**
+	 * used for testing purposes
+	 * 
+	 * @return returns current Node
+	 */
+	public Node getCurrentTile() {
+		return currentTile;
+	}
+
 	public boolean isBlackTile() {
 		return currentTile.isBlackTile();
 	}

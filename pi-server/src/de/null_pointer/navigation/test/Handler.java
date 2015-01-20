@@ -5,6 +5,7 @@ import de.null_pointer.navigation.map.Navigation;
 public class Handler {
 
 	private GuiNavigation gui = null;
+	private CoordinateDialog dialog = null;
 	private Navigation navi = null;
 
 	private MyTimer timer = null;
@@ -35,7 +36,6 @@ public class Handler {
 	 * @param sizeMapX
 	 */
 	public Handler(int sizeMapY, int sizeMapX) {
-		// TODO Zeitwert ggf. anpassen
 		timer = new MyTimer(this, 50);
 		fileHandler = new FileHandler(this);
 		this.sizeMapX = sizeMapX;
@@ -48,19 +48,19 @@ public class Handler {
 		currentY = sizeMapY / 2;
 		navi = new Navigation(currentX, currentY);
 		values = new int[sizeMapY][sizeMapX];
-		for (int i = 0; i < sizeMapY; i++) {
-			for (int j = 0; j < sizeMapX; j++) {
-				if (i % 2 == 0
-						&& j % 2 == 0
-						|| (i == 0 || i == sizeMapY - 1 || j == 0 || j == sizeMapX - 1)) {
-					values[i][j] = -1;
+		for (int y = 0; y < sizeMapY; y++) {
+			for (int x = 0; x < sizeMapX; x++) {
+				if (y % 2 == 0
+						&& x % 2 == 0
+						|| (y == 0 || y == sizeMapY - 1 || x == 0 || x == sizeMapX - 1)) {
+					values[y][x] = -1;
 					if (gui != null) {
-						gui.setColor(i, j, -1);
+						gui.setColor(y, x, -1);
 					}
 				} else {
-					values[i][j] = 0;
+					values[y][x] = 0;
 					if (gui != null) {
-						gui.setColor(i, j, 0);
+						gui.setColor(y, x, 0);
 					}
 				}
 			}
@@ -142,9 +142,12 @@ public class Handler {
 		heading = navi.tremauxAlgorithm(heading, false);
 		navi.switchTile(heading);
 
+		dialog.updateOrientationAreas(navi.getCurrentTile());
+
 		System.out.println("tremaux c: " + tremauxCounter[0]
 				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]);
 
+		values[currentY][currentX] = 2;
 		if (gui != null) {
 			gui.setColor(currentY, currentX, 2);
 		}
@@ -166,7 +169,8 @@ public class Handler {
 			currentX -= 2;
 		}
 		}
-		
+
+		values[currentY][currentX] = 2;
 		if (gui != null) {
 			gui.setColor(currentY, currentX, 1);
 		}
@@ -180,12 +184,13 @@ public class Handler {
 			heading = 0;
 			currentX = sizeMapX / 2;
 			currentY = sizeMapY / 2;
-			navi = new Navigation(15, 15);
+			navi = new Navigation(currentY, currentX);
 
 			for (int i = 0; i < sizeMapY; i++) {
 				for (int j = 0; j < sizeMapX; j++) {
 					if (values[i][j] == 1 || values[i][j] == 2) {
 						values[i][j] = 0;
+
 						if (gui != null) {
 							gui.setColor(i, j, 0);
 						}
@@ -218,5 +223,18 @@ public class Handler {
 
 	public FileHandler getFileHandler() {
 		return fileHandler;
+	}
+
+	public void initDialog() {
+		int x = gui.getX() + gui.getWidth();
+		int y = gui.getY();
+		dialog = new CoordinateDialog();
+		dialog.setLocation(x, y);
+		dialog.setVisible(true);
+	}
+
+	public void killDialog() {
+		dialog.dispose();
+		dialog = null;
 	}
 }
