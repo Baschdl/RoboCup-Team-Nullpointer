@@ -52,7 +52,7 @@ public class Intersection implements Behavior {
 		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
 			logger.info("Behavior Intersection: Hallway left");
 			return true;
-		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
+		} else if (eopdRight.getDistance() >= maximalDistanceSide) {
 			logger.info("Behavior Intersection: Hallway right");
 			return true;
 		}

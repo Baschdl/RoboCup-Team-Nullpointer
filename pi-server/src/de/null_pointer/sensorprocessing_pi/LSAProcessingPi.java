@@ -63,4 +63,8 @@ public class LSAProcessingPi {
 			return lsa;
 		}
 	}
+
+	public void setTestLSA(int lsa[]){
+		
+	}
 }

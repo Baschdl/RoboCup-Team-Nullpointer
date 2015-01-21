@@ -27,4 +27,8 @@ public class EOPDProcessingPi {
 			}
 		}
 	}
+	
+	public void setTestEOPDdistance(int value){
+		
+	}
 }

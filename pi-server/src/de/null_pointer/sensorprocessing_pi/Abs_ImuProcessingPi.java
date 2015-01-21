@@ -88,4 +88,9 @@ public class Abs_ImuProcessingPi {
 			return heading;
 		}
 	}
+	
+	public void setTestAngleAndHeading(int angle, int heading){
+		
+	}
+
 }

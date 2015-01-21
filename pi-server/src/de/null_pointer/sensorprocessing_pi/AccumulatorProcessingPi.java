@@ -21,4 +21,8 @@ public class AccumulatorProcessingPi {
 			return milliVolt;
 		}
 	}
+	
+	public void setTestMilliVolt(int milliVolt){
+		
+	}
 }

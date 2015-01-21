@@ -20,4 +20,8 @@ public class DistNxProcessingPi {
 			return distance;
 		}
 	}
+	
+	public void setTestDistance(int distance){
+		this.distance = distance;
+	}
 }
