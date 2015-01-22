@@ -28,7 +28,7 @@ public class EOPDProcessingPi {
 		}
 	}
 	
-	public void setTestEOPDdistance(int value){
-		
+	public void setTestEOPDdistance(double value){
+		distance = value;		
 	}
 }

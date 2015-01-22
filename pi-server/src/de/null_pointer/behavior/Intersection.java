@@ -24,6 +24,7 @@ public class Intersection implements Behavior {
 
 	int minimalDistanceFront = -1;
 	int maximalDistanceSide = -1;
+	
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
@@ -44,7 +45,7 @@ public class Intersection implements Behavior {
 	@Override
 	public boolean takeControl() {
 		int actualDistance;
-		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront) {
+		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront &&  actualDistance >= 0) {
 			logger.info("Wall ahead");
 			return true;
 		} else if (actualDistance < 0) {
@@ -62,8 +63,8 @@ public class Intersection implements Behavior {
 	@Override
 	public void action() {
 		logger.info("Intersection detected");
-
-		if (distnx.getDistance() <= minimalDistanceFront) {
+		int actualDistance;
+		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront && actualDistance >= 0) {
 			motorControl.stop();
 			wallAhead();
 		}
