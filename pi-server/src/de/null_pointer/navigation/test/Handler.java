@@ -114,6 +114,11 @@ public class Handler {
 	}
 
 	public void simulate() {
+		values[currentY][currentX] = 2;
+		if (gui != null) {
+			gui.setColor(currentY, currentX, 2);
+		}
+
 		int[] tremauxCounter = navi.getTremauxCounter();
 		StringBuffer debugMessage = new StringBuffer("");
 
@@ -157,11 +162,6 @@ public class Handler {
 
 		if (dialog != null) {
 			dialog.setTextDebugArea(debugMessage.toString());
-		}
-
-		values[currentY][currentX] = 2;
-		if (gui != null) {
-			gui.setColor(currentY, currentX, 2);
 		}
 
 		switch (heading) {

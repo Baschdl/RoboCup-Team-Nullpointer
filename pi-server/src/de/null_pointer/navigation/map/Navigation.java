@@ -324,11 +324,11 @@ public class Navigation {
 		int x = (dimensionX - 1) / 2;
 		int y = (dimensionY - 1) / 2;
 
-		/*
-		 * i: used to decide whether x Coordinates of Node are positive or
-		 * negative o: used to change the orientation of the adding Nodes during
-		 * iteration c: indicates the depth of the column being added
-		 */
+		// i: used to decide whether x Coordinates of Node are positive or
+		// negative
+		// o: used to change the orientation of the adding Nodes during
+		// iteration
+		// c: indicates the depth of the column being added
 
 		// Generates the initial line of Nodes
 		for (int i = 1, o = 1; i >= -1; i -= 2, o += 2) {
@@ -342,13 +342,17 @@ public class Navigation {
 			columnPointer = initialNode;
 		}
 
-		/*
-		 * i: used to decide whether x coordinate of Node is positive or
-		 * negative i2: used to decide whether y coordinate of Node is positive
-		 * or negative o, o2, o3: used to change the orientation of the, to be
-		 * added, Nodes during iteration c: indicates the depth of the column
-		 * being added r: indicates the depth of the row being added
-		 */
+		
+//		  i: used to decide whether x coordinate of Node is positive or
+//		  negative 
+//		  i2: used to decide whether y coordinate of Node is positive
+//		  or negative 
+//		  o, o2, o3: used to change the orientation of the, to be
+//		  added, Nodes during iteration 
+//		  c: indicates the depth of the column
+//		  being added 
+//		  r: indicates the depth of the row being added
+		 
 
 		// iterates to generate rows of Node-lines in both North and South
 		for (int i2 = 1, o2 = 2, o3 = 0; i2 >= -1; i2 -= 2, o2 -= 2, o3 += 2) {
@@ -365,9 +369,6 @@ public class Navigation {
 						columnPointer.addNeighbor(
 								new Node(startX + (i * c * 30), startY
 										+ (i2 * r * 30), startZ), o, 0);
-						logger.debug("created Node: x:"
-								+ (startX + (i * c * 30)) + " y: "
-								+ (startY + (i2 * r * 30)));
 						columnPointer = columnPointer.getNeighbor(o);
 						secondColumnPointer = secondColumnPointer
 								.getNeighbor(o);
