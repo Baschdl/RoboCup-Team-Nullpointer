@@ -1,13 +1,19 @@
 package de.null_pointer.navigation.test;
 
 import java.awt.event.ActionEvent;
+
 import javax.swing.Timer;
+
+import org.apache.log4j.Logger;
+
+import de.null_pointer.navigation.map.Node;
 
 public class MyTimer {
 
-	Handler handler = null;
+	private static Logger logger = Logger.getLogger(Node.class);
 
-	Timer timer = null;
+	private Handler handler = null;
+	private Timer timer = null;
 
 	/**
 	 * 
@@ -33,7 +39,10 @@ public class MyTimer {
 	}
 
 	private void timerAction() {
-		handler.simulate();
+		if (handler.simulate() == false) {
+			timer.stop();
+			logger.info("simulation has ended");
+		}
 	}
 
 }
