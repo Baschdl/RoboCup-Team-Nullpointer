@@ -69,12 +69,14 @@ public class IntersectionTest {
 	
 	@Test
 	public void testTakeControlHallwayLeft(){
+		distNx.setDistance(30);
 		eopdLeft.setTestEOPDdistance(21.0);
 		assertEquals(true,classToTest.takeControl());
 	}
 	
 	@Test
 	public void testTakeControlHallwayRight(){
+		distNx.setDistance(30);
 		eopdRight.setTestEOPDdistance(21.0);
 		assertEquals(true, classToTest.takeControl());
 	}
