@@ -342,40 +342,41 @@ public class Navigation {
 			columnPointer = initialNode;
 		}
 
-		
-//		  i: used to decide whether x coordinate of Node is positive or
-//		  negative 
-//		  i2: used to decide whether y coordinate of Node is positive
-//		  or negative 
-//		  o, o2, o3: used to change the orientation of the, to be
-//		  added, Nodes during iteration 
-//		  c: indicates the depth of the column
-//		  being added 
-//		  r: indicates the depth of the row being added
-		 
+		// xSign: used to decide whether x coordinate of Node is positive or
+		// negative
+		// ySign: used to decide whether y coordinate of Node is positive
+		// or negative
+		// orientLeftRight, orientDownUp, orientUpDown:
+		// used to change the orientation of the to be added Node from left to
+		// right/ down to up/ up to down
+		// column: indicates the number of the column
+		// being added
+		// row: indicates the number of the row being added
 
 		// iterates to generate rows of Node-lines in both North and South
-		for (int i2 = 1, o2 = 2, o3 = 0; i2 >= -1; i2 -= 2, o2 -= 2, o3 += 2) {
+		for (int ySign = 1, orientDownUp = 2, orientUpDown = 0; ySign >= -1; ySign -= 2, orientDownUp -= 2, orientUpDown += 2) {
 			// iterates to generate several rows of Node-lines
-			for (int r = 1; r <= y; r++) {
-				rowPointer.addNeighbor(new Node(startX, startY + (r * 30),
-						startZ), o3, 0);
-				rowPointer = rowPointer.getNeighbor(o3);
-				columnPointer = rowPointer;
+			for (int row = 1; row <= y; row++) {
+				rowPointer.addNeighbor(new Node(startX, startY + (row * 30),
+						startZ), orientUpDown, 0);
+				rowPointer = rowPointer.getNeighbor(orientUpDown);
 				// iterates to generate a Line of Nodes in both East and West
-				for (int i = 1, o = 1; i >= -1; i -= 2, o += 2) {
+				for (int xSign = 1, orientLeftRight = 1; xSign >= -1; xSign -= 2, orientLeftRight += 2) {
 					// generates line of Nodes in one direction
-					for (int c = 1; c <= x; c++) {
-						columnPointer.addNeighbor(
-								new Node(startX + (i * c * 30), startY
-										+ (i2 * r * 30), startZ), o, 0);
-						columnPointer = columnPointer.getNeighbor(o);
-						secondColumnPointer = secondColumnPointer
-								.getNeighbor(o);
-						columnPointer.addNeighbor(secondColumnPointer, o2, 0);
-					}
 					columnPointer = rowPointer;
 					secondColumnPointer = secondRowPointer;
+					for (int column = 1; column <= x; column++) {
+						columnPointer.addNeighbor(new Node(startX
+								+ (xSign * column * 30), startY
+								+ (ySign * row * 30), startZ), orientLeftRight,
+								0);
+						columnPointer = columnPointer
+								.getNeighbor(orientLeftRight);
+						secondColumnPointer = secondColumnPointer
+								.getNeighbor(orientLeftRight);
+						columnPointer.addNeighbor(secondColumnPointer,
+								orientDownUp, 0);
+					}
 				}
 				secondRowPointer = rowPointer;
 			}

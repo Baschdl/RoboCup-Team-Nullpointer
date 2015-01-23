@@ -162,6 +162,10 @@ public class Node {
 			logger.error("Die Node wird mit sich selbst verbunden!");
 			return false;
 		}
+		if (neighbors[orientation] != null) {
+			logger.warn("Bestehender Nachbar wird ueberschrieben ! x: " + x
+					+ " y: " + y + " orientation: " + orientation);
+		}
 		int a = abort + 1;
 		neighbors[orientation] = neighbor;
 
