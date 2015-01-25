@@ -121,5 +121,77 @@ public class NavigationIntegrationTest {
 			fail("Should not have thrown any exception");
 		}
 	}
+	
+	@Test
+	public void testBottomLeftException() {
+		try {
+			handler.getFileHandler().loadFile(
+					new File("").getAbsolutePath()
+							+ "/src/resources/maps/bottom-left-corner.map");
+			handler.startTimer();
+
+			// maximale Ausfuehrungszeit sind 800ms
+			Thread.sleep(1000);
+
+			handler.stopTimer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not have thrown any exception");
+		}
+	}
+	
+	@Test
+	public void testBottomRightException() {
+		try {
+			handler.getFileHandler().loadFile(
+					new File("").getAbsolutePath()
+							+ "/src/resources/maps/bottom-right-corner.map");
+			handler.startTimer();
+
+			// maximale Ausfuehrungszeit sind 800ms
+			Thread.sleep(1000);
+
+			handler.stopTimer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not have thrown any exception");
+		}
+	}
+	
+	@Test
+	public void testTopRightException() {
+		try {
+			handler.getFileHandler().loadFile(
+					new File("").getAbsolutePath()
+							+ "/src/resources/maps/top-right-corner.map");
+			handler.startTimer();
+
+			// maximale Ausfuehrungszeit sind 800ms
+			Thread.sleep(1000);
+
+			handler.stopTimer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not have thrown any exception");
+		}
+	}
+	
+	@Test
+	public void testTopLeftException() {
+		try {
+			handler.getFileHandler().loadFile(
+					new File("").getAbsolutePath()
+							+ "/src/resources/maps/top-left-corner.map");
+			handler.startTimer();
+
+			// maximale Ausfuehrungszeit sind 800ms
+			Thread.sleep(1000);
+
+			handler.stopTimer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not have thrown any exception");
+		}
+	}
 
 }
