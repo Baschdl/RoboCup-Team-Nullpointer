@@ -11,18 +11,19 @@ import de.null_pointer.sensor.LightSensorArray;
 
 public class AllValues {
 
-	private OpticalDistanceSensor distNX = new OpticalDistanceSensor(
-			SensorPort.S3);
-	private EOPD eopd = new EOPD(SensorPort.S2);
-	private LightSensorArray lsa = new LightSensorArray(SensorPort.S4);
+	private OpticalDistanceSensor distNX;
+	private EOPD eopd;
+	private LightSensorArray lsa;
 	private int[] lsavalues = new int[8];
-	private  DThermalIR thermalsensor = new DThermalIR(SensorPort.S1);
+	private  DThermalIR thermalsensor;
 
 	public AllValues() {
 
 	}
 
 	public void showDistNX() {
+		distNX = new OpticalDistanceSensor(
+				SensorPort.S3);
 		try {
 			while (!Button.ESCAPE.isDown()) {
 				LCD.drawInt(distNX.getDistance(), 0, 0);
@@ -34,6 +35,7 @@ public class AllValues {
 	}
 
 	public void showEOPD() {
+		eopd = new EOPD(SensorPort.S2);
 		try {
 			while (!Button.ESCAPE.isDown()) {
 				LCD.drawInt(eopd.readRawValue(), 0, 1);
@@ -45,6 +47,7 @@ public class AllValues {
 	}
 
 	public void showValuesLSA() {
+		lsa = new LightSensorArray(SensorPort.S4);
 
 		try {
 			while (!Button.ESCAPE.isDown()) {
@@ -69,7 +72,8 @@ public class AllValues {
 		// TODO Insert Code for showing AbsIMU on the LCD
 	}
 
-	public void showThermal() { //TODO Choose SensorPort for thermalsensor (e.g. 0 on Brick 1)
+	public void showThermal() {
+		thermalsensor = new DThermalIR(SensorPort.S3);
 		try {
 			while (!Button.ESCAPE.isDown()) {
 				LCD.drawString(Float.toString(thermalsensor.readObject()), 0, 1);
