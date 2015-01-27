@@ -5,12 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +41,9 @@ public class GuiNavigation extends javax.swing.JFrame {
 	JButton jBstartStop;
 	JButton jBstep;
 
+	JTextField jTFtimerspeed;
+	JLabel jLtimertext;
+
 	public GuiNavigation() {
 		super();
 		initGUI();
@@ -51,6 +55,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			getContentPane().setLayout(null);
 			createButtons();
+			createTextField();
 
 			renderer = new CellRenderer();
 			createTable();
@@ -84,8 +89,8 @@ public class GuiNavigation extends javax.swing.JFrame {
 			jBsave = new JButton();
 			getContentPane().add(jBsave);
 			jBsave.setText("Save");
-			jBsave.setBounds(sizeX-276, 0, 80, 30);
-			jBsave.addActionListener (new ActionListener() {
+			jBsave.setBounds(sizeX - 276, 0, 80, 30);
+			jBsave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					savePressed();
 				}
@@ -95,7 +100,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 			jBload = new JButton();
 			getContentPane().add(jBload);
 			jBload.setText("Load");
-			jBload.setBounds(sizeX-196, 0, 80, 30);
+			jBload.setBounds(sizeX - 196, 0, 80, 30);
 			jBload.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					loadPressed();
@@ -106,7 +111,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 			jBreset = new JButton();
 			getContentPane().add(jBreset);
 			jBreset.setText("Reset");
-			jBreset.setBounds(sizeX-116, 0, 100, 30);
+			jBreset.setBounds(sizeX - 116, 0, 100, 30);
 			jBreset.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					resetPressed();
@@ -136,6 +141,25 @@ public class GuiNavigation extends javax.swing.JFrame {
 					stepPressed();
 				}
 			});
+		}
+	}
+
+	private void createTextField() {
+		{
+			jTFtimerspeed = new JTextField();
+			getContentPane().add(jTFtimerspeed);
+			jTFtimerspeed.setText("500");
+			jTFtimerspeed.setHorizontalAlignment(SwingConstants.CENTER);
+			jTFtimerspeed.setBounds(260, 5, 40, 20);
+			jTFtimerspeed.setVisible(true);
+		}
+		{
+			jLtimertext = new JLabel();
+			getContentPane().add(jLtimertext);
+			jLtimertext.setText("Zeitabstand in ms:");
+			jLtimertext.setHorizontalAlignment(SwingConstants.CENTER);
+			jLtimertext.setBounds(130, 0, 130, 30);
+			jLtimertext.setVisible(true);
 		}
 	}
 
@@ -184,19 +208,23 @@ public class GuiNavigation extends javax.swing.JFrame {
 	}
 
 	private void handleMouseClick(int row, int column, int button) {
-		handler.setValue(row, column, phase, button);
+		handler.setValue(row, column, button);
 	}
 
 	private void simulatePressed() {
 		phase = 1;
 		handler.initDialog();
 
+		jTFtimerspeed.setVisible(false);
+		jLtimertext.setVisible(false);
+		handler.newTimer(Integer.parseInt(jTFtimerspeed.getText()));
 		handler.startTimer();
 		timerActive = true;
 		jBstartStop.setText("stop");
 		jBsave.setEnabled(false);
 		jBload.setEnabled(false);
 		jBstartStop.setVisible(true);
+		jBstep.setVisible(true);
 	}
 
 	private void resetPressed() {
@@ -210,6 +238,8 @@ public class GuiNavigation extends javax.swing.JFrame {
 			timerActive = false;
 			jBstartStop.setVisible(false);
 			jBstep.setVisible(false);
+			jTFtimerspeed.setVisible(true);
+			jLtimertext.setVisible(true);
 			jBsave.setEnabled(true);
 			jBload.setEnabled(true);
 		}
@@ -228,16 +258,14 @@ public class GuiNavigation extends javax.swing.JFrame {
 			handler.stopTimer();
 			timerActive = false;
 			jBstartStop.setText("start");
-			jBstep.setVisible(true);
 		} else {
 			handler.startTimer();
 			timerActive = true;
 			jBstartStop.setText("stop");
-			jBstep.setVisible(false);
 		}
 	}
-	
-	private void stepPressed(){
+
+	private void stepPressed() {
 		handler.simulate();
 	}
 
@@ -255,8 +283,20 @@ public class GuiNavigation extends javax.swing.JFrame {
 			renderer.setColor(row, col, Color.BLUE);
 			break;
 		}
+		case 3: {
+			renderer.setColor(row, col, Color.GREEN);
+			break;
+		}
 		case -1: {
 			renderer.setColor(row, col, Color.DARK_GRAY);
+			break;
+		}
+		case -2: {
+			renderer.setColor(row, col, Color.BLACK);
+			break;
+		}
+		default: {
+			renderer.setColor(row, col, Color.YELLOW);
 			break;
 		}
 		}

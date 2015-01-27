@@ -27,7 +27,6 @@ public class Handler {
 
 	public Handler(GuiNavigation gui, int sizeMapY, int sizeMapX) {
 		this.gui = gui;
-		timer = new MyTimer(this, 1000);
 		fileHandler = new FileHandler(this);
 		this.sizeMapX = sizeMapX;
 		this.sizeMapY = sizeMapY;
@@ -86,24 +85,20 @@ public class Handler {
 	 * @param button
 	 *            pressed button (0 = left mouse button; 1 = right mouse button)
 	 */
-	public void setValue(int row, int col, int phase, int button) {
+	public void setValue(int row, int col, int button) {
 		int value = 0;
-		if (phase == 0) {
-			if (button == 0) {
-				if (values[row][col] == -1) {
-					value = 0;
-				} else {
-					value = -1;
-				}
+		if (button == 0) {
+			if (values[row][col] == -1) {
+				value = 0;
 			} else {
-				if (values[row][col] == 1) {
-					value = 0;
-				} else {
-					value = 1;
-				}
+				value = -1;
 			}
 		} else {
-			value = 2;
+			if (values[row][col] == 1) {
+				value = 0;
+			} else {
+				value = 1;
+			}
 		}
 
 		values[row][col] = value;
@@ -165,13 +160,12 @@ public class Handler {
 			lastY = currentY;
 			navi = new Navigation(currentY, currentX);
 
-			for (int i = 0; i < sizeMapY; i++) {
-				for (int j = 0; j < sizeMapX; j++) {
-					if (values[i][j] == 1 || values[i][j] == 2) {
-						values[i][j] = 0;
-
+			for (int y = 0; y < sizeMapY; y++) {
+				for (int x = 0; x < sizeMapX; x++) {
+					if (y % 2 == 1 && x % 2 == 1 && values[y][x] != -2) {
+						values[y][x] = 0;
 						if (gui != null) {
-							gui.setColor(i, j, 0);
+							gui.setColor(y, x, 0);
 						}
 					}
 				}
@@ -199,11 +193,23 @@ public class Handler {
 				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]
 				+ "\n");
 
-		values[lastY][lastX] = 2;
-		if (gui != null) {
-			gui.setColor(lastY, lastX, 2);
+		if (values[lastY][lastX] < 2) {
+			values[lastY][lastX] = 2;
+			if (gui != null) {
+				gui.setColor(lastY, lastX, 2);
+			}
+		} else if (values[lastY][lastX] == 2) {
+			values[lastY][lastX] = 3;
+			if (gui != null) {
+				gui.setColor(lastY, lastX, 3);
+			}
+		} else {
+			values[lastY][lastX] = 4;
+			if (gui != null) {
+				gui.setColor(lastY, lastX, 4);
+			}
 		}
-		values[currentY][currentX] = 1;
+
 		if (gui != null) {
 			gui.setColor(currentY, currentX, 1);
 		}
@@ -309,5 +315,9 @@ public class Handler {
 	public void killDialog() {
 		dialog.dispose();
 		dialog = null;
+	}
+
+	public void newTimer(int time) {
+		timer = new MyTimer(this, time);
 	}
 }
