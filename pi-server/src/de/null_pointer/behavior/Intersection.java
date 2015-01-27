@@ -15,16 +15,15 @@ import lejos.robotics.subsumption.Behavior;
 public class Intersection implements Behavior {
 	private static Logger logger = Logger.getLogger(Intersection.class);
 
-	MotorControlPi motorControl;
-	DistNxProcessingPi distnx;
-	EOPDProcessingPi eopdLeft;
-	EOPDProcessingPi eopdRight;
-	Abs_ImuProcessingPi absImu;
-	Navigation nav;
+	private MotorControlPi motorControl;
+	private DistNxProcessingPi distnx;
+	private EOPDProcessingPi eopdLeft;
+	private EOPDProcessingPi eopdRight;
+	private Abs_ImuProcessingPi absImu;
+	private Navigation nav;
 
-	int minimalDistanceFront = -1;
-	int maximalDistanceSide = -1;
-	
+	private int minimalDistanceFront = -1;
+	private int maximalDistanceSide = -1;
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
@@ -45,7 +44,8 @@ public class Intersection implements Behavior {
 	@Override
 	public boolean takeControl() {
 		int actualDistance;
-		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront &&  actualDistance >= 0) {
+		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
+				&& actualDistance >= 0) {
 			logger.info("Wall ahead");
 			return true;
 		} else if (actualDistance < 0) {
@@ -64,7 +64,8 @@ public class Intersection implements Behavior {
 	public void action() {
 		logger.info("Intersection detected");
 		int actualDistance;
-		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront && actualDistance >= 0) {
+		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
+				&& actualDistance >= 0) {
 			motorControl.stop();
 			wallAhead();
 		}

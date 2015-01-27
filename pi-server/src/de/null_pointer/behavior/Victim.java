@@ -9,7 +9,7 @@ import lejos.robotics.subsumption.Behavior;
 public class Victim implements Behavior {
 	private static Logger logger = Logger.getLogger(Victim.class);
 	
-	MotorControlPi motorControl;
+	private MotorControlPi motorControl;
 
 	public Victim(MotorControlPi motorControl) {
 		this.motorControl = motorControl;

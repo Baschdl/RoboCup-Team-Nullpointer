@@ -42,8 +42,13 @@ public class BlackTile implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		// TODO Auto-generated method stub
-		return false;
+		int[] values = lsa.getLSA();
+		int value = 0;
+		for (int val : values) {
+			value += val;
+		}
+		// Alle 8 Sensoren im Durchschnitt über 70
+		return value > 70 * 8;
 	}
 
 	@Override
@@ -53,7 +58,7 @@ public class BlackTile implements Behavior {
 		logger.info("Schwarze Kachel erkannt");
 		motorControl.stop();
 		nav.setBlackTile();
-		
+
 		motorControl.backward(speed);
 		while (moving && odometer.getDistanceCounter() > 0) {
 			odometer.calculateDistance(time, -speed);

@@ -11,9 +11,9 @@ import lejos.robotics.subsumption.Behavior;
 public class NextTile implements Behavior {
 	private static Logger logger = Logger.getLogger(NextTile.class);
 
-	Abs_ImuProcessingPi absImu = null;
-	Navigation nav = null;
-	Odometer odometer = null;
+	private Abs_ImuProcessingPi absImu = null;
+	private Navigation nav = null;
+	private Odometer odometer = null;
 
 	public NextTile(Abs_ImuProcessingPi absImu, Navigation nav) {
 		this.absImu = absImu;
