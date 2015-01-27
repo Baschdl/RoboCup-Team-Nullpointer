@@ -71,6 +71,10 @@ public class Node {
 		blackTile = true;
 	}
 
+	/**
+	 * 
+	 * @return boolean
+	 */
 	public boolean isVisited() {
 		return visited;
 	}
@@ -213,6 +217,7 @@ public class Node {
 	public void removeNeighbor(int orientation) {
 		if (neighbors[orientation] == null) {
 			// logger.warn("Nachbar-Eintrag war bereits null/ kein Nachbar vorhanden");
+			tremauxCounter[orientation] = -2;
 		} else {
 			neighbors[orientation].removeNeighbor(this);
 			neighbors[orientation] = null;
