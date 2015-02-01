@@ -279,37 +279,18 @@ public class BrickControlBrick extends Thread {
 			break;
 		case 11:
 			ColorSensor cs = new ColorSensor(SensorPort.S4);
-			cs.setFloodlight(true);
-			Delay.msDelay(500);
-			cs.setFloodlight(false);
-			Delay.msDelay(500);
-			cs.setFloodlight(true);
-			Delay.msDelay(500);
-			cs.setFloodlight(false);
-			Delay.msDelay(500);
-			cs.setFloodlight(true);
-			Delay.msDelay(500);
-			cs.setFloodlight(false);
-			Delay.msDelay(500);
-			cs.setFloodlight(true);
-			Delay.msDelay(500);
-			cs.setFloodlight(false);
-			Delay.msDelay(500);
-			cs.setFloodlight(true);
-			Delay.msDelay(500);
-			cs.setFloodlight(false);
-			Delay.msDelay(500);
-			cs.setFloodlight(true);
-			Delay.msDelay(100);
-			cs.setFloodlight(false);
-			Delay.msDelay(100);
-			cs.setFloodlight(true);
-			Delay.msDelay(100);
-			cs.setFloodlight(false);
-			Delay.msDelay(100);
-			cs.setFloodlight(true);
-			Delay.msDelay(100);
-			cs.setFloodlight(false);
+			for(int i=0;i<5;i++){
+				cs.setFloodlight(true);
+				Delay.msDelay(500);
+				cs.setFloodlight(false);
+				Delay.msDelay(500);	
+			}
+			for(int j=0;j<5;j++){
+				cs.setFloodlight(true);
+				Delay.msDelay(100);
+				cs.setFloodlight(false);
+				Delay.msDelay(100);
+			}
 			break;
 			
 		case 99:
