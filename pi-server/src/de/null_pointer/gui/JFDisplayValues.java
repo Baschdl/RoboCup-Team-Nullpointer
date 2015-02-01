@@ -22,6 +22,8 @@ public class JFDisplayValues extends JFrame {
 	public JLabel jLAbsoluteIMU_ACG_Compass_Heading;
 	private JLabel lblAbsoluteimuacgKompassWinkel;
 	private JLabel jLAbsoluteIMU_ACG_Compass_Angle;
+	private JLabel lblThermalsensor;
+	private JLabel jLThermalSensor;
 
 	/**
 	 * Create the frame.
@@ -83,6 +85,14 @@ public class JFDisplayValues extends JFrame {
 		jLAbsoluteIMU_ACG_Compass_Angle = new JLabel("--");
 		jLAbsoluteIMU_ACG_Compass_Angle.setBounds(302, 111, 43, 14);
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Angle);
+		
+		lblThermalsensor = new JLabel("ThermalSensor:");
+		lblThermalsensor.setBounds(10, 136, 77, 14);
+		contentPane.add(lblThermalsensor);
+		
+		jLThermalSensor = new JLabel("--");
+		jLThermalSensor.setBounds(97, 136, 97, 14);
+		contentPane.add(jLThermalSensor);
 
 		this.setVisible(true);
 	}
@@ -121,5 +131,11 @@ public class JFDisplayValues extends JFrame {
 
 		jLAbsoluteIMU_ACG_Compass_Angle.setText(Integer.toString(value));
 
+	}
+	
+	public void showThermalSensor(int value){
+		
+		jLThermalSensor.setText(Integer.toString(value));
+		
 	}
 }

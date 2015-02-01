@@ -4,6 +4,7 @@ import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 
 public class HandleValues extends Thread {
 
@@ -13,17 +14,19 @@ public class HandleValues extends Thread {
 	private EOPDProcessingPi eopdLeftprocclass = null;
 	private EOPDProcessingPi eopdRightprocclass = null;
 	private DistNxProcessingPi distnxprocclass = null;
+	private ThermalSensorProcessingPi thermalSensorprocclass = null;
 
 	public HandleValues(LSAProcessingPi lsaprocclass,
 			Abs_ImuProcessingPi absimuprocclass,
 			EOPDProcessingPi eopdLeftprocclass,
 			EOPDProcessingPi eopdRightprocclass,
-			DistNxProcessingPi distnxprocclass) {
+			DistNxProcessingPi distnxprocclass, ThermalSensorProcessingPi thermalSensorprocclass) {
 		this.lsaprocclass = lsaprocclass;
 		this.absimuprocclass = absimuprocclass;
 		this.eopdLeftprocclass = eopdLeftprocclass;
 		this.eopdRightprocclass = eopdRightprocclass;
 		this.distnxprocclass = distnxprocclass;
+		this.thermalSensorprocclass = thermalSensorprocclass;
 	}
 
 	public void run() {
@@ -40,6 +43,7 @@ public class HandleValues extends Thread {
 			readLeftEOPD();
 			readAbs_ImuCompass_Angle();
 			readAbs_ImuCompass_Heading();
+			readThermalSensor();
 
 		}
 
@@ -79,6 +83,12 @@ public class HandleValues extends Thread {
 		valueGUI.showAbsoluteIMUACG_compass_angle(absimuprocclass
 				.getAngleHorizontal());
 
+	}
+	
+	private void readThermalSensor(){
+		
+		valueGUI.showThermalSensor(thermalSensorprocclass.getTemperature());
+		
 	}
 
 }
