@@ -187,7 +187,8 @@ public class Handler {
 	 *         ocurred
 	 */
 	public boolean simulate() {
-		if (gui.getValueAt(currentY, currentX) == -2) {
+
+		if (values[currentY][currentX] == -2) {
 
 			int invHeading = invertHeading(heading);
 
@@ -197,9 +198,6 @@ public class Handler {
 
 			BlackTileRetreat = true;
 			return true;
-		}
-		if (BlackTileRetreat) {
-			BlackTileRetreat = false;
 		}
 
 		int[] tremauxCounter = navi.getTremauxCounter();
@@ -273,6 +271,10 @@ public class Handler {
 
 		navi.switchTile(heading);
 		switchTableTile(heading);
+
+		if (BlackTileRetreat) {
+			BlackTileRetreat = false;
+		}
 
 		return true;
 	}
