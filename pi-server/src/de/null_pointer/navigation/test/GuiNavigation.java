@@ -306,4 +306,23 @@ public class GuiNavigation extends javax.swing.JFrame {
 	public void setText(int row, int col, String text) {
 		table.setValueAt(text, row, col);
 	}
+
+	public int getValueAt(int row, int col) {
+		int value = 0;
+		Color color = renderer.getColor(row, col);
+		if (color == Color.RED) {
+			value = 1;
+		} else if (color == Color.BLUE) {
+			value = 2;
+		} else if (color == Color.GREEN) {
+			value = 3;
+		} else if (color == Color.DARK_GRAY) {
+			value = -1;
+		} else if (color == Color.BLACK) {
+			value = -2;
+		} else if (color == Color.YELLOW) {
+			value = 4;
+		}
+		return value;
+	}
 }

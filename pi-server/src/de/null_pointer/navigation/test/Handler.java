@@ -25,6 +25,8 @@ public class Handler {
 	private int lastY = -1;
 	private int heading = 0;
 
+	private boolean BlackTileRetreat = false;
+
 	public Handler(GuiNavigation gui, int sizeMapY, int sizeMapX) {
 		this.gui = gui;
 		fileHandler = new FileHandler(this);
@@ -94,10 +96,10 @@ public class Handler {
 				value = -1;
 			}
 		} else {
-			if (values[row][col] == 1) {
+			if (values[row][col] == -2) {
 				value = 0;
 			} else {
-				value = 1;
+				value = -2;
 			}
 		}
 
@@ -175,17 +177,31 @@ public class Handler {
 				gui.repaint();
 			}
 		}
-
 	}
 
 	/**
-	 * simulates the movement of the robot inside the maze has to be called
+	 * simulates the movement of the robot inside the maze; has to be called
 	 * continuesly
 	 * 
 	 * @return returns false if simulation is either finished or an error
 	 *         ocurred
 	 */
 	public boolean simulate() {
+		if (gui.getValueAt(currentY, currentX) == -2) {
+
+			int invHeading = invertHeading(heading);
+
+			switchTableTile(invHeading);
+			navi.switchTile(invHeading);
+			navi.disconnectTile(navi.getNeighbor(heading));
+
+			BlackTileRetreat = true;
+			return true;
+		}
+		if (BlackTileRetreat) {
+			BlackTileRetreat = false;
+		}
+
 		int[] tremauxCounter = navi.getTremauxCounter();
 		StringBuffer debugMessage = new StringBuffer("");
 
@@ -236,7 +252,7 @@ public class Handler {
 				+ tremauxCounter[1] + tremauxCounter[2] + tremauxCounter[3]
 				+ "\n");
 
-		heading = navi.tremauxAlgorithm(heading, false);
+		heading = navi.tremauxAlgorithm(heading, BlackTileRetreat);
 		if (heading < 0) {
 			return false;
 		}
@@ -256,7 +272,22 @@ public class Handler {
 		lastY = currentY;
 
 		navi.switchTile(heading);
+		switchTableTile(heading);
 
+		return true;
+	}
+
+	private int invertHeading(int heading) {
+		int calculated_orientation = 0;
+		if (heading <= 1) {
+			calculated_orientation = heading + 2;
+		} else if (heading >= 2) {
+			calculated_orientation = heading - 2;
+		}
+		return calculated_orientation;
+	}
+
+	private void switchTableTile(int heading) {
 		switch (heading) {
 		case 0: {
 			currentY -= 2;
@@ -274,8 +305,6 @@ public class Handler {
 			currentX -= 2;
 		}
 		}
-
-		return true;
 	}
 
 	public void startTimer() {
