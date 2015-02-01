@@ -250,7 +250,7 @@ public class BrickControlPi extends Thread {
 	 *            Gibt an was passieren soll bzw. welche Methode auf dem Brick
 	 *            aufgerufen werden soll.
 	 */
-	public void sendCommand(int recipient, int action) {
+	private void sendCommand(int recipient, int action) {
 		String command = "*" + recipient + ";" + action + ";" + "0" + ";" + "0"
 				+ "#";
 		logger.debug("Sende Kommando");
@@ -271,7 +271,7 @@ public class BrickControlPi extends Thread {
 	 *            Weitere Werte, die fuer die durch das Kommando ausgeloeste
 	 *            Operation noetig sind.
 	 */
-	public void sendCommand(int recipient, int action, int parameter) {
+	private void sendCommand(int recipient, int action, int parameter) {
 		String command = "*" + recipient + ";" + action + ";" + parameter + ";"
 				+ "0" + "#";
 		logger.debug("Sende Kommando");
