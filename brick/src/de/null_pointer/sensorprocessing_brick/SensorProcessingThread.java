@@ -11,12 +11,14 @@ public class SensorProcessingThread extends Thread {
 	private EOPDProcessingBrick leftEOPD = null;
 	private EOPDProcessingBrick rightEOPD = null;
 	private LSAProcessingBrick lsa = null;
+	private ThermalSensorProcessingBrick thermal = null;
 
 	public SensorProcessingThread(BrickControlBrick brickControl,
 			Abs_ImuProcessingBrick abs_imu,
 			AccumulatorProcessingBrick accumulator,
 			DistNxProcessingBrick distnx, EOPDProcessingBrick leftEOPD,
-			EOPDProcessingBrick rightEOPD, LSAProcessingBrick lsa) {
+			EOPDProcessingBrick rightEOPD, LSAProcessingBrick lsa,
+			ThermalSensorProcessingBrick thermal) {
 		this.brickControl = brickControl;
 		this.abs_imu = abs_imu;
 		this.accumulator = accumulator;
@@ -24,6 +26,7 @@ public class SensorProcessingThread extends Thread {
 		this.leftEOPD = leftEOPD;
 		this.rightEOPD = rightEOPD;
 		this.lsa = lsa;
+		this.thermal = thermal;
 	}
 
 	public void run() {
@@ -47,6 +50,9 @@ public class SensorProcessingThread extends Thread {
 			}
 			if (lsa != null) {
 				lsa.processData();
+			}
+			if (thermal != null) {
+				thermal.processData();
 			}
 
 			if (counter < 10) {
