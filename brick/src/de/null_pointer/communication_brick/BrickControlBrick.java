@@ -1,5 +1,6 @@
 package de.null_pointer.communication_brick;
 
+import lejos.nxt.ColorSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.util.Delay;
@@ -276,7 +277,41 @@ public class BrickControlBrick extends Thread {
 				break;
 			}
 			break;
-
+		case 11:
+			ColorSensor cs = new ColorSensor(SensorPort.S4);
+			cs.setFloodlight(true);
+			Delay.msDelay(500);
+			cs.setFloodlight(false);
+			Delay.msDelay(500);
+			cs.setFloodlight(true);
+			Delay.msDelay(500);
+			cs.setFloodlight(false);
+			Delay.msDelay(500);
+			cs.setFloodlight(true);
+			Delay.msDelay(500);
+			cs.setFloodlight(false);
+			Delay.msDelay(500);
+			cs.setFloodlight(true);
+			Delay.msDelay(500);
+			cs.setFloodlight(false);
+			Delay.msDelay(500);
+			cs.setFloodlight(true);
+			Delay.msDelay(500);
+			cs.setFloodlight(false);
+			Delay.msDelay(500);
+			cs.setFloodlight(true);
+			Delay.msDelay(100);
+			cs.setFloodlight(false);
+			Delay.msDelay(100);
+			cs.setFloodlight(true);
+			Delay.msDelay(100);
+			cs.setFloodlight(false);
+			Delay.msDelay(100);
+			cs.setFloodlight(true);
+			Delay.msDelay(100);
+			cs.setFloodlight(false);
+			break;
+			
 		case 99:
 
 			com.closeConnection();
