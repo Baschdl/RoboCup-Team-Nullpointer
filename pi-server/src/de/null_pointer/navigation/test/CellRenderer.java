@@ -18,7 +18,7 @@ public class CellRenderer extends DefaultTableCellRenderer {
 
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		
+
 		JTextArea label = new JTextArea((String) value);
 		int key = ((row + 1) * 1000) + column;
 		label.setOpaque(true);
@@ -33,6 +33,11 @@ public class CellRenderer extends DefaultTableCellRenderer {
 	public void setColor(int row, int column, Color color) {
 		int key = ((row + 1) * 1000) + column;
 		cellData.put(key, color);
+	}
+
+	public Color getColor(int row, int col) {
+		int key = ((row + 1) * 1000) + col;
+		return cellData.get(key);
 	}
 
 }
