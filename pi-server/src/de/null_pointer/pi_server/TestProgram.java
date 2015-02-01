@@ -70,4 +70,9 @@ public class TestProgram {
 
 	}
 
+	public void flash() {
+		// hardcoded
+		brickCon2.blinkColorSensorLED();
+	}
+
 }
