@@ -44,13 +44,7 @@ public class PiServer {
 			s = args[i];
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
-				i++;
-				s = args[i];
-				if (s.equals("navigation")) {
-					logger.debug("Starte Navigation-GUI");
-					GuiNavigation navGUI = new GuiNavigation();
-					logger.info("Navigation-GUI gestartet");
-				} else {
+				if (args[i + 1] == null) {
 					logger.debug("Starte GUI");
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
@@ -58,6 +52,14 @@ public class PiServer {
 							initProgram.getDistNx(), initProgram.getThermal());
 					logger.info("GUI gestartet");
 					vGUI.start();
+				} else {
+					i++;
+					s = args[i];
+					if (s.equals("navigation")) {
+						logger.debug("Starte Navigation-GUI");
+						GuiNavigation navGUI = new GuiNavigation();
+						logger.info("Navigation-GUI gestartet");
+					}
 				}
 			}
 
