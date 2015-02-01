@@ -21,6 +21,7 @@ public class BrickControlBrick extends Thread {
 	private EOPDProcessingBrick rightEOPD = null;
 	private LSAProcessingBrick lsa = null;
 	private ThermalSensorProcessingBrick thermal = null;
+	private ColorSensor colorS = null;
 
 	SensorProcessingThread sensorProcessing = null;
 
@@ -278,22 +279,24 @@ public class BrickControlBrick extends Thread {
 			case 5:
 				thermal = new ThermalSensorProcessingBrick(this, sp);
 				break;
+			case 6:
+				colorS = new ColorSensor(sp);
+				break;
 			default:
 				break;
 			}
 			break;
 		case 11:
-			ColorSensor cs = new ColorSensor(SensorPort.S4);
 			for(int i=0;i<5;i++){
-				cs.setFloodlight(true);
+				colorS.setFloodlight(true);
 				Delay.msDelay(500);
-				cs.setFloodlight(false);
+				colorS.setFloodlight(false);
 				Delay.msDelay(500);	
 			}
 			for(int j=0;j<5;j++){
-				cs.setFloodlight(true);
+				colorS.setFloodlight(true);
 				Delay.msDelay(100);
-				cs.setFloodlight(false);
+				colorS.setFloodlight(false);
 				Delay.msDelay(100);
 			}
 			break;
