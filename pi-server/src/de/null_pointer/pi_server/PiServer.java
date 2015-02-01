@@ -54,7 +54,8 @@ public class PiServer {
 					logger.debug("Starte GUI");
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
-							initProgram.getEopdRight(), initProgram.getDistNx());
+							initProgram.getEopdRight(),
+							initProgram.getDistNx(), initProgram.getThermal());
 					logger.info("GUI gestartet");
 					vGUI.start();
 				}
@@ -86,6 +87,9 @@ public class PiServer {
 				} else if (s.equals("leftturn")) {
 					logger.debug("Starte Testprogramm leftturn");
 					testProgram.leftturn();
+				} else if (s.equals("flash")) {
+					logger.debug("Starte Testprogramm flash");
+					testProgram.flash();
 				}
 			}
 

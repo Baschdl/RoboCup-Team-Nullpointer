@@ -47,7 +47,7 @@ public class BlackTile implements Behavior {
 		for (int val : values) {
 			value += val;
 		}
-		// Alle 8 Sensoren im Durchschnitt über 70
+		// Alle 8 Sensoren im Durchschnitt ueber 70
 		return value > 70 * 8;
 	}
 
