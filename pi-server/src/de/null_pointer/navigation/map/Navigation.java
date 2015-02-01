@@ -109,15 +109,29 @@ public class Navigation {
 			// if tile was already visited and the previous corridor was
 			// only taken once, the robot reverses and passes it a second
 			// time
-			if (currentTile.isVisited()
-					&& tremauxCounter[currentTile
-							.invertOrientation(orientation)] == 1) {
+			if (blackTileRetreat == false) {
+				if (currentTile.isVisited()
+						&& tremauxCounter[currentTile
+								.invertOrientation(orientation)] == 1) {
 
-				direction = currentTile.invertOrientation(orientation);
+					direction = currentTile.invertOrientation(orientation);
 
-				logger.info("already visited, turning around ! d: " + direction);
+					if (blackTileRetreat) {
+						logger.info("BlackTileRetreat: already visited, turning around ! d: "
+								+ direction);
+					} else {
+						logger.info("already visited, turning around ! d: "
+								+ direction);
+					}
 
-			} else if (currentTile.isVisited()) {
+					if (direction >= 0) {
+						currentTile.incTremauxCounter(direction);
+					}
+					lastOrientation = direction;
+					return direction;
+				}
+			}
+			if (currentTile.isVisited()) {
 
 				direction = rightmostDirection(orientation, tremauxCounter, 0);
 
@@ -127,16 +141,25 @@ public class Navigation {
 					direction = rightmostDirection(orientation, tremauxCounter,
 							1);
 
-					logger.info("tile already visited, passing rightmost once visited corridor ! d: "
-							+ direction);
+					if (blackTileRetreat) {
+						logger.info("BlackTileRetreat: tile already visited, passing rightmost once visited corridor ! d: "
+								+ direction);
+					} else {
+						logger.info("tile already visited, passing rightmost once visited corridor ! d: "
+								+ direction);
+					}
 				}
 
 				// if there is a corridor which was never passed, the robot
 				// takes the rightmost one
 				else {
-
-					logger.info("tile already visited, passing rightmost never passed corridor ! d: "
-							+ direction);
+					if (blackTileRetreat) {
+						logger.info("BlackTileRetreat: tile already visited, passing rightmost never passed corridor ! d: "
+								+ direction);
+					} else {
+						logger.info("tile already visited, passing rightmost never passed corridor ! d: "
+								+ direction);
+					}
 				}
 			}
 			// tile was visited the first time; robot takes the rightmost
@@ -408,8 +431,8 @@ public class Navigation {
 		for (int ySign = 1, orientDownUp = 2, orientUpDown = 0; ySign >= -1; ySign -= 2, orientDownUp -= 2, orientUpDown += 2) {
 			// iterates to generate several rows of Node-lines
 			for (int row = 1; row <= y; row++) {
-				rowPointer.addNeighbor(new Node(startX, startY + (ySign * row * 30),
-						startZ), orientUpDown, 0);
+				rowPointer.addNeighbor(new Node(startX, startY
+						+ (ySign * row * 30), startZ), orientUpDown, 0);
 				rowPointer = rowPointer.getNeighbor(orientUpDown);
 				// iterates to generate a Line of Nodes in both East and West
 				for (int xSign = 1, orientLeftRight = 1; xSign >= -1; xSign -= 2, orientLeftRight += 2) {
