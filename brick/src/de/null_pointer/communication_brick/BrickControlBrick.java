@@ -10,15 +10,17 @@ import de.null_pointer.sensorprocessing_brick.DistNxProcessingBrick;
 import de.null_pointer.sensorprocessing_brick.EOPDProcessingBrick;
 import de.null_pointer.sensorprocessing_brick.LSAProcessingBrick;
 import de.null_pointer.sensorprocessing_brick.SensorProcessingThread;
+import de.null_pointer.sensorprocessing_brick.ThermalSensorProcessingBrick;
 
 public class BrickControlBrick extends Thread {
 
-	private Abs_ImuProcessingBrick abs_imu;
-	private AccumulatorProcessingBrick accumulator;
-	private DistNxProcessingBrick distnx;
-	private EOPDProcessingBrick leftEOPD;
-	private EOPDProcessingBrick rightEOPD;
-	private LSAProcessingBrick lsa;
+	private Abs_ImuProcessingBrick abs_imu = null;
+	private AccumulatorProcessingBrick accumulator = null;
+	private DistNxProcessingBrick distnx = null;
+	private EOPDProcessingBrick leftEOPD = null;
+	private EOPDProcessingBrick rightEOPD = null;
+	private LSAProcessingBrick lsa = null;
+	private ThermalSensorProcessingBrick thermal = null;
 
 	SensorProcessingThread sensorProcessing = null;
 
@@ -37,7 +39,7 @@ public class BrickControlBrick extends Thread {
 			} else if (i == 3) {
 				this.receiveCommand();
 				sensorProcessing = new SensorProcessingThread(this, abs_imu,
-						accumulator, distnx, leftEOPD, rightEOPD, lsa);
+						accumulator, distnx, leftEOPD, rightEOPD, lsa, thermal);
 				sensorProcessing.start();
 				sensorProcessing.setDaemon(true);
 				i++;
@@ -273,6 +275,9 @@ public class BrickControlBrick extends Thread {
 			case 4:
 				abs_imu = new Abs_ImuProcessingBrick(this, sp);
 				break;
+			case 5:
+				thermal = new ThermalSensorProcessingBrick(this, sp);
+				break;
 			default:
 				break;
 			}
@@ -292,7 +297,7 @@ public class BrickControlBrick extends Thread {
 				Delay.msDelay(100);
 			}
 			break;
-			
+
 		case 99:
 
 			com.closeConnection();
