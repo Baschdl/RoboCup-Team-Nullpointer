@@ -160,6 +160,8 @@ public class BrickControlPi extends Thread {
 				// tsLeft = controlClass.getTsLeft();
 				sendCommand(10, 5, i + 1, 1);
 				// logger.debug("ts left" + tsLeft);
+			} else if (Sensor[i].equals("ColourSensor")) {
+				sendCommand(10, 6, i + 1, 0);
 			} else {
 				sendCommand(0, 0, 0, 0);
 				logger.debug("Sensor existiert nicht");
@@ -452,9 +454,9 @@ public class BrickControlPi extends Thread {
 	public boolean getSensorReady() {
 		return sensorReady;
 	}
-	
-	public void blinkColorSensorLED(){
-		sendCommand(11,1);
+
+	public void blinkColorSensorLED() {
+		sendCommand(11, 1);
 	}
 
 }
