@@ -1,6 +1,7 @@
 package de.null_pointer.communication_brick;
 
 import lejos.nxt.ColorSensor;
+import lejos.nxt.ColorSensor.Color;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.util.Delay;
@@ -287,17 +288,13 @@ public class BrickControlBrick extends Thread {
 			}
 			break;
 		case 11:
-			for(int i=0;i<5;i++){
-				colorS.setFloodlight(true);
-				Delay.msDelay(500);
-				colorS.setFloodlight(false);
-				Delay.msDelay(500);	
-			}
 			for(int j=0;j<5;j++){
-				colorS.setFloodlight(true);
-				Delay.msDelay(100);
-				colorS.setFloodlight(false);
-				Delay.msDelay(100);
+				colorS.setFloodlight(Color.BLUE);
+				colorS.setFloodlight(Color.GREEN);
+				colorS.setFloodlight(Color.RED);
+				Delay.msDelay(500);
+				colorS.setFloodlight(Color.NONE);
+				Delay.msDelay(500);
 			}
 			break;
 
