@@ -452,5 +452,9 @@ public class BrickControlPi extends Thread {
 	public boolean getSensorReady() {
 		return sensorReady;
 	}
+	
+	public void blinkColorSensorLED(){
+		sendCommand(11,1);
+	}
 
 }
