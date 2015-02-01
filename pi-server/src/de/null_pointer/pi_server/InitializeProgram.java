@@ -29,6 +29,7 @@ import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 import de.null_pointer.testmodules.testcommunication.TestBrickControlPi;
 
 public class InitializeProgram {
@@ -37,12 +38,15 @@ public class InitializeProgram {
 	private BrickControlPi brickCon2 = null;
 	private InitCommunicationPi initCom = null;
 	private MotorControlPi motorControl = null;
+
 	private Abs_ImuProcessingPi absImu = null;
 	private EOPDProcessingPi eopdLeft = null;
 	private EOPDProcessingPi eopdRight = null;
 	private DistNxProcessingPi distNx = null;
 	private LSAProcessingPi lsa = null;
 	private AccumulatorProcessingPi accumulator = null;
+	private ThermalSensorProcessingPi thermal = null;
+
 	private Navigation nav = null;
 	private Odometer odometer = null;
 	private Arbitrator arbitrator = null;
@@ -115,6 +119,10 @@ public class InitializeProgram {
 		return propPiServer;
 	}
 
+	public ThermalSensorProcessingPi getThermal() {
+		return thermal;
+	}
+
 	public InitializeProgram(Logger logger) {
 		InitializeProgram.logger = logger;
 	}
@@ -143,6 +151,7 @@ public class InitializeProgram {
 		distNx = new DistNxProcessingPi();
 		lsa = new LSAProcessingPi();
 		accumulator = new AccumulatorProcessingPi();
+		thermal = new ThermalSensorProcessingPi();
 	}
 
 	public void initializeCommunication() {
@@ -162,11 +171,11 @@ public class InitializeProgram {
 				if (i == 0) {
 					brickCon1 = new BrickControlPi(
 							(RealCommunicationPi) comPi1, absImu, distNx,
-							eopdLeft, eopdRight, lsa, accumulator);
+							eopdLeft, eopdRight, lsa, accumulator, thermal);
 				} else if (i == 1) {
 					brickCon2 = new BrickControlPi(
 							(RealCommunicationPi) comPi2, absImu, distNx,
-							eopdLeft, eopdRight, lsa, accumulator);
+							eopdLeft, eopdRight, lsa, accumulator, thermal);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
@@ -174,10 +183,10 @@ public class InitializeProgram {
 			} else {
 				if (i == 0) {
 					brickCon1 = new TestBrickControlPi(comPi1, absImu, distNx,
-							eopdLeft, eopdLeft, lsa, accumulator);
+							eopdLeft, eopdLeft, lsa, accumulator, thermal);
 				} else if (i == 1) {
 					brickCon2 = new TestBrickControlPi(comPi2, absImu, distNx,
-							eopdLeft, eopdLeft, lsa, accumulator);
+							eopdLeft, eopdLeft, lsa, accumulator, thermal);
 				} else {
 					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
@@ -218,7 +227,8 @@ public class InitializeProgram {
 		Behavior b1 = new MovingForward(motorControl, odometer, propPiServer);
 		Behavior b2 = new NextTile(absImu, nav);
 		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
-		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav, odometer, propPiServer);
+		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
+				propPiServer);
 		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, nav, propPiServer);
 		Behavior b6 = new Victim(motorControl);

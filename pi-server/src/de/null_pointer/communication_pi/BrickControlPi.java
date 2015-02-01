@@ -9,6 +9,7 @@ import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 
 public class BrickControlPi extends Thread {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
@@ -20,6 +21,7 @@ public class BrickControlPi extends Thread {
 	private EOPDProcessingPi eopdRight = null;
 	private LSAProcessingPi lsa = null;
 	private AccumulatorProcessingPi accumulator = null;
+	private ThermalSensorProcessingPi thermal = null;
 
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
@@ -27,7 +29,8 @@ public class BrickControlPi extends Thread {
 	public BrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
 			EOPDProcessingPi eopdRight, LSAProcessingPi lsa,
-			AccumulatorProcessingPi accumulator) {
+			AccumulatorProcessingPi accumulator,
+			ThermalSensorProcessingPi thermal) {
 		this.com = com;
 		this.abs_Imu = abs_Imu;
 		this.distNx = distNx;
@@ -35,6 +38,7 @@ public class BrickControlPi extends Thread {
 		this.eopdRight = eopdRight;
 		this.lsa = lsa;
 		this.accumulator = accumulator;
+		this.thermal = thermal;
 	}
 
 	/**
@@ -107,7 +111,11 @@ public class BrickControlPi extends Thread {
 		} else if (receiveData[0] == 7) {
 			logger.debug("Genuegend Werte uebermittelt: " + this);
 			sensorReady = false;
+		} else if (receiveData[0] == 8) {
+			// ThermalSensor
+			thermal.setTemperature(Math.round(receiveData[2]));
 		} else {
+
 			// System.out.println("process Data (no sensor) " +
 			// Arrays.toString(receiveData));
 			// logger.error("process Data (no sensor) "
@@ -148,7 +156,7 @@ public class BrickControlPi extends Thread {
 				// absimu_acg = controlClass.getAbsimu_acg();
 				sendCommand(10, 4, i + 1, 0);
 				// logger.debug("Gyro" + absimu_acg);
-			} else if (Sensor[i].equals("Thermosensor")) {
+			} else if (Sensor[i].equals("IRThermalSensor")) {
 				// tsLeft = controlClass.getTsLeft();
 				sendCommand(10, 5, i + 1, 1);
 				// logger.debug("ts left" + tsLeft);

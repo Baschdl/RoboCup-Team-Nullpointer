@@ -21,6 +21,7 @@ import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 import de.null_pointer.testmodules.testbehavior.TestBlackTile;
 import de.null_pointer.testmodules.testbehavior.TestIntersection;
 import de.null_pointer.testmodules.testbehavior.TestMovingForward;
@@ -52,6 +53,7 @@ public class CommunicationTest {
 	private EOPDProcessingPi eopdRight = null;
 	private LSAProcessingPi lsa = null;
 	private AccumulatorProcessingPi accumulator = null;
+	private ThermalSensorProcessingPi thermal = null;
 
 	private MotorControlPi motorControl = null;
 	private Navigation nav = null;
@@ -86,6 +88,7 @@ public class CommunicationTest {
 		propPiServer = initProgramm.getPropPiServer();
 		accumulator = initProgramm.getAccumulator();
 		odometer = initProgramm.getOdometer();
+		thermal = initProgramm.getThermal();
 
 		virtAbsImu = new VirtualAbsIMUACG();
 		virtDistNX = new VirtualDistNX(propPiServer);
@@ -112,7 +115,7 @@ public class CommunicationTest {
 		testVictim = new TestVictim(motorControl);
 
 		brickcontrol = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,
-				eopdRight, lsa, accumulator);
+				eopdRight, lsa, accumulator, thermal);
 	}
 
 	@Test

@@ -9,6 +9,7 @@ import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
+import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 import de.null_pointer.testmodules.virtualhardware.VirtualMotor;
 
 public class TestBrickControlPi extends BrickControlPi {
@@ -20,9 +21,11 @@ public class TestBrickControlPi extends BrickControlPi {
 	public TestBrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
 			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
 			EOPDProcessingPi eopdRight, LSAProcessingPi lsa,
-			AccumulatorProcessingPi accumulator) {
+			AccumulatorProcessingPi accumulator,
+			ThermalSensorProcessingPi thermal) {
 
-		super(com, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator);
+		super(com, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator,
+				thermal);
 	}
 
 	// Getter werden zum Testen der Klasse benoetigt
