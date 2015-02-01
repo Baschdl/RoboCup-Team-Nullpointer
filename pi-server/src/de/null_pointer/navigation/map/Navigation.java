@@ -9,8 +9,10 @@ public class Navigation {
 	private static Logger logger = Logger.getLogger(Navigation.class);
 
 	private Node currentTile;
-
 	private Node startTile;
+
+	private int lastOrientation = -1;
+	private boolean firstTile = true;
 
 	public Navigation(Properties propPiServer) {
 		int dimensionX = Integer.parseInt(propPiServer
@@ -45,15 +47,15 @@ public class Navigation {
 
 		int[] tremauxCounter = currentTile.getTremauxCounter();
 
-		if (blackTileRetreat == false /* && currentTile.isVisited() == false */) {
+		if (blackTileRetreat == false && firstTile == false) {
 			currentTile.incTremauxCounter(currentTile
 					.invertOrientation(orientation));
 		}
 
 		// check if maze is solved already
 		if (checkSolved(tremauxCounter) && currentTile == startTile) {
-			
-			logger.info("maze is solved ! d: " + direction);
+
+			logger.info("maze is solved ! d: -2");
 			return -2;
 			// method returns error, if there is no way to go
 		} else if (possibleDirections(tremauxCounter) == 0) {
@@ -89,6 +91,16 @@ public class Navigation {
 
 			} else {
 				// TODO: handle blackTile retreat
+				for (int i = 0; i < 4; i++) {
+					if (tremauxCounter[i] != -2
+							&& i != currentTile
+									.invertOrientation(lastOrientation)) {
+						direction = i;
+						break;
+					}
+				}
+				logger.info("BlackTileRetreat: hallway detectet ! d: "
+						+ direction);
 			}
 
 			// -> real intersection; check TremauxCounter to evaluate direction
@@ -139,9 +151,13 @@ public class Navigation {
 			}
 		}
 
+		if (firstTile) {
+			firstTile = false;
+		}
 		if (direction >= 0) {
 			currentTile.incTremauxCounter(direction);
 		}
+		lastOrientation = direction;
 		return direction;
 	}
 
@@ -222,7 +238,7 @@ public class Navigation {
 	private boolean checkSolved(int[] tremauxCounter) {
 		int counter = 4;
 		for (int i = 0; i < 4; i++) {
-			if (tremauxCounter[i] == -2 || tremauxCounter[i] == 2) {
+			if (tremauxCounter[i] == -2 || tremauxCounter[i] >= 2) {
 				counter--;
 			}
 		}
@@ -392,7 +408,7 @@ public class Navigation {
 		for (int ySign = 1, orientDownUp = 2, orientUpDown = 0; ySign >= -1; ySign -= 2, orientDownUp -= 2, orientUpDown += 2) {
 			// iterates to generate several rows of Node-lines
 			for (int row = 1; row <= y; row++) {
-				rowPointer.addNeighbor(new Node(startX, startY + (row * 30),
+				rowPointer.addNeighbor(new Node(startX, startY + (ySign * row * 30),
 						startZ), orientUpDown, 0);
 				rowPointer = rowPointer.getNeighbor(orientUpDown);
 				// iterates to generate a Line of Nodes in both East and West
