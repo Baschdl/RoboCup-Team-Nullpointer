@@ -164,12 +164,14 @@ public class MotorControlPi {
 		speedDifference = 1;
 		speedCurve = 1;
 		actualSpeed = 1;
+		
+		int wheelAngle = (int) Math.round((Math.PI*16.8/(360/angle))*360/Math.PI*4.8);
 
 		logger.info("PC set motor rotate left angle " + angle);
-		brickCon1.rotate(angle, 'A');
-		brickCon1.rotate(angle, 'B');
-		brickCon2.rotate(angle, 'A');
-		brickCon2.rotate(angle, 'B');
+		brickCon1.rotate(wheelAngle, 'A');
+		brickCon1.rotate(wheelAngle, 'B');
+		brickCon2.rotate(wheelAngle, 'A');
+		brickCon2.rotate(wheelAngle, 'B');
 	}
 
 	/**
@@ -183,12 +185,14 @@ public class MotorControlPi {
 		speedDifference = 1;
 		speedCurve = 1;
 		actualSpeed = 1;
+		
+		int wheelAngle = (int) Math.round((Math.PI*16.8/(360/angle))*360/Math.PI*4.8);
 
 		logger.info("PC set motor rotate left angle " + angle);
-		brickCon1.rotate(-angle, 'A');
-		brickCon1.rotate(-angle, 'B');
-		brickCon2.rotate(-angle, 'A');
-		brickCon2.rotate(-angle, 'B');
+		brickCon1.rotate(-wheelAngle, 'A');
+		brickCon1.rotate(-wheelAngle, 'B');
+		brickCon2.rotate(-wheelAngle, 'A');
+		brickCon2.rotate(-wheelAngle, 'B');
 	}
 
 	/**
