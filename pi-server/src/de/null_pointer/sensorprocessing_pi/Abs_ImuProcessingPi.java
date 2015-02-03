@@ -35,14 +35,26 @@ public class Abs_ImuProcessingPi {
 			this.angle[dimension] = angle;
 
 			if (dimension == dimension_horizontal) {
-				if (angle < 45 && angle > 315) {
-					heading = 0;
-				} else if (angle < 135 && angle > 45) {
-					heading = 1;
-				} else if (angle < 225 && angle > 135) {
-					heading = 2;
+				if (angle >= 0) {
+					if (angle < 45 && angle > 315) {
+						heading = 0;
+					} else if (angle < 135 && angle > 45) {
+						heading = 1;
+					} else if (angle < 225 && angle > 135) {
+						heading = 2;
+					} else {
+						heading = 3;
+					}
 				} else {
-					heading = 3;
+					if (angle < -45 && angle > -315) {
+						heading = 0;
+					} else if (angle < -135 && angle > -45) {
+						heading = 2;
+					} else if (angle < -225 && angle > -135) {
+						heading = 1;
+					} else {
+						heading = 3;
+					}
 				}
 			}
 		}
@@ -88,9 +100,9 @@ public class Abs_ImuProcessingPi {
 			return heading;
 		}
 	}
-	
-	public void setTestAngleAndHeading(int angle, int heading){
-		
+
+	public void setTestAngleAndHeading(int angle, int heading) {
+
 	}
 
 }
