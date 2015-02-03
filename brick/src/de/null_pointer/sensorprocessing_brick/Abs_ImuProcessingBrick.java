@@ -38,8 +38,8 @@ public class Abs_ImuProcessingBrick {
 		abs_imu.setSensitivity2G();
 		Delay.msDelay(100);
 		startGyro = getGyro();
-		if (gyro[dimension_horizontal] > 60000) {
-			gyro[dimension_horizontal] -= 65535;
+		if (startGyro[dimension_horizontal] > 60000) {
+			startGyro[dimension_horizontal] -= 65535;
 		}
 		this.brickControl = brickControl;
 	}
@@ -54,8 +54,10 @@ public class Abs_ImuProcessingBrick {
 	public void processData_Angle() {
 		// time since last call gets determined
 		time = System.currentTimeMillis() - oldTime[dimension_horizontal];
+		oldTime[dimension_horizontal] = System.currentTimeMillis();
+		Delay.msDelay(250);
 		gyro = getGyro();
-		if (gyro[dimension_horizontal] > 60000) {
+		if (gyro[dimension_horizontal] > 50000) {
 			gyro[dimension_horizontal] -= 65535;
 		}
 		LCD.clear();
@@ -68,9 +70,10 @@ public class Abs_ImuProcessingBrick {
 		// new angle gets calculated
 		deltaAngle[dimension_horizontal] = (int) Math
 				.round(gyro[dimension_horizontal] * sensitivity);
-		angle[dimension_horizontal] += deltaAngle[dimension_horizontal]
-				/ (1000 / time);
-
+		LCD.drawInt(deltaAngle[dimension_horizontal], 0, 2);
+		angle[dimension_horizontal] += (deltaAngle[dimension_horizontal] / (1000 / time));
+		LCD.drawInt(angle[dimension_horizontal], 0, 3);
+		LCD.drawInt((int) time, 0, 4);
 		// angleExcludingPeriodicity gets calculated
 		angleExcludingPeriodicity = angle[dimension_horizontal] % 360;
 
@@ -81,7 +84,6 @@ public class Abs_ImuProcessingBrick {
 					angleExcludingPeriodicity);
 			oldAngleExcludingPeriodicity[dimension_horizontal] = angleExcludingPeriodicity;
 		}
-		oldTime[dimension_horizontal] = System.currentTimeMillis();
 	}
 
 	/**
