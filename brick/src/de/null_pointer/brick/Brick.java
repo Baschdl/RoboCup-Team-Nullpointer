@@ -12,17 +12,19 @@ public class Brick {
 	private static String[] mainMenuStrings = { "connect", "sensors",
 			"calibrate", "exit" };
 	private static String[] sensorMenuStrings = { "DistNX", "EOPD",
-			"LSA", "'AbsIMU", "Thermal", "return" };
+			"LSA", "AbsIMU", "Thermal", "return" };
 	private static String[] calibrationMenuStrings = { "LSA white",
 			"LSA black", "return" };
+	private static String[] absIMUMenuStrings = { "TiltData", "Gyro", "return"};
 
 	private static TextMenu mainMenu = new TextMenu(mainMenuStrings);
 	private static TextMenu sensorMenu = new TextMenu(sensorMenuStrings);
 	private static TextMenu calibrationMenu = new TextMenu(
 			calibrationMenuStrings);
+	private static TextMenu absIMUMenu = new TextMenu(absIMUMenuStrings);
 	private static AllValues allVal = new AllValues();
 	private static Calibrate calibration = new Calibrate();
-	
+
 	public static void main(String[] args) {
 		while (true) {
 			mainMenu();
@@ -84,7 +86,8 @@ public class Brick {
 			break;
 		case 3:
 			LCD.clear();
-			allVal.showAbsIMU();
+			showAbsIMU();
+			//allVal.showAbsIMU();
 			break;
 		case 4:
 			LCD.clear();
@@ -109,6 +112,24 @@ public class Brick {
 			break;
 		case 2:
 			// return
+			LCD.clear();
+			break;
+		}
+
+	}
+	
+	private static void showAbsIMU(){
+		switch (absIMUMenu.select()){
+		case 0:
+			LCD.clear();
+			allVal.showAbsIMUTiltData();
+			break;
+		case 1:
+			LCD.clear();
+			allVal.showAbsIMUGyro();
+			break;
+		case 2:
+			//return
 			LCD.clear();
 			break;
 		}

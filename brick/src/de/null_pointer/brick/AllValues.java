@@ -70,7 +70,7 @@ public class AllValues {
 		}
 	}
 
-	public void showAbsIMU() {
+	public void showAbsIMUTiltData() {
 		absimu = new AbsoluteIMU_ACG(SensorPort.S1);
 		try{
 			while(!Button.ESCAPE.isDown()){
@@ -83,6 +83,23 @@ public class AllValues {
 		} catch (Exception e){
 			System.out.println(e);
 		}
+	}
+	
+	public void showAbsIMUGyro(){
+		absimu = new AbsoluteIMU_ACG(SensorPort.S1);
+		try{
+			while(!Button.ESCAPE.isDown()){
+				LCD.drawString("x: " + Integer.toString(absimu.getGyro()[0]),0,0);
+				LCD.drawString("y: " + Integer.toString(absimu.getGyro()[1]),0,1);
+				LCD.drawString("z: " + Integer.toString(absimu.getGyro()[2]),0,2);
+				Delay.msDelay(100);
+				LCD.clear();
+			}
+		} catch (Exception e){
+			System.out.println(e);
+		}
+		
+		
 	}
 
 	public void showThermal() {
