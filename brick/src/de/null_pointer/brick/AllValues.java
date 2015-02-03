@@ -6,6 +6,7 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.addon.EOPD;
 import lejos.nxt.addon.OpticalDistanceSensor;
 import lejos.util.Delay;
+import de.null_pointer.sensor.AbsoluteIMU_ACG;
 import de.null_pointer.sensor.DThermalIR;
 import de.null_pointer.sensor.LightSensorArray;
 
@@ -16,6 +17,7 @@ public class AllValues {
 	private LightSensorArray lsa;
 	private int[] lsavalues = new int[8];
 	private  DThermalIR thermalsensor;
+	private AbsoluteIMU_ACG absimu;
 
 	public AllValues() {
 
@@ -64,12 +66,23 @@ public class AllValues {
 				LCD.clear();
 			}
 		} catch (Exception e) {
-
+			System.out.println(e);
 		}
 	}
 
 	public void showAbsIMU() {
-		// TODO Insert Code for showing AbsIMU on the LCD
+		absimu = new AbsoluteIMU_ACG(SensorPort.S1);
+		try{
+			while(!Button.ESCAPE.isDown()){
+				LCD.drawString(Integer.toString(absimu.getTiltData()[0]), 0, 0);
+				LCD.drawString(Integer.toString(absimu.getTiltData()[1]), 0, 1);
+				LCD.drawString(Integer.toString(absimu.getTiltData()[2]), 0, 2);
+				Delay.msDelay(100);
+				LCD.clear();
+			}
+		} catch (Exception e){
+			System.out.println(e);
+		}
 	}
 
 	public void showThermal() {
