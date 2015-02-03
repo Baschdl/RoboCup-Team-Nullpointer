@@ -57,14 +57,14 @@ public class TestProgram {
 	}
 
 	public void rightturn() {
-		motorcontrol.rightturn(speedTurn, difference);
+		motorcontrol.rotateright(90);
 		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
 
 	public void leftturn() {
-		motorcontrol.leftturn(speedTurn, difference);
+		motorcontrol.rotateleft(90);
 		Delay.msDelay(duration);
 		motorcontrol.flt();
 
