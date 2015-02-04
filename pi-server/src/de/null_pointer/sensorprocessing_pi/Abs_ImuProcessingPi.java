@@ -36,23 +36,23 @@ public class Abs_ImuProcessingPi {
 
 			if (dimension == dimension_horizontal) {
 				if (angle >= 0) {
-					if (angle < 45 && angle > 315) {
+					if (angle < 45 || angle > 315) {
 						heading = 0;
-					} else if (angle < 135 && angle > 45) {
-						heading = 1;
-					} else if (angle < 225 && angle > 135) {
-						heading = 2;
-					} else {
+					} else if (angle > 225) {
 						heading = 3;
+					} else if (angle > 135) {
+						heading = 2;
+					} else if (angle > 45) {
+						heading = 1;
 					}
 				} else {
-					if (angle < -45 && angle > -315) {
+					if (angle > -45 || angle < -315) {
 						heading = 0;
-					} else if (angle < -135 && angle > -45) {
-						heading = 2;
-					} else if (angle < -225 && angle > -135) {
+					} else if (angle < -225) {
 						heading = 1;
-					} else {
+					} else if (angle < -135) {
+						heading = 2;
+					} else if (angle < -45) {
 						heading = 3;
 					}
 				}
