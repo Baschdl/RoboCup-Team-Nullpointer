@@ -112,7 +112,7 @@ public class CommunicationTest {
 
 		testSlope = new TestSlope(motorControl, absImu, nav, propPiServer);
 
-		testVictim = new TestVictim(motorControl);
+		testVictim = new TestVictim(motorControl, thermal, propPiServer);
 
 		brickcontrol = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,
 				eopdRight, lsa, accumulator, thermal);

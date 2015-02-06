@@ -2,13 +2,13 @@ package de.null_pointer.behavior;
 
 import java.util.Properties;
 
+import lejos.robotics.subsumption.Behavior;
+
 import org.apache.log4j.Logger;
 
-import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
-import lejos.robotics.subsumption.Behavior;
 
 public class Slope implements Behavior {
 	private static Logger logger = Logger.getLogger(Slope.class);
@@ -22,6 +22,7 @@ public class Slope implements Behavior {
 	private int angleToTakeControl = -1;
 	private int speed = -1;
 	private int mapSize = -1;
+	private boolean suppress = false;
 
 	public Slope(MotorControlPi motorControl, Abs_ImuProcessingPi absImu,
 			Navigation nav, Properties propPiServer) {
@@ -46,14 +47,21 @@ public class Slope implements Behavior {
 	@Override
 	public void action() {
 		logger.info("Steigung erkannt");
-		// TODO
+		suppress = false;
 		nav.slope(absImu.getHeading(), mapSize, mapSize);
 		motorControl.forward(speed);
+		while (suppress && absImu.getTiltDataVertical() > angleToTakeControl) {
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				logger.fatal("InterruptedException while sleep()");
+			}
+		}
 	}
 
 	@Override
 	public void suppress() {
-		// TODO Auto-generated method stub
+		suppress = true;
 
 	}
 
