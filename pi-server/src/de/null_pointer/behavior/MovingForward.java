@@ -18,7 +18,7 @@ public class MovingForward implements Behavior {
 
 	private int speed = -1;
 
-	private boolean moving = true;
+	private boolean moving = false;
 	private long time;
 
 	public MovingForward(MotorControlPi motorControl, Odometer odometer, Properties propPiServer) {
@@ -59,4 +59,29 @@ public class MovingForward implements Behavior {
 		moving = false;
 	}
 
+	public boolean testGetMoving(){
+		return moving;
+	}
+
+	
+	public void testActionWithoutLoop(){
+		time = 0;
+		moving = true;
+		logger.debug("Bewege mich vorwaerts");
+		// TODO: Geschwindigkeit anpassen
+		motorControl.forward(speed);
+		
+		odometer.calculateDistance(time, speed);
+		time = System.currentTimeMillis();
+		try {
+			Thread.sleep(2);
+		} catch (InterruptedException e) {
+			logger.fatal("InterruptedException while sleep()");
+		}
+		time = System.currentTimeMillis() - time;
+
+	}
+	public void testSetMoving(boolean mov){
+		moving = mov;
+	}
 }

@@ -91,9 +91,44 @@ public class IntersectionTest {
 	}
 
 	@Test
-	public void testAction() {
-		fail("Not yet implemented");
+	public void testActionGoRightNoOtherWay() {
+		
+		
+		
 	}
+	
+	@Test
+	public void testActionGoRightFirstTime(){
+		
+	}
+	
+	
+	
+	@Test
+	public void testActionGoLeftNoOtherWay(){
+		
+	}
+	
+	@Test
+	public void testActionGoLeftAlreadyTurnedRightAndForward(){
+		
+	}
+	
+	@Test
+	public void testActionGoForward(){
+		
+	}
+	
+	@Test
+	public void testActionGoForwardAlreadyTurnedRight(){
+		
+	}
+	
+	@Test
+	public void testActionReverse(){
+		
+	}
+	
 
 	@Test
 	public void testSuppress() {

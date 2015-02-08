@@ -78,14 +78,16 @@ public class MovingForwardTest {
 	}
 
 	@Test
-	public void testAction() {
-		classToTest.action();
+	public void testActionWithoutLoop() {
+		classToTest.testActionWithoutLoop();
 		assertEquals(0, motorControl.getMode());
 	}
 
 	@Test
 	public void testSuppress() {
-		fail("Not yet implemented");
+		classToTest.testSetMoving(false);
+		classToTest.suppress();
+		assertEquals(false, classToTest.testGetMoving());
 	}
 
 }
