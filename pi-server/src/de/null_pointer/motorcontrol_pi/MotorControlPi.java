@@ -58,10 +58,8 @@ public class MotorControlPi {
 			speedCurve = 1;
 
 			logger.info("PC set all motors forward speed " + speed);
-			brickCon2.forward(speed, 'A');
-			brickCon2.backward(speed, 'B');
-			brickCon1.stop('A');
-			brickCon1.stop('B');
+			brickCon2.forward(speed, 'D');
+			brickCon1.stop('D');
 			actualSpeed = speed;
 			mode = 0;
 		}
@@ -81,10 +79,8 @@ public class MotorControlPi {
 			speedCurve = 1;
 
 			logger.info("PC set all motors backward speed " + speed);
-			brickCon2.backward(speed, 'A');
-			brickCon2.forward(speed, 'B');
-			brickCon1.stop('A');
-			brickCon1.stop('B');
+			brickCon2.backward(speed, 'D');
+			brickCon1.stop('D');
 			actualSpeed = -speed;
 			mode = 1;
 		}
@@ -169,10 +165,8 @@ public class MotorControlPi {
 				* (360 / (Math.PI * 4.8)));
 
 		logger.info("PC set motor rotate left angle " + angle);
-		brickCon1.rotate(wheelAngle, 'A');
-		brickCon1.rotate(wheelAngle, 'B');
-		brickCon2.rotate(wheelAngle, 'A');
-		brickCon2.rotate(wheelAngle, 'B');
+		brickCon1.rotate(wheelAngle, 'D');
+		brickCon2.rotate(wheelAngle, 'D');
 	}
 
 	/**
@@ -191,10 +185,8 @@ public class MotorControlPi {
 				* (360 / (Math.PI * 4.8)));
 
 		logger.info("PC set motor rotate left angle " + angle);
-		brickCon1.rotate(-wheelAngle, 'A');
-		brickCon1.rotate(-wheelAngle, 'B');
-		brickCon2.rotate(-wheelAngle, 'A');
-		brickCon2.rotate(-wheelAngle, 'B');
+		brickCon1.rotate(-wheelAngle, 'D');
+		brickCon2.rotate(-wheelAngle, 'D');
 	}
 
 	/**
@@ -208,10 +200,8 @@ public class MotorControlPi {
 			actualSpeed = 1;
 
 			logger.info("PC set all motor stop");
-			brickCon1.stop('A');
-			brickCon1.stop('B');
-			brickCon2.stop('A');
-			brickCon2.stop('B');
+			brickCon1.stop('D');
+			brickCon2.stop('D');
 			notMoving = -10;
 
 		}
@@ -226,10 +216,8 @@ public class MotorControlPi {
 			speedDifference = 1;
 			speedCurve = 1;
 			actualSpeed = 1;
-			brickCon1.flt('A');
-			brickCon1.flt('B');
-			brickCon2.flt('A');
-			brickCon2.flt('B');
+			brickCon1.flt('D');
+			brickCon2.flt('D');
 			notMoving = -10;
 
 		}

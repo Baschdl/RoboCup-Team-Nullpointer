@@ -316,9 +316,11 @@ public class BrickControlPi extends Thread {
 		case 'B':
 			sendCommand(9, 2, speed, 1);
 			break;
-
 		case 'C':
 			sendCommand(9, 3, speed, 1);
+			break;
+		case 'D':
+			sendCommand(9, 4, speed, 1);
 			break;
 		default:
 			break;
@@ -336,9 +338,11 @@ public class BrickControlPi extends Thread {
 		case 'B':
 			sendCommand(9, 2, speed, 2);
 			break;
-
 		case 'C':
 			sendCommand(9, 3, speed, 2);
+			break;
+		case 'D':
+			sendCommand(9, 4, speed, 2);
 			break;
 		default:
 			break;
@@ -356,9 +360,11 @@ public class BrickControlPi extends Thread {
 		case 'B':
 			sendCommand(9, 2, 0, 3);
 			break;
-
 		case 'C':
 			sendCommand(9, 3, 0, 3);
+			break;
+		case 'D':
+			sendCommand(9, 4, 0, 3);
 			break;
 		default:
 			break;
@@ -376,9 +382,11 @@ public class BrickControlPi extends Thread {
 		case 'B':
 			sendCommand(9, 2, 0, 4);
 			break;
-
 		case 'C':
 			sendCommand(9, 3, 0, 4);
+			break;
+		case 'D':
+			sendCommand(9, 4, 0, 4);
 			break;
 		default:
 			break;
@@ -396,9 +404,11 @@ public class BrickControlPi extends Thread {
 		case 'B':
 			sendCommand(9, 2, angle, 5);
 			break;
-
 		case 'C':
 			sendCommand(9, 3, angle, 5);
+			break;
+		case 'D':
+			sendCommand(9, 4, angle, 5);
 			break;
 		default:
 			break;
