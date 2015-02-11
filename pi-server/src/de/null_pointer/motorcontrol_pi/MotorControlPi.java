@@ -222,5 +222,52 @@ public class MotorControlPi {
 
 		}
 	}
+	
+	public void decideTurn(int absImuHeading, int directionToMove){
+		
+		if(absImuHeading == 0){
+			if(directionToMove == 0){
+				return;
+			}else if(directionToMove == 1){
+				rotateright(90);
+			}else if(directionToMove == 2){
+				rotateright(180);
+			}else if(directionToMove == 3){
+				rotateleft(90);
+			}
+		}else if(absImuHeading == 1){
+			if(directionToMove == 0){
+				rotateleft(90);
+			}else if(directionToMove == 1){
+				return;
+			}else if(directionToMove == 2){
+				rotateright(90);
+			}else if(directionToMove == 3){
+				rotateright(180);
+			}
+		}else if(absImuHeading == 2){
+			if(directionToMove == 0){
+				rotateright(180);
+			}else if(directionToMove == 1){
+				rotateleft(90);
+			}else if(directionToMove == 2){
+				return;
+			}else if(directionToMove == 3){
+				rotateright(90);
+			}
+		}else if(absImuHeading == 3){
+			if(directionToMove == 0){
+				rotateright(90);
+			}else if(directionToMove == 1){
+				rotateright(180);
+			}else if(directionToMove == 2){
+				rotateleft(90);
+			}else if(directionToMove == 3){
+				return;
+			}
+		}
+		
+		
+	}
 
 }

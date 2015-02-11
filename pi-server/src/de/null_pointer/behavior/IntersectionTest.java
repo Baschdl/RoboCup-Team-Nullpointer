@@ -92,9 +92,14 @@ public class IntersectionTest {
 
 	@Test
 	public void testActionGoRightNoOtherWay() {
+		eopdsZuruecksetzen();
+		distNx.setDistance(3);
+		eopdRight.setTestEOPDdistance(21);
+		eopdLeft.setTestEOPDdistance(18);
+		abs_Imu.setTestHeading(0);
 		
-		
-		
+		//assertEquals()
+				
 	}
 	
 	@Test
@@ -133,6 +138,11 @@ public class IntersectionTest {
 	@Test
 	public void testSuppress() {
 		fail("Not yet implemented");
+	}
+	
+	public void eopdsZuruecksetzen(){
+		eopdRight.setTestEOPDdistance(-1);
+		eopdLeft.setTestEOPDdistance(-1);
 	}
 
 }

@@ -40,7 +40,6 @@ public class MovingForward implements Behavior {
 		time = 0;
 		moving = true;
 		logger.debug("Bewege mich vorwaerts");
-		// TODO: Geschwindigkeit anpassen
 		motorControl.forward(speed);
 		while (moving) {
 			odometer.calculateDistance(time, speed);
@@ -68,7 +67,6 @@ public class MovingForward implements Behavior {
 		time = 0;
 		moving = true;
 		logger.debug("Bewege mich vorwaerts");
-		// TODO: Geschwindigkeit anpassen
 		motorControl.forward(speed);
 		
 		odometer.calculateDistance(time, speed);

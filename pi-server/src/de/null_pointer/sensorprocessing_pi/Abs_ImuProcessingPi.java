@@ -101,8 +101,10 @@ public class Abs_ImuProcessingPi {
 		}
 	}
 
-	public void setTestAngleAndHeading(int angle, int heading) {
-
+	public void setTestHeading(int heading) {
+		
+		this.heading = heading;
+		
 	}
 
 }
