@@ -13,7 +13,6 @@ public class Abs_ImuProcessingPi {
 	 * 0 = N, 1 = O, 2 = S, 3 = W
 	 */
 	private int absImuHeading = 0;
-	private int rotationHeading = 0;
 
 	private int tiltData[] = { 0, 0, 0 };
 
@@ -100,26 +99,6 @@ public class Abs_ImuProcessingPi {
 	public int getAbsImuHeading() {
 		synchronized (lockAngle) {
 			return absImuHeading;
-		}
-	}
-
-	public int getRotationHeading() {
-		return rotationHeading;
-	}
-
-	public void turnRotationHeading(boolean right) {
-		if (right) {
-			if (rotationHeading == 3) {
-				rotationHeading = 0;
-			} else {
-				rotationHeading++;
-			}
-		} else {
-			if (rotationHeading == 0) {
-				rotationHeading = 3;
-			} else {
-				rotationHeading--;
-			}
 		}
 	}
 

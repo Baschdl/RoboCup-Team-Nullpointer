@@ -18,6 +18,8 @@ public class MotorControlPi {
 	private int speedDifference = -1;
 	private int notMoving = -1;
 
+	private int rotationHeading = 0;
+
 	// Getters werden zum Testen benoetigt
 	public int getActualSpeed() {
 		return actualSpeed;
@@ -167,6 +169,10 @@ public class MotorControlPi {
 		logger.info("PC set motor rotate left angle " + angle);
 		brickCon1.rotate(wheelAngle, 'D');
 		brickCon2.rotate(wheelAngle, 'D');
+
+		for (int i = 0; i < (angle / 90); i++) {
+			turnRotationHeading(true);
+		}
 	}
 
 	/**
@@ -187,6 +193,10 @@ public class MotorControlPi {
 		logger.info("PC set motor rotate left angle " + angle);
 		brickCon1.rotate(-wheelAngle, 'D');
 		brickCon2.rotate(-wheelAngle, 'D');
+
+		for (int i = 0; i < (angle / 90); i++) {
+			turnRotationHeading(false);
+		}
 	}
 
 	/**
@@ -222,52 +232,71 @@ public class MotorControlPi {
 
 		}
 	}
-	
-	public void decideTurn(int absImuHeading, int directionToMove){
-		
-		if(absImuHeading == 0){
-			if(directionToMove == 0){
+
+	public void decideTurn(int absImuHeading, int directionToMove) {
+
+		if (absImuHeading == 0) {
+			if (directionToMove == 0) {
 				return;
-			}else if(directionToMove == 1){
+			} else if (directionToMove == 1) {
 				rotateright(90);
-			}else if(directionToMove == 2){
+			} else if (directionToMove == 2) {
 				rotateright(180);
-			}else if(directionToMove == 3){
+			} else if (directionToMove == 3) {
 				rotateleft(90);
 			}
-		}else if(absImuHeading == 1){
-			if(directionToMove == 0){
+		} else if (absImuHeading == 1) {
+			if (directionToMove == 0) {
 				rotateleft(90);
-			}else if(directionToMove == 1){
+			} else if (directionToMove == 1) {
 				return;
-			}else if(directionToMove == 2){
+			} else if (directionToMove == 2) {
 				rotateright(90);
-			}else if(directionToMove == 3){
+			} else if (directionToMove == 3) {
 				rotateright(180);
 			}
-		}else if(absImuHeading == 2){
-			if(directionToMove == 0){
+		} else if (absImuHeading == 2) {
+			if (directionToMove == 0) {
 				rotateright(180);
-			}else if(directionToMove == 1){
+			} else if (directionToMove == 1) {
 				rotateleft(90);
-			}else if(directionToMove == 2){
+			} else if (directionToMove == 2) {
 				return;
-			}else if(directionToMove == 3){
+			} else if (directionToMove == 3) {
 				rotateright(90);
 			}
-		}else if(absImuHeading == 3){
-			if(directionToMove == 0){
+		} else if (absImuHeading == 3) {
+			if (directionToMove == 0) {
 				rotateright(90);
-			}else if(directionToMove == 1){
+			} else if (directionToMove == 1) {
 				rotateright(180);
-			}else if(directionToMove == 2){
+			} else if (directionToMove == 2) {
 				rotateleft(90);
-			}else if(directionToMove == 3){
+			} else if (directionToMove == 3) {
 				return;
 			}
 		}
-		
-		
+
+	}
+
+	public int getRotationHeading() {
+		return rotationHeading;
+	}
+
+	private void turnRotationHeading(boolean right) {
+		if (right) {
+			if (rotationHeading == 3) {
+				rotationHeading = 0;
+			} else {
+				rotationHeading++;
+			}
+		} else {
+			if (rotationHeading == 0) {
+				rotationHeading = 3;
+			} else {
+				rotationHeading--;
+			}
+		}
 	}
 
 }
