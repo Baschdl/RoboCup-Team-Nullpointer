@@ -234,7 +234,38 @@ public class BrickControlBrick extends Thread {
 					break;
 				}
 				break;
+			case 4:
+				if (command[2] != 0 && (command[3] != 5 || command[3] != 6)) {
+					Motor.A.setSpeed(command[2]);
+					Motor.B.setSpeed(command[2]);
+				}
 
+				switch (command[3]) {
+				case 1:
+					// TODO: ueberpruefen ob richtiger Motor
+					Motor.A.forward();
+					Motor.B.backward();
+					break;
+				case 2:
+					// TODO: ueberpruefen ob richtiger Motor
+					Motor.A.backward();
+					Motor.B.forward();
+					break;
+				case 3:
+					Motor.A.stop();
+					Motor.B.stop();
+					break;
+				case 4:
+					Motor.A.flt();
+					Motor.B.flt();
+					break;
+				case 5:
+					Motor.A.rotate(command[2]);
+					Motor.B.rotate(command[2]);
+					break;
+				default:
+					break;
+				}
 			}
 			Delay.msDelay(1);
 			break;
@@ -288,7 +319,7 @@ public class BrickControlBrick extends Thread {
 			}
 			break;
 		case 11:
-			for(int j=0;j<5;j++){
+			for (int j = 0; j < 5; j++) {
 				colorS.setFloodlight(Color.BLUE);
 				colorS.setFloodlight(Color.GREEN);
 				colorS.setFloodlight(Color.RED);
