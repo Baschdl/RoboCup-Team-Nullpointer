@@ -12,7 +12,9 @@ public class Abs_ImuProcessingPi {
 	/**
 	 * 0 = N, 1 = O, 2 = S, 3 = W
 	 */
-	private int heading = 0;
+	private int absImuHeading = 0;
+	private int rotationHeading = 0;
+
 	private int tiltData[] = { 0, 0, 0 };
 
 	private final Object lockAngle = new Object();
@@ -37,23 +39,23 @@ public class Abs_ImuProcessingPi {
 			if (dimension == dimension_horizontal) {
 				if (angle >= 0) {
 					if (angle < 45 || angle > 315) {
-						heading = 0;
+						absImuHeading = 0;
 					} else if (angle > 225) {
-						heading = 3;
+						absImuHeading = 3;
 					} else if (angle > 135) {
-						heading = 2;
+						absImuHeading = 2;
 					} else if (angle > 45) {
-						heading = 1;
+						absImuHeading = 1;
 					}
 				} else {
 					if (angle > -45 || angle < -315) {
-						heading = 0;
+						absImuHeading = 0;
 					} else if (angle < -225) {
-						heading = 1;
+						absImuHeading = 1;
 					} else if (angle < -135) {
-						heading = 2;
+						absImuHeading = 2;
 					} else if (angle < -45) {
-						heading = 3;
+						absImuHeading = 3;
 					}
 				}
 			}
@@ -95,16 +97,34 @@ public class Abs_ImuProcessingPi {
 	 * 
 	 * @return 0 = N, 1 = O, 2 = S, 3 = W
 	 */
-	public int getHeading() {
+	public int getAbsImuHeading() {
 		synchronized (lockAngle) {
-			return heading;
+			return absImuHeading;
 		}
 	}
 
-	public void setTestHeading(int heading) {
-		
-		this.heading = heading;
-		
+	public int getRotationHeading() {
+		return rotationHeading;
+	}
+
+	public void turnRotationHeading(boolean right) {
+		if (right) {
+			if (rotationHeading == 3) {
+				rotationHeading = 0;
+			} else {
+				rotationHeading++;
+			}
+		} else {
+			if (rotationHeading == 0) {
+				rotationHeading = 3;
+			} else {
+				rotationHeading--;
+			}
+		}
+	}
+
+	public void setTestHeading(int absImuHeading) {
+		this.absImuHeading = absImuHeading;
 	}
 
 }

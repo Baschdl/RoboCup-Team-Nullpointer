@@ -80,7 +80,7 @@ public class Intersection implements Behavior {
 		// TODO: von dieser bis zur letzten Kreuzung seitliche Verbindungen
 		// kappen
 
-		int directionToMove = nav.tremauxAlgorithm(absImu.getHeading(), false);
+		int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(), false);
 
 		// TODO: in die gegebene Richtung fahren
 	}
@@ -98,7 +98,7 @@ public class Intersection implements Behavior {
 	}
 
 	private void wallAhead() {
-		nav.removeNeighbor(absImu.getHeading());
+		nav.removeNeighbor(absImu.getAbsImuHeading());
 		findHallway();
 
 	}

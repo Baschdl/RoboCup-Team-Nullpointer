@@ -75,7 +75,7 @@ public class HandleValues extends Thread {
 
 	private void readAbs_ImuCompass_Heading() {
 
-		valueGUI.showAbsoluteIMUACG_compass_heading(absimuprocclass.getHeading());
+		valueGUI.showAbsoluteIMUACG_compass_heading(absimuprocclass.getAbsImuHeading());
 	}
 
 	private void readAbs_ImuCompass_Angle() {

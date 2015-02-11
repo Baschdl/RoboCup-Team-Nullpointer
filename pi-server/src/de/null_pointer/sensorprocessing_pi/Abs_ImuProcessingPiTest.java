@@ -20,7 +20,7 @@ public class Abs_ImuProcessingPiTest {
 		classToTest = new Abs_ImuProcessingPi(props);
 		
 		classToTest.setAngle(-40, 2);
-		assertEquals(0,classToTest.getHeading());
+		assertEquals(0,classToTest.getAbsImuHeading());
 		
 	}
 	

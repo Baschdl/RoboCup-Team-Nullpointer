@@ -32,7 +32,7 @@ public class NextTile implements Behavior {
 	@Override
 	public void action() {
 		logger.info("Naechste Kachel erreicht");
-		nav.switchTile(absImu.getHeading());
+		nav.switchTile(absImu.getAbsImuHeading());
 		odometer.resetDistanceCounter();
 	}
 
