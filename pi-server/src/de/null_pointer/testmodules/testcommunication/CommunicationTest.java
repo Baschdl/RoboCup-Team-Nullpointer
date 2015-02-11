@@ -38,7 +38,7 @@ public class CommunicationTest {
 
 	InitializeProgram initProgramm = null;
 
-	TestBrickControlPi brickcontrol = null;
+	TestBrickControlPi brickControl = null;
 
 	private VirtualAbsIMUACG virtAbsImu = null;
 	private VirtualDistNX virtDistNX = null;
@@ -112,9 +112,10 @@ public class CommunicationTest {
 
 		testSlope = new TestSlope(motorControl, absImu, nav, propPiServer);
 
-		testVictim = new TestVictim(motorControl, thermal, propPiServer);
+		testVictim = new TestVictim(brickControl, motorControl, thermal,
+				propPiServer);
 
-		brickcontrol = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,
+		brickControl = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,
 				eopdRight, lsa, accumulator, thermal);
 	}
 

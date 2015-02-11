@@ -231,7 +231,7 @@ public class InitializeProgram {
 				propPiServer);
 		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, nav, propPiServer);
-		Behavior b6 = new Victim(motorControl, thermal, propPiServer);
+		Behavior b6 = new Victim(brickCon2, motorControl, thermal, propPiServer);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
 
