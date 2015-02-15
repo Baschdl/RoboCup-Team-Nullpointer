@@ -75,18 +75,24 @@ public class PiServer {
 				logger.debug("Waehle Testprogramm aus");
 				i++;
 				s = args[i];
+				int speedAngle = 0;
+
+				try {
+					speedAngle = Integer.parseInt(args[i + 1]);
+				} catch (Exception e) {
+				}
 				if (s.equals("forward")) {
 					logger.debug("Starte Testprogramm forward");
-					testProgram.forward();
+					testProgram.forward(speedAngle);
 				} else if (s.equals("backward")) {
 					logger.debug("Starte Testprogramm backward");
-					testProgram.backward();
+					testProgram.backward(speedAngle);
 				} else if (s.equals("rightturn")) {
 					logger.debug("Starte Testprogramm rightturn");
-					testProgram.rightturn();
+					testProgram.rightturn(speedAngle);
 				} else if (s.equals("leftturn")) {
 					logger.debug("Starte Testprogramm leftturn");
-					testProgram.leftturn();
+					testProgram.leftturn(speedAngle);
 				} else if (s.equals("flash")) {
 					logger.debug("Starte Testprogramm flash");
 					testProgram.flash();

@@ -39,9 +39,13 @@ public class TestProgram {
 				.getProperty("Pi_server.TestProgram.duration"));
 	}
 
-	public void forward() {
+	public void forward(int speed) {
 		logger.debug("Testprogramm: Vorwaerts");
-		motorcontrol.forward(speedLinear);
+		if (speed != 0) {
+			motorcontrol.forward(speed);
+		} else {
+			motorcontrol.forward(speedLinear);
+		}
 		logger.debug("Testprogramm: Delay");
 		Delay.msDelay(duration);
 		logger.debug("Testprogramm: Flt");
@@ -49,22 +53,34 @@ public class TestProgram {
 
 	}
 
-	public void backward() {
-		motorcontrol.backward(speedLinear);
+	public void backward(int speed) {
+		if (speed != 0) {
+			motorcontrol.forward(speed);
+		} else {
+			motorcontrol.forward(speedLinear);
+		}
 		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
 
-	public void rightturn() {
-		motorcontrol.rotateright(90);
+	public void rightturn(int angle) {
+		if (angle != 0) {
+			motorcontrol.rotateright(angle);
+		} else {
+			motorcontrol.rotateright(90);
+		}
 		Delay.msDelay(duration);
 		motorcontrol.flt();
 
 	}
 
-	public void leftturn() {
-		motorcontrol.rotateleft(90);
+	public void leftturn(int angle) {
+		if (angle != 0) {
+			motorcontrol.rotateright(angle);
+		} else {
+			motorcontrol.rotateright(90);
+		}
 		Delay.msDelay(duration);
 		motorcontrol.flt();
 
