@@ -76,17 +76,21 @@ public class PiServer {
 				i++;
 				s = args[i];
 				int speedAngle = 0;
-
+				int duration = 0;
 				try {
 					speedAngle = Integer.parseInt(args[i + 1]);
 				} catch (Exception e) {
 				}
+				try {
+					duration = Integer.parseInt(args[i + 2]);
+				} catch (Exception e) {
+				}
 				if (s.equals("forward")) {
 					logger.debug("Starte Testprogramm forward");
-					testProgram.forward(speedAngle);
+					testProgram.forward(speedAngle, duration);
 				} else if (s.equals("backward")) {
 					logger.debug("Starte Testprogramm backward");
-					testProgram.backward(speedAngle);
+					testProgram.backward(speedAngle, duration);
 				} else if (s.equals("rightturn")) {
 					logger.debug("Starte Testprogramm rightturn");
 					testProgram.rightturn(speedAngle);
