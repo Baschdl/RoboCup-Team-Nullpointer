@@ -55,7 +55,7 @@ public class Odometer {
 	 * @return int
 	 */
 	private int deviationAngle() {
-		int heading = abs_imu.getHeading();
+		int heading = abs_imu.getAbsImuHeading();
 		int angle = abs_imu.getAngleHorizontal();
 
 		switch (heading) {

@@ -48,7 +48,7 @@ public class Slope implements Behavior {
 	public void action() {
 		logger.info("Steigung erkannt");
 		suppress = false;
-		nav.slope(absImu.getHeading(), mapSize, mapSize);
+		nav.slope(absImu.getAbsImuHeading(), mapSize, mapSize);
 		motorControl.forward(speed);
 		while (suppress && absImu.getTiltDataVertical() > angleToTakeControl) {
 			try {
