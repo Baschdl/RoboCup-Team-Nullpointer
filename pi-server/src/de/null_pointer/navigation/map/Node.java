@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  * @author BB
  * @see lejos.robotics.pathfinding.SearchAlgorithm
  */
-public class Node {
+public class Node implements Cloneable {
 
 	private static Logger logger = Logger.getLogger(Node.class);
 
@@ -50,12 +50,14 @@ public class Node {
 	private int[] tremauxCounter = { 0, 0, 0, 0 };
 
 	/**
-	 * Creates a new instance of a node.
+	 * Creates a new instance of a node
 	 * 
 	 * @param x
-	 *            The x coordinate of this node.
+	 *            The x coordinate of this node
 	 * @param y
-	 *            The y coordinate of this node.
+	 *            The y coordinate of this node
+	 * @param z
+	 *            The z coordinate of this node
 	 */
 	public Node(int x, int y, int z) {
 		this.x = x;
@@ -233,6 +235,25 @@ public class Node {
 			calculated_orientation = initialOrientation - 2;
 		}
 		return calculated_orientation;
+	}
+
+	/**
+	 * creates a clone of this Node without its neighbors
+	 * 
+	 * @return cloned Node
+	 */
+	public Node clone() {
+		Node clone = new Node(this.x, this.y, this.z);
+		int[] tremauxCopy = { tremauxCounter[0], tremauxCounter[1],
+				tremauxCounter[2], tremauxCounter[3] };
+		clone.setTremauxCounter(tremauxCopy);
+		if (visited) {
+			clone.setVisited();
+		}
+		if (blackTile) {
+			clone.setBlackTile();
+		}
+		return clone;
 	}
 
 }

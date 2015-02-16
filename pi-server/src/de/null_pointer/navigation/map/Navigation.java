@@ -4,12 +4,19 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+/**
+ * 
+ * @author Jan Krebes
+ * 
+ */
 public class Navigation {
 
 	private static Logger logger = Logger.getLogger(Navigation.class);
 
 	private Node currentTile;
 	private Node startTile;
+
+	private Node lastCheckpointTile;
 
 	private int lastOrientation = -1;
 	private boolean firstTile = true;
@@ -24,7 +31,12 @@ public class Navigation {
 		startTile = currentTile;
 	}
 
-	// Konstruktor fuer Testzwecke
+	/**
+	 * contructor for Testing purposes
+	 * 
+	 * @param dimensionX
+	 * @param dimensionY
+	 */
 	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
@@ -90,7 +102,6 @@ public class Navigation {
 				logger.info("hallway detectet ! d: " + direction);
 
 			} else {
-				// TODO: handle blackTile retreat
 				for (int i = 0; i < 4; i++) {
 					if (tremauxCounter[i] != -2
 							&& i != currentTile
@@ -461,6 +472,36 @@ public class Navigation {
 		}
 
 		return initialNode;
+	}
+
+	/**
+	 * overwrites the current mapPointer with the mapPointer of the last
+	 * checkpoint
+	 */
+	public void loadMap() {
+		currentTile = lastCheckpointTile;
+	}
+
+	/**
+	 * creates a copy of the current nodemap and saves the mapPointer
+	 */
+	public void copyMap() {
+		lastCheckpointTile = currentTile.clone();
+		cloneNeighbors(lastCheckpointTile, currentTile);
+	}
+
+	private Node cloneNeighbors(Node newMapBuffer, Node currentMapBuffer) {
+
+		for (int i = 0; i < 4; i++) {
+			Node currentNeighborBuffer = currentMapBuffer.getNeighbor(i);
+			if (currentNeighborBuffer != null) {
+				Node neighborClone = currentNeighborBuffer.clone();
+				newMapBuffer.addNeighbor(neighborClone, i, 0);
+				cloneNeighbors(neighborClone, currentNeighborBuffer);
+			}
+		}
+
+		return newMapBuffer;
 	}
 
 }
