@@ -17,6 +17,8 @@ public class Navigation {
 	private Node startTile;
 
 	private Node lastCheckpointTile;
+	private TurnSave currentTurn = null;
+	private TurnSave initialTurn = null;
 
 	private int lastOrientation = -1;
 	private boolean firstTile = true;
@@ -28,6 +30,8 @@ public class Navigation {
 				.getProperty("Navigation.Navigation.mapHeight"));
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
+		lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		lastCheckpointTile.setVisited();
 		startTile = currentTile;
 	}
 
@@ -40,6 +44,8 @@ public class Navigation {
 	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
+		lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		lastCheckpointTile.setVisited();
 		startTile = currentTile;
 	}
 
@@ -139,6 +145,7 @@ public class Navigation {
 						currentTile.incTremauxCounter(direction);
 					}
 					lastOrientation = direction;
+					addTurn(direction, tremauxCounter, blackTileRetreat);
 					return direction;
 				}
 			}
@@ -192,6 +199,7 @@ public class Navigation {
 			currentTile.incTremauxCounter(direction);
 		}
 		lastOrientation = direction;
+		addTurn(direction, tremauxCounter, blackTileRetreat);
 		return direction;
 	}
 
@@ -287,7 +295,7 @@ public class Navigation {
 	 * Cuts a Tile out of the map
 	 * 
 	 * @param tile
-	 *            Tile which is to be cut out of the map
+	 *            Tile to be cut out of the map
 	 */
 	public void disconnectTile(Node tile) {
 		for (int i = 0; i < 4; i++) {
@@ -480,28 +488,38 @@ public class Navigation {
 	 */
 	public void loadMap() {
 		currentTile = lastCheckpointTile;
+		currentTurn = null;
 	}
 
-	/**
-	 * creates a copy of the current nodemap and saves the mapPointer
-	 */
 	public void copyMap() {
-		lastCheckpointTile = currentTile.clone();
-		cloneNeighbors(lastCheckpointTile, currentTile);
+		currentTurn = initialTurn;
+		while (currentTurn != null) {
+			int[] tremauxCounter = currentTurn.getTremauxCounter();
+			for (int i = 0; i < 4; i++) {
+				if (tremauxCounter[i] == -2) {
+					lastCheckpointTile.removeNeighbor(i);
+				}
+			}
+			lastCheckpointTile.setTremauxCounter(tremauxCounter);
+			lastCheckpointTile.setVisited();
+			lastCheckpointTile = lastCheckpointTile.getNeighbor(currentTurn
+					.getMoveDirection());
+			currentTurn = currentTurn.getNextTurn();
+		}
 	}
 
-	private Node cloneNeighbors(Node newMapBuffer, Node currentMapBuffer) {
-
-		for (int i = 0; i < 4; i++) {
-			Node currentNeighborBuffer = currentMapBuffer.getNeighbor(i);
-			if (currentNeighborBuffer != null) {
-				Node neighborClone = currentNeighborBuffer.clone();
-				newMapBuffer.addNeighbor(neighborClone, i, 0);
-				cloneNeighbors(neighborClone, currentNeighborBuffer);
+	private void addTurn(int moveDirection, int[] tremauxCounter,
+			boolean blackTileRetreat) {
+		TurnSave nextTurn = new TurnSave(moveDirection, tremauxCounter);
+		if (currentTurn != null) {
+			if (blackTileRetreat == false) {
+				currentTurn.setNextTurn(nextTurn);
 			}
+			currentTurn = nextTurn;
+		} else {
+			initialTurn = nextTurn;
+			currentTurn = initialTurn;
 		}
-
-		return newMapBuffer;
 	}
 
 }
