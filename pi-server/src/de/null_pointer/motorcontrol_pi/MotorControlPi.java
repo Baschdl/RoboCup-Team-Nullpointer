@@ -89,69 +89,6 @@ public class MotorControlPi {
 	}
 
 	/**
-	 * Methode zum Fahren einer Rechtskurve.
-	 * 
-	 * @param speed
-	 *            Geschwindigkeit der Rechtskurve
-	 * @param difference
-	 *            Unterschied der Geschwindigkeit der linken und rechten
-	 *            Motoren. Beeinflusst den Wendekreis.
-	 */
-	// TODO: Loeschen
-	@SuppressWarnings("deprecation")
-	public void rightturn(int speed, int difference) {
-		if (this.speedCurve != speed && this.speedDifference != difference
-				&& mode != 2) {
-			notMoving = 1;
-			actualSpeed = 1;
-
-			logger.info("PC set rightcurve speed " + speed + " difference "
-					+ difference);
-			// TODO: Unserem aktuellen Roboter anpassen
-			// brickCon1.backward(speed, 'A');
-			// brickCon1.backward(speed - difference, 'B');
-			// brickCon2.forward(speed, 'A');
-			// brickCon2.forward(speed - difference, 'B');
-			// brickCon2.forward(speed, 'A');
-			// brickCon2.forward(speed, 'B');
-			// brickCon2.forward(speed, 'C');
-			this.speedDifference = difference;
-			this.mode = 2;
-			this.speedCurve = speed;
-		}
-	}
-
-	/**
-	 * Methode zum Fahren einer Linkskurve.
-	 * 
-	 * @param speed
-	 *            Geschwindigkeit der Linkskurve
-	 * @param difference
-	 *            Unterschied der Geschwindigkeit der linken und rechten
-	 *            Motoren. Beeinflusst den Wendekreis.
-	 */
-	// TODO: Loeschen
-	@SuppressWarnings("deprecation")
-	public void leftturn(int speed, int difference) {
-		if (this.speedCurve != speed && this.speedDifference != difference
-				&& mode != 3) {
-			notMoving = 1;
-			actualSpeed = 1;
-
-			logger.info("PC set leftcurve speed " + speed + " difference "
-					+ difference);
-			// TODO: Unserem aktuellen Roboter anpassen
-			// brickCon1.backward(speed - difference, 'A');
-			// brickCon1.backward(speed, 'B');
-			// brickCon2.forward(speed - difference, 'A');
-			// brickCon2.forward(speed, 'B');
-			this.speedDifference = -difference;
-			this.mode = 3;
-			this.speedCurve = -speed;
-		}
-	}
-
-	/**
 	 * Methode zum Rotieren des Roboters auf der Stelle nach rechts.
 	 * 
 	 * @param angle
