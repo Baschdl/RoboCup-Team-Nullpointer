@@ -4,12 +4,21 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+/**
+ * 
+ * @author Jan Krebes
+ * 
+ */
 public class Navigation {
 
 	private static Logger logger = Logger.getLogger(Navigation.class);
 
 	private Node currentTile;
 	private Node startTile;
+
+	private Node lastCheckpointTile;
+	private TurnSave currentTurn = null;
+	private TurnSave initialTurn = null;
 
 	private int lastOrientation = -1;
 	private boolean firstTile = true;
@@ -21,13 +30,22 @@ public class Navigation {
 				.getProperty("Navigation.Navigation.mapHeight"));
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
+		lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		lastCheckpointTile.setVisited();
 		startTile = currentTile;
 	}
 
-	// Konstruktor fuer Testzwecke
+	/**
+	 * contructor for Testing purposes
+	 * 
+	 * @param dimensionX
+	 * @param dimensionY
+	 */
 	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
+		lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		lastCheckpointTile.setVisited();
 		startTile = currentTile;
 	}
 
@@ -90,7 +108,6 @@ public class Navigation {
 				logger.info("hallway detectet ! d: " + direction);
 
 			} else {
-				// TODO: handle blackTile retreat
 				for (int i = 0; i < 4; i++) {
 					if (tremauxCounter[i] != -2
 							&& i != currentTile
@@ -128,6 +145,7 @@ public class Navigation {
 						currentTile.incTremauxCounter(direction);
 					}
 					lastOrientation = direction;
+					addTurn(direction, tremauxCounter, blackTileRetreat);
 					return direction;
 				}
 			}
@@ -181,6 +199,7 @@ public class Navigation {
 			currentTile.incTremauxCounter(direction);
 		}
 		lastOrientation = direction;
+		addTurn(direction, tremauxCounter, blackTileRetreat);
 		return direction;
 	}
 
@@ -276,7 +295,7 @@ public class Navigation {
 	 * Cuts a Tile out of the map
 	 * 
 	 * @param tile
-	 *            Tile which is to be cut out of the map
+	 *            Tile to be cut out of the map
 	 */
 	public void disconnectTile(Node tile) {
 		for (int i = 0; i < 4; i++) {
@@ -461,6 +480,46 @@ public class Navigation {
 		}
 
 		return initialNode;
+	}
+
+	/**
+	 * overwrites the current mapPointer with the mapPointer of the last
+	 * checkpoint
+	 */
+	public void loadMap() {
+		currentTile = lastCheckpointTile;
+		currentTurn = null;
+	}
+
+	public void copyMap() {
+		currentTurn = initialTurn;
+		while (currentTurn != null) {
+			int[] tremauxCounter = currentTurn.getTremauxCounter();
+			for (int i = 0; i < 4; i++) {
+				if (tremauxCounter[i] == -2) {
+					lastCheckpointTile.removeNeighbor(i);
+				}
+			}
+			lastCheckpointTile.setTremauxCounter(tremauxCounter);
+			lastCheckpointTile.setVisited();
+			lastCheckpointTile = lastCheckpointTile.getNeighbor(currentTurn
+					.getMoveDirection());
+			currentTurn = currentTurn.getNextTurn();
+		}
+	}
+
+	private void addTurn(int moveDirection, int[] tremauxCounter,
+			boolean blackTileRetreat) {
+		TurnSave nextTurn = new TurnSave(moveDirection, tremauxCounter);
+		if (currentTurn != null) {
+			if (blackTileRetreat == false) {
+				currentTurn.setNextTurn(nextTurn);
+			}
+			currentTurn = nextTurn;
+		} else {
+			initialTurn = nextTurn;
+			currentTurn = initialTurn;
+		}
 	}
 
 }

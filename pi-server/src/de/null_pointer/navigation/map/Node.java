@@ -50,12 +50,14 @@ public class Node {
 	private int[] tremauxCounter = { 0, 0, 0, 0 };
 
 	/**
-	 * Creates a new instance of a node.
+	 * Creates a new instance of a node
 	 * 
 	 * @param x
-	 *            The x coordinate of this node.
+	 *            The x coordinate of this node
 	 * @param y
-	 *            The y coordinate of this node.
+	 *            The y coordinate of this node
+	 * @param z
+	 *            The z coordinate of this node
 	 */
 	public Node(int x, int y, int z) {
 		this.x = x;
