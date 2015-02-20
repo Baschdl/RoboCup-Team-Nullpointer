@@ -87,6 +87,39 @@ public class MotorControlPi {
 			mode = 1;
 		}
 	}
+	
+	/**
+	 * method to change forward-speed on only one motor
+	 * @param brick 
+	 * 			Brick of the controlled motor
+	 * @param motorport
+	 * 			Port of the brick of the controlled motor
+	 * @param speed
+	 * 			New speed of the motor
+	 */
+	public void changeSpeedSingleMotorForward(int brick, char motorport, int speed){
+		if(brick == 1){
+			brickCon1.forward(speed, motorport);
+		}else if(brick == 2){
+			brickCon2.forward(speed, motorport);
+		}
+	}
+	/**
+	  * method to change backward-speed on only one motor
+	 * @param brick 
+	 * 			Brick of the controlled motor
+	 * @param motorport
+	 * 			Port of the brick of the controlled motor
+	 * @param speed
+	 * 			New speed of the motor
+	 */
+	public void changeSpeedSingleMotorBackward(int brick, char motorport, int speed){
+		if(brick == 1){
+			brickCon1.backward(speed, motorport);
+		}else if(brick == 2){
+			brickCon2.backward(speed, motorport);
+		}
+	}
 
 	/**
 	 * Methode zum Rotieren des Roboters auf der Stelle nach rechts.

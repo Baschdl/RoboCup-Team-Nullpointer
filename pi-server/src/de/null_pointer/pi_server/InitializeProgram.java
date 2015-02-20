@@ -17,6 +17,7 @@ import de.null_pointer.behavior.MovingForward;
 import de.null_pointer.behavior.NextTile;
 import de.null_pointer.behavior.Slope;
 import de.null_pointer.behavior.Victim;
+import de.null_pointer.behavior.WallTooClose;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.communication_pi.CommunicationPi;
 import de.null_pointer.communication_pi.InitCommunicationPi;
@@ -31,6 +32,7 @@ import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 import de.null_pointer.sensorprocessing_pi.LSAProcessingPi;
 import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 import de.null_pointer.testmodules.testcommunication.TestBrickControlPi;
+
 
 public class InitializeProgram {
 	private static Logger logger = null;
@@ -232,8 +234,9 @@ public class InitializeProgram {
 		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, nav, propPiServer);
 		Behavior b6 = new Victim(brickCon2, motorControl, thermal, propPiServer);
+		Behavior b7 = new WallTooClose(eopdRight, eopdLeft, motorControl, odometer, propPiServer);
 
-		Behavior[] behavior = { b1, b2, b3, b4, b5, b6 };
+		Behavior[] behavior = { b1, b2, b3, b4, b5, b6, b7 };
 
 		// Abritrator wird erst Initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
