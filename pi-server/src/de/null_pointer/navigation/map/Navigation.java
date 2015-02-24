@@ -491,7 +491,7 @@ public class Navigation {
 		currentTurn = null;
 	}
 
-	public void copyMap() {
+	public void saveMap() {
 		currentTurn = initialTurn;
 		while (currentTurn != null) {
 			int[] tremauxCounter = currentTurn.getTremauxCounter();

@@ -61,10 +61,10 @@ public class MovingForwardTest {
 		odom = new Odometer(accumulator, abs_Imu, props);
 
 		com = new VirtualCommunicationPi();
-		brickCon1 = new TestBrickControlPi(com, abs_Imu, distNx, eopdLeft,
-				eopdRight, lsa, accumulator, thermal);
-		brickCon2 = new TestBrickControlPi(com, abs_Imu, distNx, eopdLeft,
-				eopdRight, lsa, accumulator, thermal);
+		brickCon1 = new TestBrickControlPi(com, null, abs_Imu, distNx,
+				eopdLeft, eopdRight, lsa, accumulator, thermal); // null == nav
+		brickCon2 = new TestBrickControlPi(com, null, abs_Imu, distNx,
+				eopdLeft, eopdRight, lsa, accumulator, thermal); // null == nav
 
 		motorControl = new MotorControlPi(brickCon1, brickCon2);
 

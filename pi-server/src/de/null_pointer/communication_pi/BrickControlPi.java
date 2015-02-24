@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -15,6 +16,7 @@ public class BrickControlPi extends Thread {
 	private static Logger logger = Logger.getLogger(BrickControlPi.class);
 	// TODO: initialisieren
 	private CommunicationPi com = null;
+	private Navigation navi = null;
 	private Abs_ImuProcessingPi abs_Imu = null;
 	private DistNxProcessingPi distNx = null;
 	private EOPDProcessingPi eopdLeft = null;
@@ -26,12 +28,13 @@ public class BrickControlPi extends Thread {
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
 
-	public BrickControlPi(CommunicationPi com, Abs_ImuProcessingPi abs_Imu,
-			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
-			EOPDProcessingPi eopdRight, LSAProcessingPi lsa,
-			AccumulatorProcessingPi accumulator,
+	public BrickControlPi(CommunicationPi com, Navigation navi,
+			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
+			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
+			LSAProcessingPi lsa, AccumulatorProcessingPi accumulator,
 			ThermalSensorProcessingPi thermal) {
 		this.com = com;
+		this.navi = navi;
 		this.abs_Imu = abs_Imu;
 		this.distNx = distNx;
 		this.eopdLeft = eopdLeft;
@@ -107,6 +110,7 @@ public class BrickControlPi extends Thread {
 			}
 
 		} else if (receiveData[0] == 6) {
+			// Akkuladung
 			accumulator.setMilliVolt(Math.round(receiveData[1]));
 		} else if (receiveData[0] == 7) {
 			logger.debug("Genuegend Werte uebermittelt: " + this);
@@ -114,6 +118,9 @@ public class BrickControlPi extends Thread {
 		} else if (receiveData[0] == 8) {
 			// ThermalSensor
 			thermal.setTemperature(Math.round(receiveData[2]));
+		} else if (receiveData[0] == 9) {
+			// TODO Reset Button gedrueckt; ggf. muss noch weiteres getan werden
+			navi.loadMap();
 		} else {
 
 			// System.out.println("process Data (no sensor) " +

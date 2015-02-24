@@ -41,10 +41,10 @@ public class IntersectionTest {
 	@Before
 	public void initializeTests() {
 		com = new VirtualCommunicationPi();
-		brickCon1 = new TestBrickControlPi(com, abs_Imu, distNx, eopdLeft,
-				eopdRight, lsa, accumulator, thermal);
-		brickCon2 = new TestBrickControlPi(com, abs_Imu, distNx, eopdLeft,
-				eopdRight, lsa, accumulator, thermal);
+		brickCon1 = new TestBrickControlPi(com, null, abs_Imu, distNx,
+				eopdLeft, eopdRight, lsa, accumulator, thermal); // null == nav
+		brickCon2 = new TestBrickControlPi(com, null, abs_Imu, distNx,
+				eopdLeft, eopdRight, lsa, accumulator, thermal); // null == nav
 		motorControl = new MotorControlPi(brickCon1, brickCon2);
 
 		props.setProperty(
@@ -97,50 +97,47 @@ public class IntersectionTest {
 		eopdRight.setTestEOPDdistance(21);
 		eopdLeft.setTestEOPDdistance(18);
 		abs_Imu.setTestHeading(0);
-		
-		//assertEquals()
-				
+
+		// assertEquals()
+
 	}
-	
+
 	@Test
-	public void testActionGoRightFirstTime(){
-		
+	public void testActionGoRightFirstTime() {
+
 	}
-	
-	
-	
+
 	@Test
-	public void testActionGoLeftNoOtherWay(){
-		
+	public void testActionGoLeftNoOtherWay() {
+
 	}
-	
+
 	@Test
-	public void testActionGoLeftAlreadyTurnedRightAndForward(){
-		
+	public void testActionGoLeftAlreadyTurnedRightAndForward() {
+
 	}
-	
+
 	@Test
-	public void testActionGoForward(){
-		
+	public void testActionGoForward() {
+
 	}
-	
+
 	@Test
-	public void testActionGoForwardAlreadyTurnedRight(){
-		
+	public void testActionGoForwardAlreadyTurnedRight() {
+
 	}
-	
+
 	@Test
-	public void testActionReverse(){
-		
+	public void testActionReverse() {
+
 	}
-	
 
 	@Test
 	public void testSuppress() {
 		fail("Not yet implemented");
 	}
-	
-	public void eopdsZuruecksetzen(){
+
+	public void eopdsZuruecksetzen() {
 		eopdRight.setTestEOPDdistance(-1);
 		eopdLeft.setTestEOPDdistance(-1);
 	}

@@ -115,7 +115,7 @@ public class CommunicationTest {
 		testVictim = new TestVictim(brickControl, motorControl, thermal,
 				propPiServer);
 
-		brickControl = new TestBrickControlPi(comPi, absImu, distNx, eopdLeft,
+		brickControl = new TestBrickControlPi(comPi, nav, absImu, distNx, eopdLeft,
 				eopdRight, lsa, accumulator, thermal);
 	}
 
