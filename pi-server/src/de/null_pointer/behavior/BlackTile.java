@@ -22,9 +22,12 @@ public class BlackTile implements Behavior {
 	private Abs_ImuProcessingPi absImu = null;
 	private Navigation nav = null;
 	private Odometer odometer = null;
+
+	private int speed = -1;
+	private int lsaActionValue = -1;
+
 	private boolean moving = false;
 	private long time = -1;
-	private int speed = -1;
 
 	public BlackTile(MotorControlPi motorControl, LSAProcessingPi lsa,
 			Abs_ImuProcessingPi absImu, Navigation nav, Odometer odometer,
@@ -38,6 +41,8 @@ public class BlackTile implements Behavior {
 
 		speed = Integer.parseInt(propPiServer
 				.getProperty("Behavior.BlackTile.speed"));
+		lsaActionValue = Integer.parseInt(propPiServer
+				.getProperty("Behavior.BlackTile.lsaActionValue"));
 	}
 
 	@Override
@@ -47,8 +52,9 @@ public class BlackTile implements Behavior {
 		for (int val : values) {
 			value += val;
 		}
-		// Alle 8 Sensoren im Durchschnitt ueber 70
-		return value > 70 * 8;
+		// Alle 8 Sensoren im Durchschnitt unter dem Schwellenwert
+		// lsaActionValue
+		return value < lsaActionValue * 8;
 	}
 
 	@Override
@@ -71,16 +77,15 @@ public class BlackTile implements Behavior {
 			time = System.currentTimeMillis() - time;
 		}
 		motorControl.stop();
-		int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(), true);
+		int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
+				true);
 
 		motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
-
 	}
 
 	@Override
 	public void suppress() {
 		moving = false;
-
 	}
 
 }
