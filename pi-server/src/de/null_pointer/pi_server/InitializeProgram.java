@@ -232,7 +232,7 @@ public class InitializeProgram {
 		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
 				propPiServer);
 		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, nav, propPiServer);
+				eopdRight, absImu, odometer, nav, propPiServer);
 		Behavior b6 = new Victim(brickCon2, motorControl, thermal, propPiServer);
 		Behavior b7 = new WallTooClose(eopdRight, eopdLeft, motorControl,
 				odometer, propPiServer);
