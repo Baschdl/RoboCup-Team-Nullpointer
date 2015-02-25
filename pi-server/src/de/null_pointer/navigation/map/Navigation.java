@@ -303,6 +303,31 @@ public class Navigation {
 		}
 	}
 
+	public void cutWallConnections(Node lastIntersection) {
+		Node buffer = currentTile;
+		if (buffer.z == lastIntersection.z) {
+			int orientation = -1;
+			if (buffer.x == lastIntersection.x) {
+				if (buffer.y < lastIntersection.y) {
+					orientation = 2;
+				} else {
+					orientation = 0;
+				}
+			} else if (buffer.y == lastIntersection.y) {
+				if (buffer.x < lastIntersection.x) {
+					orientation = 3;
+				} else {
+					orientation = 1;
+				}
+			}
+			while (buffer != lastIntersection) {
+				buffer = buffer.getNeighbor(orientation);
+				buffer.removeNeighbor(rightleftDirection(orientation, true));
+				buffer.removeNeighbor(rightleftDirection(orientation, false));
+			}
+		}
+	}
+
 	/**
 	 * creates a new map layer and attaches it to the existing map
 	 * 

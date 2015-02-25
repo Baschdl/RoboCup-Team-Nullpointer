@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
+import de.null_pointer.navigation.map.Node;
 import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -23,6 +24,8 @@ public class Intersection implements Behavior {
 	private Abs_ImuProcessingPi absImu;
 	private Odometer odometer;
 	private Navigation nav;
+
+	private Node lastIntersection = null;
 
 	private int minimalDistanceFront = -1;
 	private int maximalDistanceSide = -1;
@@ -77,23 +80,32 @@ public class Intersection implements Behavior {
 				&& actualDistance >= 0) {
 			motorControl.stop();
 			wallAhead();
-		}else{
-		motorControl.forward(speed);
-		while (odometer.getDistanceCounter() < 30) {
-			odometer.calculateDistance(time, speed);
-			time = System.currentTimeMillis();
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				logger.fatal("InterruptedException while sleep()");
+		} else {
+			motorControl.forward(speed);
+			while (odometer.getDistanceCounter() < 30) {
+				odometer.calculateDistance(time, speed);
+				time = System.currentTimeMillis();
+				try {
+					Thread.sleep(2);
+				} catch (InterruptedException e) {
+					logger.fatal("InterruptedException while sleep()");
+				}
+				time = System.currentTimeMillis() - time;
+				if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
+						&& actualDistance >= 0) {
+					break;
+				}
 			}
-			time = System.currentTimeMillis() - time;
-		}
-		motorControl.stop();
-		findHallway();
+			odometer.resetDistanceCounter();
+			motorControl.stop();
+			findHallway();
 		}
 		// TODO: von dieser bis zur letzten Kreuzung seitliche Verbindungen
 		// kappen
+		if (lastIntersection != null) {
+			nav.cutWallConnections(lastIntersection);
+		}
+		lastIntersection = nav.getCurrentTile();
 
 		int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
 				false);
@@ -102,19 +114,18 @@ public class Intersection implements Behavior {
 	}
 
 	private void findHallway() {
-		 if((actualDistance = distnx.getDistance()) <= minimalDistanceFront
-				&& actualDistance >= 0){
-			 nav.removeNeighbor(absImu.getAbsImuHeading());
-		 }
-		 if (eopdLeft.getDistance() <= maximalDistanceSide) {
-		 // TODO: linker Nachbar entfernen
-		 nav.removeNeighbor(-1);
-		 }
-		 if (eopdRight.getDistance() <= maximalDistanceSide) {
-		 // TODO: rechter Nachbar entfernen
-		 nav.removeNeighbor(-1);
-		 }
-		  
+		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
+				&& actualDistance >= 0) {
+			nav.removeNeighbor(absImu.getAbsImuHeading());
+		}
+		if (eopdLeft.getDistance() <= maximalDistanceSide) {
+			// TODO: linker Nachbar entfernen
+			nav.removeNeighbor(-1);
+		}
+		if (eopdRight.getDistance() <= maximalDistanceSide) {
+			// TODO: rechter Nachbar entfernen
+			nav.removeNeighbor(-1);
+		}
 
 	}
 
