@@ -79,7 +79,7 @@ public class Intersection implements Behavior {
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
 			motorControl.stop();
-			wallAhead();
+			findHallway();
 		} else {
 			motorControl.forward(speed);
 			while (odometer.getDistanceCounter() < 30) {
@@ -100,8 +100,7 @@ public class Intersection implements Behavior {
 			motorControl.stop();
 			findHallway();
 		}
-		// TODO: von dieser bis zur letzten Kreuzung seitliche Verbindungen
-		// kappen
+
 		if (lastIntersection != null) {
 			nav.cutWallConnections(lastIntersection);
 		}
@@ -119,26 +118,17 @@ public class Intersection implements Behavior {
 			nav.removeNeighbor(absImu.getAbsImuHeading());
 		}
 		if (eopdLeft.getDistance() <= maximalDistanceSide) {
-			// TODO: linker Nachbar entfernen
-			nav.removeNeighbor(-1);
+			nav.removeNeighbor(nav.rightleftDirection(
+					absImu.getAbsImuHeading(), false));
 		}
 		if (eopdRight.getDistance() <= maximalDistanceSide) {
-			// TODO: rechter Nachbar entfernen
-			nav.removeNeighbor(-1);
+			nav.removeNeighbor(nav.rightleftDirection(
+					absImu.getAbsImuHeading(), true));
 		}
-
-	}
-
-	private void wallAhead() {
-		nav.removeNeighbor(absImu.getAbsImuHeading());
-		findHallway();
-
 	}
 
 	@Override
 	public void suppress() {
-		// TODO Auto-generated method stub
-
 	}
 
 }
