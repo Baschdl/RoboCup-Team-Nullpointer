@@ -78,7 +78,7 @@ public class Intersection implements Behavior {
 		time = 0;
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
-			motorControl.stop();
+			motorControl.stop(); 
 			findHallway();
 		} else {
 			motorControl.forward(speed);
