@@ -184,11 +184,13 @@ public class InitializeProgram {
 
 			} else {
 				if (i == 0) {
-					brickCon1 = new TestBrickControlPi(comPi1, nav, absImu, distNx,
-							eopdLeft, eopdLeft, lsa, accumulator, thermal);
+					brickCon1 = new TestBrickControlPi(comPi1, nav, absImu,
+							distNx, eopdLeft, eopdLeft, lsa, accumulator,
+							thermal);
 				} else if (i == 1) {
-					brickCon2 = new TestBrickControlPi(comPi2, nav, absImu, distNx,
-							eopdLeft, eopdLeft, lsa, accumulator, thermal);
+					brickCon2 = new TestBrickControlPi(comPi2, nav, absImu,
+							distNx, eopdLeft, eopdLeft, lsa, accumulator,
+							thermal);
 				} else {
 					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
@@ -229,14 +231,14 @@ public class InitializeProgram {
 		Behavior b1 = new MovingForward(motorControl, odometer, propPiServer);
 		Behavior b2 = new NextTile(absImu, nav);
 		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
-		Behavior b4 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
-				propPiServer);
-		Behavior b5 = new Intersection(motorControl, distNx, eopdLeft,
+		Behavior b4 = new Intersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, odometer, nav, propPiServer);
-		Behavior b6 = new Victim(brickCon2, motorControl, thermal, propPiServer);
+		Behavior b5 = new SilverTile(lsa, nav, propPiServer);
+		Behavior b6 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
+				propPiServer);
 		Behavior b7 = new WallTooClose(eopdRight, eopdLeft, motorControl,
 				odometer, propPiServer);
-		Behavior b8 = new SilverTile(lsa, nav, propPiServer);
+		Behavior b8 = new Victim(brickCon2, motorControl, thermal, propPiServer);
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6, b7, b8 };
 
