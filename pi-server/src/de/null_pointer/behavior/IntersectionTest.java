@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import de.null_pointer.communication_pi.VirtualCommunicationPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -35,7 +36,7 @@ public class IntersectionTest {
 	TestBrickControlPi brickCon2 = null;
 
 	MotorControlPi motorControl = null;
-
+	Odometer odometer = null;
 	Intersection classToTest = null;
 
 	@Before
@@ -60,8 +61,9 @@ public class IntersectionTest {
 		props.setProperty("Behavior.Intersection.maximalDistanceSide", "20");
 
 		abs_Imu = new Abs_ImuProcessingPi(props);
+		odometer = new Odometer(accumulator, abs_Imu, props);
 		classToTest = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, abs_Imu, null, props); // null == nav
+				eopdRight, abs_Imu, odometer, null, props); // null == nav
 	}
 
 	@Test

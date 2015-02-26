@@ -103,7 +103,7 @@ public class CommunicationTest {
 		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav,
 				odometer, propPiServer);
 		testInters = new TestIntersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, nav, propPiServer);
+				eopdRight, absImu, odometer, nav, propPiServer);
 
 		testMovFor = new TestMovingForward(motorControl,
 				initProgramm.getOdometer(), propPiServer);
@@ -115,8 +115,8 @@ public class CommunicationTest {
 		testVictim = new TestVictim(brickControl, motorControl, thermal,
 				propPiServer);
 
-		brickControl = new TestBrickControlPi(comPi, nav, absImu, distNx, eopdLeft,
-				eopdRight, lsa, accumulator, thermal);
+		brickControl = new TestBrickControlPi(comPi, nav, absImu, distNx,
+				eopdLeft, eopdRight, lsa, accumulator, thermal);
 	}
 
 	@Test
