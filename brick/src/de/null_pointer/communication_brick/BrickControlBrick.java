@@ -260,8 +260,8 @@ public class BrickControlBrick extends Thread {
 					Motor.B.flt();
 					break;
 				case 5:
-					Motor.A.rotate(command[2]);
-					Motor.B.rotate(command[2]);
+					Motor.A.rotate(command[2], true);
+					Motor.B.rotate(command[2], true);
 					break;
 				default:
 					break;
