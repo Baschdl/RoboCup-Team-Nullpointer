@@ -11,11 +11,11 @@ public class Brick {
 
 	private static String[] mainMenuStrings = { "connect", "sensors",
 			"calibrate", "exit" };
-	private static String[] sensorMenuStrings = { "DistNX", "EOPD",
-			"LSA", "AbsIMU", "Thermal", "return" };
+	private static String[] sensorMenuStrings = { "DistNX", "EOPD", "LSA",
+			"AbsIMU", "Thermal", "return" };
 	private static String[] calibrationMenuStrings = { "LSA white",
 			"LSA black", "return" };
-	private static String[] absIMUMenuStrings = { "TiltData", "Gyro", "return"};
+	private static String[] absIMUMenuStrings = { "TiltData", "Gyro", "return" };
 
 	private static TextMenu mainMenu = new TextMenu(mainMenuStrings);
 	private static TextMenu sensorMenu = new TextMenu(sensorMenuStrings);
@@ -63,6 +63,14 @@ public class Brick {
 			comBrick.setDaemon(true);
 			System.out.println("Preparations finished.");
 			while (!Button.ESCAPE.isDown()) {
+
+				// Wenn Beide PfeilTasten gedrueckt sind, wird der Befehl zum
+				// Laden der Karte an Pi-Server geschickt
+				if (Button.LEFT.isDown() && Button.RIGHT.isDown()) {
+					comBrick.sendData(9, 1, 1);
+					Delay.msDelay(4500);
+				}
+
 				Delay.msDelay(500);
 			}
 		} catch (Exception e) {
@@ -87,7 +95,7 @@ public class Brick {
 		case 3:
 			LCD.clear();
 			showAbsIMU();
-			//allVal.showAbsIMU();
+			// allVal.showAbsIMU();
 			break;
 		case 4:
 			LCD.clear();
@@ -117,9 +125,9 @@ public class Brick {
 		}
 
 	}
-	
-	private static void showAbsIMU(){
-		switch (absIMUMenu.select()){
+
+	private static void showAbsIMU() {
+		switch (absIMUMenu.select()) {
 		case 0:
 			LCD.clear();
 			allVal.showAbsIMUTiltData();
@@ -129,7 +137,7 @@ public class Brick {
 			allVal.showAbsIMUGyro();
 			break;
 		case 2:
-			//return
+			// return
 			LCD.clear();
 			break;
 		}
