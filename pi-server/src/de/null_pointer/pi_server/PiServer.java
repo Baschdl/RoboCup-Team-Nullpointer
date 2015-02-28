@@ -55,7 +55,7 @@ public class PiServer {
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
 							initProgram.getEopdRight(),
-							initProgram.getDistNx(), initProgram.getThermal());
+							initProgram.getDistNx(), initProgram.getThermal(), initProgram.getOdometer());
 					logger.info("GUI gestartet");
 					vGUI.start();
 				}
