@@ -108,7 +108,7 @@ public class CommunicationTest {
 		testMovFor = new TestMovingForward(motorControl,
 				initProgramm.getOdometer(), propPiServer);
 
-		testNextTile = new TestNextTile(absImu, nav);
+		testNextTile = new TestNextTile(absImu, nav, odometer);
 
 		testSlope = new TestSlope(motorControl, absImu, nav, propPiServer);
 
