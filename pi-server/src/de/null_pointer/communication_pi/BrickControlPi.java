@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import de.null_pointer.motorcontrol_pi.Semaphore;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
@@ -24,7 +25,7 @@ public class BrickControlPi extends Thread {
 	private LSAProcessingPi lsa = null;
 	private AccumulatorProcessingPi accumulator = null;
 	private ThermalSensorProcessingPi thermal = null;
-
+	private Semaphore semaphore = null;
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
 
@@ -121,6 +122,15 @@ public class BrickControlPi extends Thread {
 		} else if (receiveData[0] == 9) {
 			// TODO Reset Button gedrueckt; ggf. muss noch weiteres getan werden
 			navi.loadMap();
+		} else if (receiveData[0] == 10) {
+			semaphore.down();
+		} else if (receiveData[0] == 11) {
+			semaphore.down();
+		} else if (receiveData[0] == 12) {
+			semaphore.down();
+		} else if (receiveData[0] == 13) {
+			semaphore.down();
+			semaphore.down();
 		} else {
 
 			// System.out.println("process Data (no sensor) " +
@@ -404,6 +414,7 @@ public class BrickControlPi extends Thread {
 
 	public void rotate(int angle, char motorport) {
 		logger.debug("Sende Kommando rotate");
+		semaphore.up();
 		switch (motorport) {
 		case 'A':
 			sendCommand(9, 1, angle, 5);
@@ -415,6 +426,7 @@ public class BrickControlPi extends Thread {
 			sendCommand(9, 3, angle, 5);
 			break;
 		case 'D':
+			semaphore.up();
 			sendCommand(9, 4, angle, 5);
 			break;
 		default:
@@ -474,6 +486,10 @@ public class BrickControlPi extends Thread {
 
 	public void blinkColorSensorLED() {
 		sendCommand(11, 1);
+	}
+
+	public void setSemaphore(Semaphore semaphore) {
+		this.semaphore = semaphore;
 	}
 
 }

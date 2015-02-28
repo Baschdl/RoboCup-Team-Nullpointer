@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
@@ -24,6 +25,7 @@ import de.null_pointer.communication_pi.CommunicationPi;
 import de.null_pointer.communication_pi.InitCommunicationPi;
 import de.null_pointer.communication_pi.RealCommunicationPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.motorcontrol_pi.Semaphore;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
@@ -54,6 +56,8 @@ public class InitializeProgram {
 	private Arbitrator arbitrator = null;
 	private CommunicationPi comPi1 = null;
 	private CommunicationPi comPi2 = null;
+	
+	private Semaphore available = null;
 
 	private Properties propPiServer = null;
 
@@ -242,13 +246,17 @@ public class InitializeProgram {
 
 		Behavior[] behavior = { b1, b2, b3, b4, b5, b6, b7, b8 };
 
-		// Abritrator wird erst Initialisiert, wenn von beiden Bricks gemeldet
+		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
 		// wurden
 		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
 		}
 
 		arbitrator = new Arbitrator(behavior);
+		available = new Semaphore(arbitrator);
+		brickCon1.setSemaphore(available);
+		brickCon2.setSemaphore(available);
+		
 	}
 
 	private static Properties loadConfiguration(String configFile) {
