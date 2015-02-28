@@ -6,8 +6,7 @@ import org.apache.log4j.Logger;
 
 /**
  * 
- * @author Jan Krebes
- * 
+ * @author Jan Krebes (jankrebes@null-pointer.de)
  */
 public class Navigation {
 
@@ -20,7 +19,7 @@ public class Navigation {
 	private TurnSave currentTurn = null;
 	private TurnSave initialTurn = null;
 
-	private int lastOrientation = -1;
+	private int lastDirection = -1;
 	private boolean firstTile = true;
 
 	public Navigation(Properties propPiServer) {
@@ -63,144 +62,156 @@ public class Navigation {
 	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat) {
 		int direction = -1;
 
-		int[] tremauxCounter = currentTile.getTremauxCounter();
+		// check if direction to move was already evaluated
+		// if so, the last evaluated direction gets returned
+		if (currentTile.getTremauxAlreadyEvaluated() == false) {
+			int[] tremauxCounter = currentTile.getTremauxCounter();
 
-		if (blackTileRetreat == false && firstTile == false) {
-			currentTile.incTremauxCounter(currentTile
-					.invertOrientation(orientation));
-		}
-
-		// check if maze is solved already
-		if (checkSolved(tremauxCounter) && currentTile == startTile) {
-
-			logger.info("maze is solved ! d: -2");
-			return -2;
-			// method returns error, if there is no way to go
-		} else if (possibleDirections(tremauxCounter) == 0) {
-			direction = -1;
-
-			logger.warn("there's no way to go ! d: " + direction);
-
-			// check for dead end; if detected, robot takes only possible
-			// direction
-		} else if (possibleDirections(tremauxCounter) == 1) {
-			for (int i = 0; i < 4; i++) {
-				if (tremauxCounter[i] != -2) {
-					direction = i;
-					break;
-				}
+			if (blackTileRetreat == false && firstTile == false) {
+				currentTile.incTremauxCounter(currentTile
+						.invertOrientation(orientation));
 			}
 
-			logger.info("dead end, taking only possible direction ! d: "
-					+ direction);
+			// check if maze is solved already
+			if (checkSolved(tremauxCounter) && currentTile == startTile) {
 
-			// check for hallway and follow it if it's not a black tile retreat
-		} else if (possibleDirections(tremauxCounter) == 2) {
-			if (blackTileRetreat == false) {
+				logger.info("maze is solved ! d: -2");
+				return -2;
+				// method returns error, if there is no way to go
+			} else if (possibleDirections(tremauxCounter) == 0) {
+				direction = -1;
+
+				logger.warn("there's no way to go ! d: " + direction);
+
+				// check for dead end; if detected, robot takes only possible
+				// direction
+			} else if (possibleDirections(tremauxCounter) == 1) {
 				for (int i = 0; i < 4; i++) {
-					if (tremauxCounter[i] != -2
-							&& i != currentTile.invertOrientation(orientation)) {
+					if (tremauxCounter[i] != -2) {
 						direction = i;
 						break;
 					}
 				}
 
-				logger.info("hallway detectet ! d: " + direction);
+				logger.info("dead end, taking only possible direction ! d: "
+						+ direction);
 
+				// check for hallway and follow it if it's not a black tile
+				// retreat
+			} else if (possibleDirections(tremauxCounter) == 2) {
+				if (blackTileRetreat == false) {
+					for (int i = 0; i < 4; i++) {
+						if (tremauxCounter[i] != -2
+								&& i != currentTile
+										.invertOrientation(orientation)) {
+							direction = i;
+							break;
+						}
+					}
+
+					logger.info("hallway detectet ! d: " + direction);
+
+				} else {
+					for (int i = 0; i < 4; i++) {
+						if (tremauxCounter[i] != -2
+								&& i != currentTile
+										.invertOrientation(lastDirection)) {
+							direction = i;
+							break;
+						}
+					}
+					logger.info("BlackTileRetreat: hallway detectet ! d: "
+							+ direction);
+				}
+
+				// -> real intersection; check TremauxCounter to evaluate
+				// direction
 			} else {
-				for (int i = 0; i < 4; i++) {
-					if (tremauxCounter[i] != -2
-							&& i != currentTile
-									.invertOrientation(lastOrientation)) {
-						direction = i;
-						break;
+
+				// if tile was already visited and the previous corridor was
+				// only taken once, the robot reverses and passes it a second
+				// time
+				if (blackTileRetreat == false) {
+					if (currentTile.isVisited()
+							&& tremauxCounter[currentTile
+									.invertOrientation(orientation)] == 1) {
+
+						direction = currentTile.invertOrientation(orientation);
+
+						if (blackTileRetreat) {
+							logger.info("BlackTileRetreat: already visited, turning around ! d: "
+									+ direction);
+						} else {
+							logger.info("already visited, turning around ! d: "
+									+ direction);
+						}
+
+						if (direction >= 0) {
+							currentTile.incTremauxCounter(direction);
+						}
+						lastDirection = direction;
+						addTurn(direction, tremauxCounter, blackTileRetreat);
+						return direction;
 					}
 				}
-				logger.info("BlackTileRetreat: hallway detectet ! d: "
-						+ direction);
-			}
+				if (currentTile.isVisited()) {
 
-			// -> real intersection; check TremauxCounter to evaluate direction
-		} else {
-
-			// if tile was already visited and the previous corridor was
-			// only taken once, the robot reverses and passes it a second
-			// time
-			if (blackTileRetreat == false) {
-				if (currentTile.isVisited()
-						&& tremauxCounter[currentTile
-								.invertOrientation(orientation)] == 1) {
-
-					direction = currentTile.invertOrientation(orientation);
-
-					if (blackTileRetreat) {
-						logger.info("BlackTileRetreat: already visited, turning around ! d: "
-								+ direction);
-					} else {
-						logger.info("already visited, turning around ! d: "
-								+ direction);
-					}
-
-					if (direction >= 0) {
-						currentTile.incTremauxCounter(direction);
-					}
-					lastOrientation = direction;
-					addTurn(direction, tremauxCounter, blackTileRetreat);
-					return direction;
-				}
-			}
-			if (currentTile.isVisited()) {
-
-				direction = rightmostDirection(orientation, tremauxCounter, 0);
-
-				// if there is no corridor which was never passed, the robot
-				// takes the rightmost once passed corridor
-				if (direction == -1) {
 					direction = rightmostDirection(orientation, tremauxCounter,
-							1);
+							0);
 
-					if (blackTileRetreat) {
-						logger.info("BlackTileRetreat: tile already visited, passing rightmost once visited corridor ! d: "
-								+ direction);
-					} else {
-						logger.info("tile already visited, passing rightmost once visited corridor ! d: "
-								+ direction);
+					// if there is no corridor which was never passed, the robot
+					// takes the rightmost once passed corridor
+					if (direction == -1) {
+						direction = rightmostDirection(orientation,
+								tremauxCounter, 1);
+
+						if (blackTileRetreat) {
+							logger.info("BlackTileRetreat: tile already visited, passing rightmost once visited corridor ! d: "
+									+ direction);
+						} else {
+							logger.info("tile already visited, passing rightmost once visited corridor ! d: "
+									+ direction);
+						}
+					}
+
+					// if there is a corridor which was never passed, the robot
+					// takes the rightmost one
+					else {
+						if (blackTileRetreat) {
+							logger.info("BlackTileRetreat: tile already visited, passing rightmost never passed corridor ! d: "
+									+ direction);
+						} else {
+							logger.info("tile already visited, passing rightmost never passed corridor ! d: "
+									+ direction);
+						}
 					}
 				}
-
-				// if there is a corridor which was never passed, the robot
-				// takes the rightmost one
+				// tile was visited the first time; robot takes the rightmost
+				// direction
 				else {
-					if (blackTileRetreat) {
-						logger.info("BlackTileRetreat: tile already visited, passing rightmost never passed corridor ! d: "
-								+ direction);
-					} else {
-						logger.info("tile already visited, passing rightmost never passed corridor ! d: "
-								+ direction);
-					}
+					direction = rightmostDirection(orientation, tremauxCounter,
+							0);
+
+					logger.info("tile was visited the first time, taking rightmost direction ! d: "
+							+ direction);
+
+					currentTile.setVisited();
 				}
 			}
-			// tile was visited the first time; robot takes the rightmost
-			// direction
-			else {
-				direction = rightmostDirection(orientation, tremauxCounter, 0);
 
-				logger.info("tile was visited the first time, taking rightmost direction ! d: "
-						+ direction);
-
-				currentTile.setVisited();
+			if (firstTile) {
+				firstTile = false;
 			}
+			if (direction >= 0) {
+				currentTile.incTremauxCounter(direction);
+			}
+			lastDirection = direction;
+			currentTile.setTremauxAlreadyEvaluated(true);
+			addTurn(direction, tremauxCounter, blackTileRetreat);
+			return direction;
+		} else {
+			return lastDirection;
 		}
-
-		if (firstTile) {
-			firstTile = false;
-		}
-		if (direction >= 0) {
-			currentTile.incTremauxCounter(direction);
-		}
-		lastOrientation = direction;
-		addTurn(direction, tremauxCounter, blackTileRetreat);
-		return direction;
 	}
 
 	/**
@@ -395,6 +406,7 @@ public class Navigation {
 	}
 
 	public void switchTile(int orientation) {
+		currentTile.setTremauxAlreadyEvaluated(false);
 		currentTile = currentTile.getNeighbor(orientation);
 		if (currentTile == null) {
 			logger.warn("CurrentTile is NULL !");
@@ -467,8 +479,7 @@ public class Navigation {
 		// orientLeftRight, orientDownUp, orientUpDown:
 		// used to change the orientation of the to be added Node from left to
 		// right/ down to up/ up to down
-		// column: indicates the number of the column
-		// being added
+		// column: indicates the number of the column being added
 		// row: indicates the number of the row being added
 
 		// iterates to generate rows of Node-lines in both North and South
