@@ -22,7 +22,9 @@ public class HandleValues extends Thread {
 			Abs_ImuProcessingPi absimuprocclass,
 			EOPDProcessingPi eopdLeftprocclass,
 			EOPDProcessingPi eopdRightprocclass,
-			DistNxProcessingPi distnxprocclass, ThermalSensorProcessingPi thermalSensorprocclass, Odometer odometerclass) {
+			DistNxProcessingPi distnxprocclass,
+			ThermalSensorProcessingPi thermalSensorprocclass,
+			Odometer odometerclass) {
 		this.lsaprocclass = lsaprocclass;
 		this.absimuprocclass = absimuprocclass;
 		this.eopdLeftprocclass = eopdLeftprocclass;
@@ -62,7 +64,7 @@ public class HandleValues extends Thread {
 
 	private void readDistNXRaw() {
 
-			valueGUI.showDistNXRaw(distnxprocclass.getDistance());
+		valueGUI.showDistNXRaw(distnxprocclass.getDistance());
 
 	}
 
@@ -80,7 +82,8 @@ public class HandleValues extends Thread {
 
 	private void readAbs_ImuCompass_Heading() {
 
-		valueGUI.showAbsoluteIMUACG_compass_heading(absimuprocclass.getAbsImuHeading());
+		valueGUI.showAbsoluteIMUACG_compass_heading(absimuprocclass
+				.getAbsImuHeading());
 	}
 
 	private void readAbs_ImuCompass_Angle() {
@@ -89,23 +92,23 @@ public class HandleValues extends Thread {
 				.getAngleHorizontal());
 
 	}
-	
-	private void readThermalSensor(){
-		
+
+	private void readThermalSensor() {
+
 		valueGUI.showThermalSensor(thermalSensorprocclass.getTemperature());
-		
+
 	}
-	
-	private void readSlopeAngle(){
-		
+
+	private void readSlopeAngle() {
+
 		valueGUI.showSlopeAngle(absimuprocclass.getTiltDataVertical());
-	
+
 	}
-	
-	private void readOdometer(){
-		
+
+	private void readOdometer() {
+
 		valueGUI.showOdometer(odometerclass.getDistanceCounter());
-		
+
 	}
 
 }

@@ -51,11 +51,21 @@ public class PiServer {
 					GuiNavigation navGUI = new GuiNavigation();
 					logger.info("Navigation-GUI gestartet");
 				} else if (s.equals("normal")) {
+					boolean startComp = false;
+					for (String param : args) {
+						if (param.equals("-comp")) {
+							startComp = true;
+						}
+					}
+					if (startComp == false) {
+						initProgram.initializeNavigation();
+					}
 					logger.debug("Starte GUI");
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
 							initProgram.getEopdRight(),
-							initProgram.getDistNx(), initProgram.getThermal(), initProgram.getOdometer());
+							initProgram.getDistNx(), initProgram.getThermal(),
+							initProgram.getOdometer());
 					logger.info("GUI gestartet");
 					vGUI.start();
 				}
