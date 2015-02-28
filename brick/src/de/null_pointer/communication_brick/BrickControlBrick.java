@@ -171,6 +171,8 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					Motor.A.rotate(command[2], true);
+					while(Motor.A.isMoving()){};
+					sendData(10,1,0);
 					break;
 				case 6:
 					Motor.A.resetTachoCount();
@@ -199,6 +201,8 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					Motor.B.rotate(command[2], true);
+					while(Motor.B.isMoving()){};
+					sendData(11,1,0);
 					break;
 				case 6:
 					Motor.B.resetTachoCount();
@@ -226,6 +230,8 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					Motor.C.rotate(command[2], true);
+					while(Motor.C.isMoving()){};
+					sendData(12,1,0);
 					break;
 				case 6:
 					Motor.C.resetTachoCount();
@@ -262,6 +268,8 @@ public class BrickControlBrick extends Thread {
 				case 5:
 					Motor.A.rotate(command[2], true);
 					Motor.B.rotate(command[2], true);
+					while(Motor.A.isMoving() || Motor.B.isMoving()){};
+					sendData(13, 1, 0);
 					break;
 				default:
 					break;
