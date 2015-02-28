@@ -11,7 +11,7 @@ public class DistNxProcessingPi {
 
 	public void setDistance(int distance) {
 		synchronized (lockDistance) {
-			this.distance = distance;
+			this.distance = Math.round(distance / 10);
 		}
 	}
 
@@ -20,8 +20,8 @@ public class DistNxProcessingPi {
 			return distance;
 		}
 	}
-	
-	public void setTestDistance(int distance){
+
+	public void setTestDistance(int distance) {
 		this.distance = distance;
 	}
 }

@@ -3,15 +3,13 @@ package de.null_pointer.navigation.map;
 import org.apache.log4j.Logger;
 
 /**
- * This class represents a Node which can be connected to other neighboring
- * nodes. Node sets can be searched using search algorithms. Typically the
- * search algorithm only requires one starting node and one goal node. It
- * assumes these nodes are linked by intermediate nodes.
- * 
  * Orignal Code from lejos;
  * 
  * @author BB
  * @see lejos.robotics.pathfinding.SearchAlgorithm
+ * 
+ * @author Jan Krebes (jankrebes@null-pointer.de)
+ * @author Sebastian Bischoff (sebastianbischoff@null-pointer.de)
  */
 public class Node {
 
@@ -41,6 +39,12 @@ public class Node {
 	 * Indicates if intersection/ node was already visited.
 	 */
 	private boolean visited = false;
+
+	/**
+	 * Indicates if the tremauxAlgorithm already calculated the direction the
+	 * robot should take for this tile
+	 */
+	private boolean tremauxAlreadyEvaluated = false;
 
 	/**
 	 * List of neighbors to this node. 0 = North; 1 = East; 2 = South; 3 = West;
@@ -83,6 +87,14 @@ public class Node {
 
 	public void setVisited() {
 		visited = true;
+	}
+
+	public boolean getTremauxAlreadyEvaluated() {
+		return tremauxAlreadyEvaluated;
+	}
+
+	public void setTremauxAlreadyEvaluated(boolean value) {
+		tremauxAlreadyEvaluated = value;
 	}
 
 	/**
@@ -146,7 +158,6 @@ public class Node {
 	 * @return Returns false if the neighbor already existed, or if you try to
 	 *         add this node to itself as a neighbor.
 	 */
-	// TODO: addNeighbor()-Methode unbedingt mit jUnit testen
 	public boolean addNeighbor(Node neighbor, int orientation, int abort) {
 		// Check if Node is already connected
 		if (abort == 2) {

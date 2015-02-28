@@ -44,18 +44,35 @@ public class PiServer {
 			s = args[i];
 			// ruft die GUI auf
 			if (s.equals("-gui")) {
+
 				i++;
 				s = args[i];
 				if (s.equals("navigation")) {
 					logger.debug("Starte Navigation-GUI");
 					GuiNavigation navGUI = new GuiNavigation();
 					logger.info("Navigation-GUI gestartet");
+
 				} else if (s.equals("normal")) {
+					/*
+					 * Wenn der Parameter "comp" vor "-gui normal" uebergeben
+					 * wurde, soll die Navigation nicht initialisiert werden
+					 */
+					boolean comParam = false;
+					for (int j = 0; j < args.length && j < i; j++) {
+						if (args[j].equals("-comp")) {
+							comParam = true;
+						}
+					}
+					if (comParam == false) {
+						initProgram.initializeNavigation();
+					}
+
 					logger.debug("Starte GUI");
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
 							initProgram.getEopdRight(),
-							initProgram.getDistNx(), initProgram.getThermal());
+							initProgram.getDistNx(), initProgram.getThermal(),
+							initProgram.getOdometer());
 					logger.info("GUI gestartet");
 					vGUI.start();
 				}
@@ -64,7 +81,20 @@ public class PiServer {
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
 				logger.info("Wettkampfprogramm gestartet");
-				initProgram.initializeNavigation();
+
+				/*
+				 * Wenn der Parameter "-gui normal" vor "comp" uebergeben wurde,
+				 * soll die Navigation nicht initialisiert werden
+				 */
+				boolean guiNormalParam = false;
+				for (int j = 0; j < args.length && j < i; j++) {
+					if (args[j].equals("-gui") && args[j + 1].equals("normal")) {
+						guiNormalParam = true;
+					}
+				}
+				if (guiNormalParam == false) {
+					initProgram.initializeNavigation();
+				}
 				initProgram.initializeBehavior();
 
 				initProgram.getArbitrator().start();
@@ -80,10 +110,12 @@ public class PiServer {
 				try {
 					speedAngle = Integer.parseInt(args[i + 1]);
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				try {
 					duration = Integer.parseInt(args[i + 2]);
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				if (s.equals("forward")) {
 					logger.debug("Starte Testprogramm forward");
