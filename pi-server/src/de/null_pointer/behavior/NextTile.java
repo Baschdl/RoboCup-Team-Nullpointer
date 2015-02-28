@@ -15,9 +15,11 @@ public class NextTile implements Behavior {
 	private Navigation nav = null;
 	private Odometer odometer = null;
 
-	public NextTile(Abs_ImuProcessingPi absImu, Navigation nav) {
+	public NextTile(Abs_ImuProcessingPi absImu, Navigation nav,
+			Odometer odometer) {
 		this.absImu = absImu;
 		this.nav = nav;
+		this.odometer = odometer;
 	}
 
 	@Override
