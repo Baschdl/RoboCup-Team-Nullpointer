@@ -95,6 +95,7 @@ public class Abs_ImuProcessingBrick {
 	 */
 	public void processData_TiltData() {
 		int[] TiltData = abs_imu.getTiltData();
+		TiltData[dimension_vertical] -= 128;
 		// new TiltData will only be sent away, if it has changed
 		if (TiltData[dimension_vertical] < oldTiltData[dimension_vertical]
 				|| TiltData[dimension_vertical] > oldTiltData[dimension_vertical]) {
