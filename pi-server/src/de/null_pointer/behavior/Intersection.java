@@ -107,27 +107,38 @@ public class Intersection implements Behavior {
 		}
 		lastIntersection = nav.getCurrentTile();
 
-		int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
-				false);
+		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
+		// false);
 
-		motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
+		int directionToMove = nav.tremauxAlgorithm(
+				motorControl.getRotationHeading(), false);
+
+		// motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
+
+		motorControl.decideTurn(motorControl.getRotationHeading(),
+				directionToMove);
 	}
 
 	private void findHallway() {
 		double distanceSide = -1;
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
-			nav.removeNeighbor(absImu.getAbsImuHeading());
+			// nav.removeNeighbor(absImu.getAbsImuHeading());
+			nav.removeNeighbor(motorControl.getRotationHeading());
 		}
 		if ((distanceSide = eopdLeft.getDistance()) <= maximalDistanceSide
 				& distanceSide > 0) {
+			// nav.removeNeighbor(nav.rightleftDirection(
+			// absImu.getAbsImuHeading(), false));
 			nav.removeNeighbor(nav.rightleftDirection(
-					absImu.getAbsImuHeading(), false));
+					motorControl.getRotationHeading(), false));
 		}
 		if ((distanceSide = eopdRight.getDistance()) <= maximalDistanceSide
 				& distanceSide > 0) {
+			// nav.removeNeighbor(nav.rightleftDirection(
+			// absImu.getAbsImuHeading(), true));
 			nav.removeNeighbor(nav.rightleftDirection(
-					absImu.getAbsImuHeading(), true));
+					motorControl.getRotationHeading(), true));
 		}
 	}
 
