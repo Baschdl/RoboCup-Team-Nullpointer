@@ -24,6 +24,10 @@ public class JFDisplayValues extends JFrame {
 	private JLabel jLAbsoluteIMU_ACG_Compass_Angle;
 	private JLabel lblThermalsensor;
 	private JLabel jLThermalSensor;
+	private JLabel lblSteigungswinkel;
+	private JLabel jLSlopeAngle;
+	private JLabel lblDistancecounter;
+	private JLabel jLOdometer;
 
 	/**
 	 * Create the frame.
@@ -91,8 +95,24 @@ public class JFDisplayValues extends JFrame {
 		contentPane.add(lblThermalsensor);
 		
 		jLThermalSensor = new JLabel("--");
-		jLThermalSensor.setBounds(97, 136, 97, 14);
+		jLThermalSensor.setBounds(107, 136, 97, 14);
 		contentPane.add(jLThermalSensor);
+		
+		lblSteigungswinkel = new JLabel("Steigungswinkel:");
+		lblSteigungswinkel.setBounds(10, 161, 83, 14);
+		contentPane.add(lblSteigungswinkel);
+		
+		jLSlopeAngle = new JLabel("--");
+		jLSlopeAngle.setBounds(107, 161, 97, 14);
+		contentPane.add(jLSlopeAngle);
+		
+		lblDistancecounter = new JLabel("DistanceCounter:");
+		lblDistancecounter.setBounds(10, 186, 91, 14);
+		contentPane.add(lblDistancecounter);
+		
+		jLOdometer = new JLabel("--");
+		jLOdometer.setBounds(107, 186, 46, 14);
+		contentPane.add(jLOdometer);
 
 		this.setVisible(true);
 	}
@@ -136,6 +156,18 @@ public class JFDisplayValues extends JFrame {
 	public void showThermalSensor(int value){
 		
 		jLThermalSensor.setText(Integer.toString(value));
+		
+	}
+	
+	public void showSlopeAngle(int value){
+		
+		jLSlopeAngle.setText(Integer.toString(value));
+		
+	}
+	
+	public void showOdometer(double value){
+		
+		jLOdometer.setText(Double.toString(value));
 		
 	}
 }

@@ -1,5 +1,6 @@
 package de.null_pointer.gui;
 
+import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
@@ -15,18 +16,20 @@ public class HandleValues extends Thread {
 	private EOPDProcessingPi eopdRightprocclass = null;
 	private DistNxProcessingPi distnxprocclass = null;
 	private ThermalSensorProcessingPi thermalSensorprocclass = null;
+	private Odometer odometerclass = null;
 
 	public HandleValues(LSAProcessingPi lsaprocclass,
 			Abs_ImuProcessingPi absimuprocclass,
 			EOPDProcessingPi eopdLeftprocclass,
 			EOPDProcessingPi eopdRightprocclass,
-			DistNxProcessingPi distnxprocclass, ThermalSensorProcessingPi thermalSensorprocclass) {
+			DistNxProcessingPi distnxprocclass, ThermalSensorProcessingPi thermalSensorprocclass, Odometer odometerclass) {
 		this.lsaprocclass = lsaprocclass;
 		this.absimuprocclass = absimuprocclass;
 		this.eopdLeftprocclass = eopdLeftprocclass;
 		this.eopdRightprocclass = eopdRightprocclass;
 		this.distnxprocclass = distnxprocclass;
 		this.thermalSensorprocclass = thermalSensorprocclass;
+		this.odometerclass = odometerclass;
 	}
 
 	public void run() {
@@ -44,6 +47,8 @@ public class HandleValues extends Thread {
 			readAbs_ImuCompass_Angle();
 			readAbs_ImuCompass_Heading();
 			readThermalSensor();
+			readSlopeAngle();
+			readOdometer();
 
 		}
 
@@ -88,6 +93,18 @@ public class HandleValues extends Thread {
 	private void readThermalSensor(){
 		
 		valueGUI.showThermalSensor(thermalSensorprocclass.getTemperature());
+		
+	}
+	
+	private void readSlopeAngle(){
+		
+		valueGUI.showSlopeAngle(absimuprocclass.getTiltDataVertical());
+	
+	}
+	
+	private void readOdometer(){
+		
+		valueGUI.showOdometer(odometerclass.getDistanceCounter());
 		
 	}
 
