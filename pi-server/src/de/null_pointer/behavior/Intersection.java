@@ -31,6 +31,7 @@ public class Intersection implements Behavior {
 	private int maximalDistanceSide = -1;
 	private int speed = -1;
 	private long time = 0;
+	// TODO: passender benennen
 	private int actualDistance = -1;
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
@@ -78,7 +79,7 @@ public class Intersection implements Behavior {
 		time = 0;
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
-			motorControl.stop(); 
+			motorControl.stop();
 			findHallway();
 		} else {
 			motorControl.forward(speed);
@@ -113,15 +114,18 @@ public class Intersection implements Behavior {
 	}
 
 	private void findHallway() {
+		double distanceSide = -1;
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
 			nav.removeNeighbor(absImu.getAbsImuHeading());
 		}
-		if (eopdLeft.getDistance() <= maximalDistanceSide) {
+		if ((distanceSide = eopdLeft.getDistance()) <= maximalDistanceSide
+				& distanceSide > 0) {
 			nav.removeNeighbor(nav.rightleftDirection(
 					absImu.getAbsImuHeading(), false));
 		}
-		if (eopdRight.getDistance() <= maximalDistanceSide) {
+		if ((distanceSide = eopdRight.getDistance()) <= maximalDistanceSide
+				& distanceSide > 0) {
 			nav.removeNeighbor(nav.rightleftDirection(
 					absImu.getAbsImuHeading(), true));
 		}
