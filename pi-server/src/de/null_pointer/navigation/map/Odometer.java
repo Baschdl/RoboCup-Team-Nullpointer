@@ -42,8 +42,8 @@ public class Odometer {
 		//milliVolt = accumulator.getMilliVolt();
 
 		// TODO Batteriestatus beachten
-		tmpDistance = (currentSpeed / 360) * 2 * Math.PI * wheelRadius
-				* (time / 1000);
+		tmpDistance = (currentSpeed / 360.0) * 2.0 * Math.PI * wheelRadius
+				* (time / 1000.0);
 		distanceCounter += tmpDistance;
 
 	}
