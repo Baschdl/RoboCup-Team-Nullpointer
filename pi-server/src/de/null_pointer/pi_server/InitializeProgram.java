@@ -241,7 +241,8 @@ public class InitializeProgram {
 	public void initializeBehavior() {
 		// TODO: Reihenfolge richtig?
 		Behavior b1 = new MovingForward(motorControl, odometer, propPiServer);
-		Behavior b2 = new NextTile(absImu, nav, odometer);
+		Behavior b2 = new NextTile(/* absImu, */motorControl, nav, odometer,
+				propPiServer);
 		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
 		Behavior b4 = new Intersection(motorControl, distNx, eopdLeft,
 				eopdRight, absImu, odometer, nav, propPiServer);
@@ -250,7 +251,8 @@ public class InitializeProgram {
 				propPiServer);
 		Behavior b7 = new WallTooClose(eopdRight, eopdLeft, motorControl,
 				odometer, propPiServer);
-		Behavior b8 = new Victim(brickCon2, motorControl, thermal, propPiServer);
+		Behavior b8 = new Victim(brickCon2, motorControl, nav, thermal,
+				propPiServer);
 
 		Behavior[] behavior = { b1, b2, /** b3, **/
 		b4, b5, b6, /** b7, **/

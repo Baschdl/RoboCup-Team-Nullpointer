@@ -5,6 +5,7 @@ import java.util.Properties;
 import de.null_pointer.behavior.Victim;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 
 public class TestVictim extends Victim {
@@ -12,9 +13,9 @@ public class TestVictim extends Victim {
 	private boolean active = false;
 
 	public TestVictim(BrickControlPi brickControlLED,
-			MotorControlPi motorControl, ThermalSensorProcessingPi thermal,
+			MotorControlPi motorControl, Navigation nav, ThermalSensorProcessingPi thermal,
 			Properties propPiServer) {
-		super(brickControlLED, motorControl, thermal, propPiServer);
+		super(brickControlLED, motorControl, nav, thermal, propPiServer);
 	}
 
 	public boolean isActive() {

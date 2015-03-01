@@ -558,4 +558,12 @@ public class Navigation {
 		}
 	}
 
+	public boolean getVictimFound(int direction) {
+		return currentTile.getVictimFound(direction);
+	}
+	
+	public void setVictimFound(int direction){
+		currentTile.setVictimFound(direction);
+	}
+
 }

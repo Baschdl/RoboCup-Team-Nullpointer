@@ -77,10 +77,15 @@ public class BlackTile implements Behavior {
 			time = System.currentTimeMillis() - time;
 		}
 		motorControl.stop();
-		int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
-				true);
+		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
+		// true);
 
-		motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
+		int directionToMove = nav.tremauxAlgorithm(
+				motorControl.getRotationHeading(), true);
+
+		//motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
+		
+		motorControl.decideTurn(motorControl.getRotationHeading(), directionToMove);
 	}
 
 	@Override

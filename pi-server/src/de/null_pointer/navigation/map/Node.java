@@ -53,6 +53,8 @@ public class Node {
 
 	private int[] tremauxCounter = { 0, 0, 0, 0 };
 
+	private boolean[] victimFound = { false, false, false, false };
+
 	/**
 	 * Creates a new instance of a node
 	 * 
@@ -95,6 +97,14 @@ public class Node {
 
 	public void setTremauxAlreadyEvaluated(boolean value) {
 		tremauxAlreadyEvaluated = value;
+	}
+	
+	public boolean getVictimFound(int direction){
+		return victimFound[direction];
+	}
+	
+	public void setVictimFound(int direction){
+		victimFound[direction] = true;
 	}
 
 	/**

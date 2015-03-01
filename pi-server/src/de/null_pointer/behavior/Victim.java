@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.sensorprocessing_pi.ThermalSensorProcessingPi;
 
 public class Victim implements Behavior {
@@ -15,6 +16,7 @@ public class Victim implements Behavior {
 
 	private BrickControlPi brickControlLED = null;
 	private MotorControlPi motorControl = null;
+	private Navigation nav = null;
 	private ThermalSensorProcessingPi thermal = null;
 	private Properties propPiServer = null;
 
@@ -24,9 +26,11 @@ public class Victim implements Behavior {
 	private int victimsFound = 0;
 
 	public Victim(BrickControlPi brickControlLED, MotorControlPi motorControl,
-			ThermalSensorProcessingPi thermal, Properties propPiServer) {
+			Navigation nav, ThermalSensorProcessingPi thermal,
+			Properties propPiServer) {
 		this.brickControlLED = brickControlLED;
 		this.motorControl = motorControl;
+		this.nav = nav;
 		this.thermal = thermal;
 		this.propPiServer = propPiServer;
 
@@ -46,7 +50,9 @@ public class Victim implements Behavior {
 		}
 		int temperature = -1;
 		return (temperature = thermal.getTemperature()) > minimumTemperature
-				&& temperature < maximumTemperature;
+				&& temperature < maximumTemperature
+				&& nav.getVictimFound(nav.rightleftDirection(
+						motorControl.getRotationHeading(), true)) == false;
 	}
 
 	@Override
@@ -56,6 +62,8 @@ public class Victim implements Behavior {
 		// TODO: ggf. bis zur mitte der Kachel fahren (mittels Odometer)
 		motorControl.stop();
 
+		nav.setVictimFound(nav.rightleftDirection(
+				motorControl.getRotationHeading(), true));
 		brickControlLED.blinkColorSensorLED();
 
 		// TODO: Rettungspaket abwerfen
