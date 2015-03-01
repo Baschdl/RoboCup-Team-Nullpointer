@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JFDisplayValues extends JFrame {
 
@@ -28,13 +31,17 @@ public class JFDisplayValues extends JFrame {
 	private JLabel jLSlopeAngle;
 	private JLabel lblDistancecounter;
 	private JLabel jLOdometer;
+	private JButton btnCloseConnection;
+	private JLabel lblMotorcontrolheading;
+	private JLabel jLMotorControlHeading;
+	private boolean closeConnection = false;
 
 	/**
 	 * Create the frame.
 	 */
 	public JFDisplayValues() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 545, 395);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -56,7 +63,7 @@ public class JFDisplayValues extends JFrame {
 		jLDistNX.setBounds(96, 36, 83, 14);
 		getContentPane().add(jLDistNX);
 
-		lblEopdRechts = new JLabel("EOPD rechts:");
+		lblEopdRechts = new JLabel("EOPD right:");
 		lblEopdRechts.setBounds(10, 61, 77, 14);
 		getContentPane().add(lblEopdRechts);
 
@@ -64,16 +71,16 @@ public class JFDisplayValues extends JFrame {
 		jLEOPDright.setBounds(97, 61, 126, 14);
 		getContentPane().add(jLEOPDright);
 
-		lblEopdLinks = new JLabel("EOPD links:");
-		lblEopdLinks.setBounds(218, 61, 64, 14);
+		lblEopdLinks = new JLabel("EOPD left:");
+		lblEopdLinks.setBounds(218, 61, 74, 14);
 		getContentPane().add(lblEopdLinks);
 
 		jLEOPDleft = new JLabel("--");
-		jLEOPDleft.setBounds(292, 61, 142, 14);
+		jLEOPDleft.setBounds(302, 61, 142, 14);
 		getContentPane().add(jLEOPDleft);
 
 		lblAbsoluteimuacgKompassHeading = new JLabel(
-				"AbsoluteIMU-ACG Kompass Ausrichtung:");
+				"AbsoluteIMU-ACG Compass Heading:");
 		lblAbsoluteimuacgKompassHeading.setBounds(10, 86, 272, 14);
 		getContentPane().add(lblAbsoluteimuacgKompassHeading);
 
@@ -82,7 +89,7 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Heading);
 
 		lblAbsoluteimuacgKompassWinkel = new JLabel(
-				"AbsoluteIMU-ACG Kompass Winkel:");
+				"AbsoluteIMU-ACG Compass Angle:");
 		lblAbsoluteimuacgKompassWinkel.setBounds(10, 111, 272, 14);
 		getContentPane().add(lblAbsoluteimuacgKompassWinkel);
 
@@ -91,28 +98,45 @@ public class JFDisplayValues extends JFrame {
 		getContentPane().add(jLAbsoluteIMU_ACG_Compass_Angle);
 		
 		lblThermalsensor = new JLabel("ThermalSensor:");
-		lblThermalsensor.setBounds(10, 136, 77, 14);
+		lblThermalsensor.setBounds(10, 136, 138, 14);
 		contentPane.add(lblThermalsensor);
 		
 		jLThermalSensor = new JLabel("--");
-		jLThermalSensor.setBounds(107, 136, 97, 14);
+		jLThermalSensor.setBounds(158, 136, 97, 14);
 		contentPane.add(jLThermalSensor);
 		
-		lblSteigungswinkel = new JLabel("Steigungswinkel:");
-		lblSteigungswinkel.setBounds(10, 161, 83, 14);
+		lblSteigungswinkel = new JLabel("slope-angle");
+		lblSteigungswinkel.setBounds(10, 161, 138, 14);
 		contentPane.add(lblSteigungswinkel);
 		
 		jLSlopeAngle = new JLabel("--");
-		jLSlopeAngle.setBounds(107, 161, 97, 14);
+		jLSlopeAngle.setBounds(158, 161, 97, 14);
 		contentPane.add(jLSlopeAngle);
 		
 		lblDistancecounter = new JLabel("DistanceCounter:");
-		lblDistancecounter.setBounds(10, 186, 91, 14);
+		lblDistancecounter.setBounds(10, 186, 138, 14);
 		contentPane.add(lblDistancecounter);
 		
 		jLOdometer = new JLabel("--");
-		jLOdometer.setBounds(107, 186, 46, 14);
+		jLOdometer.setBounds(158, 186, 46, 14);
 		contentPane.add(jLOdometer);
+		
+		btnCloseConnection = new JButton("Close Connection");
+		btnCloseConnection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				closeConnection = true;
+			}
+		});
+		btnCloseConnection.setBounds(365, 322, 154, 23);
+		contentPane.add(btnCloseConnection);
+		
+		lblMotorcontrolheading = new JLabel("MotorControl-Heading:");
+		lblMotorcontrolheading.setBounds(10, 211, 143, 14);
+		contentPane.add(lblMotorcontrolheading);
+		
+		jLMotorControlHeading = new JLabel("--");
+		jLMotorControlHeading.setBounds(158, 211, 46, 14);
+		contentPane.add(jLMotorControlHeading);
 
 		this.setVisible(true);
 	}
@@ -168,6 +192,24 @@ public class JFDisplayValues extends JFrame {
 	public void showOdometer(double value){
 		
 		jLOdometer.setText(Double.toString(value));
+		
+	}
+	
+	public void showMotorControlHeading(int value){
+		
+		jLMotorControlHeading.setText(Integer.toString(value));
+		
+	}
+	
+	public boolean getCloseConnection(){
+		
+		return closeConnection;
+		
+	}
+	
+	public void setCloseConnection(boolean value){
+		
+		closeConnection = value;
 		
 	}
 }

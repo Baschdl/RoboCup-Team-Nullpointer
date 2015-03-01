@@ -1,5 +1,7 @@
 package de.null_pointer.gui;
 
+import de.null_pointer.communication_pi.BrickControlPi;
+import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -17,6 +19,9 @@ public class HandleValues extends Thread {
 	private DistNxProcessingPi distnxprocclass = null;
 	private ThermalSensorProcessingPi thermalSensorprocclass = null;
 	private Odometer odometerclass = null;
+	private MotorControlPi motorcontrolpi = null;
+	private BrickControlPi brickCon1 = null;
+	private BrickControlPi brickCon2 = null;
 
 	public HandleValues(LSAProcessingPi lsaprocclass,
 			Abs_ImuProcessingPi absimuprocclass,
@@ -24,7 +29,7 @@ public class HandleValues extends Thread {
 			EOPDProcessingPi eopdRightprocclass,
 			DistNxProcessingPi distnxprocclass,
 			ThermalSensorProcessingPi thermalSensorprocclass,
-			Odometer odometerclass) {
+			Odometer odometerclass, MotorControlPi motorcontrolpi, BrickControlPi brickCon1, BrickControlPi brickCon2) {
 		this.lsaprocclass = lsaprocclass;
 		this.absimuprocclass = absimuprocclass;
 		this.eopdLeftprocclass = eopdLeftprocclass;
@@ -32,6 +37,9 @@ public class HandleValues extends Thread {
 		this.distnxprocclass = distnxprocclass;
 		this.thermalSensorprocclass = thermalSensorprocclass;
 		this.odometerclass = odometerclass;
+		this.motorcontrolpi = motorcontrolpi;
+		this.brickCon1 = brickCon1;
+		this.brickCon2 = brickCon2;
 	}
 
 	public void run() {
@@ -51,6 +59,8 @@ public class HandleValues extends Thread {
 			readThermalSensor();
 			readSlopeAngle();
 			readOdometer();
+			readMotorControlHeading();
+			closeConnection();
 
 		}
 
@@ -111,4 +121,20 @@ public class HandleValues extends Thread {
 
 	}
 
+	private void readMotorControlHeading(){
+		
+		valueGUI.showMotorControlHeading(motorcontrolpi.getRotationHeading());
+		
+	}
+	
+	private void closeConnection(){
+		
+		
+		if(valueGUI.getCloseConnection()){
+			brickCon1.exitBrick();
+			brickCon2.exitBrick();
+			valueGUI.setCloseConnection(false);
+		}
+		
+	}
 }
