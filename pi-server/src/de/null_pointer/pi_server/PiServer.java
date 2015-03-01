@@ -53,6 +53,7 @@ public class PiServer {
 					logger.info("Navigation-GUI gestartet");
 
 				} else if (s.equals("normal")) {
+					logger.debug("Starte Werte-GUI");
 					/*
 					 * Wenn der Parameter "comp" vor "-gui normal" uebergeben
 					 * wurde, soll die Navigation nicht initialisiert werden
@@ -67,7 +68,6 @@ public class PiServer {
 						initProgram.initializeNavigation();
 					}
 
-					logger.debug("Starte GUI");
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
 							initProgram.getEopdRight(),
@@ -80,7 +80,7 @@ public class PiServer {
 
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
-				logger.info("Wettkampfprogramm gestartet");
+				logger.debug("Starte Wettkampfprogramm");
 
 				/*
 				 * Wenn der Parameter "-gui normal" vor "comp" uebergeben wurde,
@@ -98,6 +98,7 @@ public class PiServer {
 				initProgram.initializeBehavior();
 
 				initProgram.getArbitrator().start();
+				logger.info("Wettkampfprogramm gestartet");
 			}
 
 			// startet ein Testprogramm, der nachfolgende String gibt an welches
@@ -133,6 +134,7 @@ public class PiServer {
 					logger.debug("Starte Testprogramm flash");
 					testProgram.flash();
 				}
+				logger.info("Testprogramm gestartet");
 			}
 
 		}

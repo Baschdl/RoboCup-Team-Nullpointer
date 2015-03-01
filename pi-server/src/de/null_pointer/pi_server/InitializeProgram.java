@@ -263,6 +263,7 @@ public class InitializeProgram {
 		// wurden
 		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
 		}
+		logger.info("Genug Sensorwerte erhalten");
 
 		arbitrator = new Arbitrator(behavior);
 		available = new Semaphore(arbitrator, behavior);
@@ -272,6 +273,7 @@ public class InitializeProgram {
 		while (!programStarted) {
 			Delay.msDelay(250);
 		}
+		logger.info("Programm durch Betätigen des Enter-Buttons auf dem Brick gestartet");
 
 	}
 
