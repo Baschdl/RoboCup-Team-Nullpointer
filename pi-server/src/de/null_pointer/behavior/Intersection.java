@@ -64,9 +64,17 @@ public class Intersection implements Behavior {
 		} else if (actualDistance < 0) {
 			logger.error("No DistNx-Values (negative value)");
 		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
+			if (odometer.getDistanceCounter() < 15) {
+				logger.info("Behavior Intersection: detectet, but distanceCounter is < 15");
+				return false;
+			}
 			logger.info("Behavior Intersection: Hallway left");
 			return true;
 		} else if (eopdRight.getDistance() >= maximalDistanceSide) {
+			if (odometer.getDistanceCounter() < 15) {
+				logger.info("Behavior Intersection: detectet, but distanceCounter is < 15");
+				return false;
+			}
 			logger.info("Behavior Intersection: Hallway right");
 			return true;
 		}
