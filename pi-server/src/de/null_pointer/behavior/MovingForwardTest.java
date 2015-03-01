@@ -62,9 +62,11 @@ public class MovingForwardTest {
 
 		com = new VirtualCommunicationPi();
 		brickCon1 = new TestBrickControlPi(com, null, abs_Imu, distNx,
-				eopdLeft, eopdRight, lsa, accumulator, thermal); // null == nav
+				eopdLeft, eopdRight, lsa, accumulator, thermal, null);
+		// 1. null == nav, 2. null = InitializeProgram
 		brickCon2 = new TestBrickControlPi(com, null, abs_Imu, distNx,
-				eopdLeft, eopdRight, lsa, accumulator, thermal); // null == nav
+				eopdLeft, eopdRight, lsa, accumulator, thermal, null);
+		// 1. null == nav, 2. null = InitializeProgram
 
 		motorControl = new MotorControlPi(brickCon1, brickCon2);
 

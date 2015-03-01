@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-
 import de.null_pointer.behavior.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
+import lejos.util.Delay;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -56,10 +56,12 @@ public class InitializeProgram {
 	private Arbitrator arbitrator = null;
 	private CommunicationPi comPi1 = null;
 	private CommunicationPi comPi2 = null;
-	
+
 	private Semaphore available = null;
 
 	private Properties propPiServer = null;
+
+	private boolean programStarted = false;
 
 	public Arbitrator getArbitrator() {
 		return arbitrator;
@@ -129,6 +131,10 @@ public class InitializeProgram {
 		return thermal;
 	}
 
+	public void setProgramStarted() {
+		this.programStarted = true;
+	}
+
 	public InitializeProgram(Logger logger) {
 		InitializeProgram.logger = logger;
 	}
@@ -177,11 +183,13 @@ public class InitializeProgram {
 				if (i == 0) {
 					brickCon1 = new BrickControlPi(
 							(RealCommunicationPi) comPi1, nav, absImu, distNx,
-							eopdLeft, eopdRight, lsa, accumulator, thermal);
+							eopdLeft, eopdRight, lsa, accumulator, thermal,
+							this);
 				} else if (i == 1) {
 					brickCon2 = new BrickControlPi(
 							(RealCommunicationPi) comPi2, nav, absImu, distNx,
-							eopdLeft, eopdRight, lsa, accumulator, thermal);
+							eopdLeft, eopdRight, lsa, accumulator, thermal,
+							this);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
@@ -190,11 +198,11 @@ public class InitializeProgram {
 				if (i == 0) {
 					brickCon1 = new TestBrickControlPi(comPi1, nav, absImu,
 							distNx, eopdLeft, eopdLeft, lsa, accumulator,
-							thermal);
+							thermal, this);
 				} else if (i == 1) {
 					brickCon2 = new TestBrickControlPi(comPi2, nav, absImu,
 							distNx, eopdLeft, eopdLeft, lsa, accumulator,
-							thermal);
+							thermal, this);
 				} else {
 					logger.warn("Es wurde versucht virtuelle Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
@@ -258,7 +266,11 @@ public class InitializeProgram {
 		available = new Semaphore(arbitrator, behavior);
 		brickCon1.setSemaphore(available);
 		brickCon2.setSemaphore(available);
-		
+
+		while (!programStarted) {
+			Delay.msDelay(250);
+		}
+
 	}
 
 	private static Properties loadConfiguration(String configFile) {

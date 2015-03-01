@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.communication_pi.CommunicationPi;
 import de.null_pointer.navigation.map.Navigation;
+import de.null_pointer.pi_server.InitializeProgram;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -19,14 +20,15 @@ public class TestBrickControlPi extends BrickControlPi {
 	private VirtualMotor motorB = new VirtualMotor();
 	private VirtualMotor motorC = new VirtualMotor();
 
-	public TestBrickControlPi(CommunicationPi com, Navigation nav, Abs_ImuProcessingPi abs_Imu,
-			DistNxProcessingPi distNx, EOPDProcessingPi eopdLeft,
-			EOPDProcessingPi eopdRight, LSAProcessingPi lsa,
-			AccumulatorProcessingPi accumulator,
-			ThermalSensorProcessingPi thermal) {
+	public TestBrickControlPi(CommunicationPi com, Navigation nav,
+			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
+			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
+			LSAProcessingPi lsa, AccumulatorProcessingPi accumulator,
+			ThermalSensorProcessingPi thermal,
+			InitializeProgram initializeProgram) {
 
 		super(com, nav, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator,
-				thermal);
+				thermal, initializeProgram);
 	}
 
 	// Getter werden zum Testen der Klasse benoetigt

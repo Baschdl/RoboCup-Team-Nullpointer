@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.motorcontrol_pi.Semaphore;
 import de.null_pointer.navigation.map.Navigation;
+import de.null_pointer.pi_server.InitializeProgram;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -28,12 +29,14 @@ public class BrickControlPi extends Thread {
 	private Semaphore semaphore = null;
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
+	private InitializeProgram initializeProgram = null;
 
 	public BrickControlPi(CommunicationPi com, Navigation navi,
 			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
 			LSAProcessingPi lsa, AccumulatorProcessingPi accumulator,
-			ThermalSensorProcessingPi thermal) {
+			ThermalSensorProcessingPi thermal,
+			InitializeProgram initializeProgram) {
 		this.com = com;
 		this.navi = navi;
 		this.abs_Imu = abs_Imu;
@@ -43,6 +46,7 @@ public class BrickControlPi extends Thread {
 		this.lsa = lsa;
 		this.accumulator = accumulator;
 		this.thermal = thermal;
+		this.initializeProgram = initializeProgram;
 	}
 
 	/**
@@ -120,8 +124,13 @@ public class BrickControlPi extends Thread {
 			// ThermalSensor
 			thermal.setTemperature(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 9) {
-			// TODO Reset Button gedrueckt; ggf. muss noch weiteres getan werden
-			navi.loadMap();
+			if (receiveData[0] == 1) {
+				// TODO Reset Button gedrueckt; ggf. muss noch weiteres getan
+				// werden
+				navi.loadMap();
+			} else if (receiveData[0] == 2) {
+				initializeProgram.setProgramStarted();
+			}
 		} else if (receiveData[0] == 10) {
 			semaphore.down();
 		} else if (receiveData[0] == 11) {

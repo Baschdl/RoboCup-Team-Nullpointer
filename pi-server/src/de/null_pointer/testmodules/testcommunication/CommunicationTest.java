@@ -116,7 +116,7 @@ public class CommunicationTest {
 				propPiServer);
 
 		brickControl = new TestBrickControlPi(comPi, nav, absImu, distNx,
-				eopdLeft, eopdRight, lsa, accumulator, thermal);
+				eopdLeft, eopdRight, lsa, accumulator, thermal, initProgramm);
 	}
 
 	@Test
