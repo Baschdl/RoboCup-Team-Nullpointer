@@ -21,7 +21,7 @@ public class RealCommunicationBrick extends CommunicationBrick {
 
 	@Override
 	public String receiveString() {
-		
+
 		String string;
 		try {
 
@@ -37,8 +37,8 @@ public class RealCommunicationBrick extends CommunicationBrick {
 	}
 
 	@Override
-	public void sendString(String data) {
-		
+	public synchronized void sendString(String data) {
+
 		try {
 
 			dataToPi.writeUTF(data);
@@ -54,7 +54,7 @@ public class RealCommunicationBrick extends CommunicationBrick {
 
 	@Override
 	public void closeConnection() {
-		
+
 		try {
 
 			dataFromPi.close();

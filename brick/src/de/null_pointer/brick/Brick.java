@@ -69,6 +69,9 @@ public class Brick {
 				if (Button.LEFT.isDown() && Button.RIGHT.isDown()) {
 					comBrick.sendData(9, 1, 1);
 					Delay.msDelay(4500);
+				} else if (Button.ENTER.isDown()) {
+					comBrick.sendData(9, 2, 1);
+					Delay.msDelay(4500);
 				}
 
 				Delay.msDelay(500);
