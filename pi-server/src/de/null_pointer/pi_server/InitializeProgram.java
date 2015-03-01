@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 
-import lejos.robotics.subsumption.Arbitrator;
+import de.null_pointer.behavior.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
 import org.apache.log4j.Level;
@@ -255,7 +255,7 @@ public class InitializeProgram {
 		}
 
 		arbitrator = new Arbitrator(behavior);
-		available = new Semaphore(arbitrator);
+		available = new Semaphore(arbitrator, behavior);
 		brickCon1.setSemaphore(available);
 		brickCon2.setSemaphore(available);
 		
