@@ -250,7 +250,7 @@ public class InitializeProgram {
 		Behavior b6 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
 				propPiServer);
 		Behavior b7 = new WallTooClose(eopdRight, eopdLeft, motorControl,
-				odometer, propPiServer);
+				odometer, propPiServer, absImu);
 		Behavior b8 = new Victim(brickCon2, motorControl, nav, thermal,
 				propPiServer);
 
