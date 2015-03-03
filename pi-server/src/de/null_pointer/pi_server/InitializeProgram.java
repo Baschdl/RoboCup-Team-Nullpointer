@@ -136,6 +136,10 @@ public class InitializeProgram {
 		this.programStarted = true;
 	}
 
+	public boolean getProgramStarted() {
+		return programStarted;
+	}
+
 	public void setNavCompetitionHandler(NavCompetitionHandler navComp) {
 		this.navComp = navComp;
 
@@ -244,7 +248,7 @@ public class InitializeProgram {
 		odometer = new Odometer(accumulator, absImu, propPiServer);
 	}
 
-	public void initializeBehavior() {
+	public boolean initializeBehavior() {
 		// TODO: Reihenfolge richtig?
 		Behavior b1 = new MovingForward(motorControl, odometer, propPiServer);
 		Behavior b2 = new NextTile(/* absImu, */motorControl, nav, odometer,
@@ -276,11 +280,7 @@ public class InitializeProgram {
 		brickCon1.setSemaphore(available);
 		brickCon2.setSemaphore(available);
 
-		while (!programStarted) {
-			Delay.msDelay(250);
-		}
-		logger.info("Programm durch Betaetigen des Enter-Buttons auf dem Brick gestartet");
-
+		return programStarted;
 	}
 
 	private static Properties loadConfiguration(String configFile) {
