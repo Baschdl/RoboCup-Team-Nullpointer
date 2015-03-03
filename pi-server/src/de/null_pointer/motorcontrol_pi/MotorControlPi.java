@@ -166,7 +166,7 @@ public class MotorControlPi {
 	 * Method to stop the motors, active breaking with the stepping motor
 	 */
 	public void stop() {
-		if (mode != 4 && mode != 5) {
+		if (mode != 4) {
 			actualSpeed = 1;
 			mode = 4;
 
@@ -181,7 +181,7 @@ public class MotorControlPi {
 	 * Method to stop the motors, no active breaking, wheels can roll out
 	 */
 	public void flt() {
-		if (mode != 4 && mode != 5) {
+		if (mode != 5) {
 			logger.info("PC set all motor flt");
 			actualSpeed = 1;
 			mode = 5;
