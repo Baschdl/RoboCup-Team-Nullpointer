@@ -7,17 +7,21 @@ import org.apache.log4j.Logger;
 import de.null_pointer.gui.HandleValues;
 import de.null_pointer.navigation.test.GuiNavigation;
 
-/* Setup:
+/**
+ * Program for our robot to participate in the RoboCup Junior 2015 Rescue B.
+ * </br> <u>Our hardware setup:</u> </br> - Raspberry Pi B+</br> - 2 Lego
+ * Mindstorms Bricks</br> - 4 motors</br> - different sensors </br> </br>
+ * <u>Software setup:</u> </br> required libraries: </br> - JRE </br> - JUnit 4
+ * </br> - LeJOS PC Libraries </br> - log4j-1.2.17 (in /lib) </br> -
+ * org.eclipse.jdt.annotation_1.1.0.v20130513-1648 (in /lib) </br> </br>
  * 
- * required libraries:
- * - JRE
- * - JUnit 4
- * - LeJOS PC Libraries
- * - log4j-1.2.17 (in /lib)
- * - org.eclipse.jdt.annotation_1.1.0.v20130513-1648 (in /lib)
+ * Classpath-User Entries: /pi-server/src/resources/
  * 
- * Classpath- User Entries:
- * /pi-server/src/resources/
+ * @author Sebastian Bischoff (sebastianbischoff@null-pointer.de) ("Baschdl" on
+ *         the leJOS-Forum), Jan Krebes (jankrebes@null-pointer.de), Samuel
+ *         Scherer (samuelscherer@null-pointer.de)
+ * 
+ * @see <a href="http://www.null-pointer.de/">Our project website</a>
  * 
  */
 
@@ -72,7 +76,10 @@ public class PiServer {
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
 							initProgram.getEopdRight(),
 							initProgram.getDistNx(), initProgram.getThermal(),
-							initProgram.getOdometer(), initProgram.getMotorControl(), initProgram.getBrickCon1(), initProgram.getBrickCon2());
+							initProgram.getOdometer(),
+							initProgram.getMotorControl(),
+							initProgram.getBrickCon1(),
+							initProgram.getBrickCon2());
 					logger.info("GUI gestartet");
 					vGUI.start();
 				}
