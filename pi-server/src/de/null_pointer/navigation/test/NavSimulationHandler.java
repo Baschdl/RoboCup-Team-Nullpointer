@@ -2,7 +2,7 @@ package de.null_pointer.navigation.test;
 
 import de.null_pointer.navigation.map.Navigation;
 
-public class Handler {
+public class NavSimulationHandler {
 
 	private GuiNavigation gui = null;
 	private CoordinateDialog dialog = null;
@@ -27,8 +27,10 @@ public class Handler {
 
 	private boolean BlackTileRetreat = false;
 
-	public Handler(GuiNavigation gui, int sizeMapY, int sizeMapX) {
-		this.gui = gui;
+	public NavSimulationHandler(int sizeMapY, int sizeMapX, boolean withGui) {
+		if (withGui) {
+			this.gui = new GuiNavigation(this);
+		}
 		fileHandler = new FileHandler(this);
 		this.sizeMapX = sizeMapX;
 		this.sizeMapY = sizeMapY;
@@ -36,17 +38,11 @@ public class Handler {
 	}
 
 	/**
-	 * Konstruktor fuer Testzwecke
-	 * 
 	 * @param sizeMapY
 	 * @param sizeMapX
 	 */
-	public Handler(int sizeMapY, int sizeMapX) {
-		timer = new MyTimer(this, 50);
-		fileHandler = new FileHandler(this);
-		this.sizeMapX = sizeMapX;
-		this.sizeMapY = sizeMapY;
-		initValues();
+	public NavSimulationHandler(int sizeMapY, int sizeMapX) {
+		this(sizeMapX, sizeMapX, false);
 	}
 
 	/**

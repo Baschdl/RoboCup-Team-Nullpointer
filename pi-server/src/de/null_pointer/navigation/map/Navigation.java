@@ -315,6 +315,10 @@ public class Navigation {
 	}
 
 	public void cutNodeConnections(Node lastIntersection) {
+		if (currentTile == null) {
+			logger.error("cutNodeconnectios: currentTile is NULL !");
+			return;
+		}
 		Node buffer = currentTile;
 		if (buffer.z == lastIntersection.z) {
 			int orientation = -1;

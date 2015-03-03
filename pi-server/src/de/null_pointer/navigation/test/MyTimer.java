@@ -12,7 +12,7 @@ public class MyTimer {
 
 	private static Logger logger = Logger.getLogger(Node.class);
 
-	private Handler handler = null;
+	private NavSimulationHandler handler = null;
 	private Timer timer = null;
 
 	/**
@@ -21,7 +21,7 @@ public class MyTimer {
 	 * @param period
 	 *            time between two actions
 	 */
-	public MyTimer(Handler handler, int period) {
+	public MyTimer(NavSimulationHandler handler, int period) {
 		this.handler = handler;
 		timer = new Timer(period, new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {

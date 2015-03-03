@@ -17,9 +17,9 @@ import de.null_pointer.navigation.map.Navigation;
 public class FileHandler {
 	private static Logger logger = Logger.getLogger(Navigation.class);
 
-	private Handler handler = null;
+	private NavSimulationHandler handler = null;
 
-	public FileHandler(Handler handler) {
+	public FileHandler(NavSimulationHandler handler) {
 		this.handler = handler;
 	}
 

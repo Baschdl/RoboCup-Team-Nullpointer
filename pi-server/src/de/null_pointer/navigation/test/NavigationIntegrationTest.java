@@ -12,14 +12,14 @@ import org.junit.Test;
 
 // keine saubere Trennung: Integration-Tests und Unit-Test
 public class NavigationIntegrationTest {
-	static Handler handler = null;
+	static NavSimulationHandler handler = null;
 
 	@Rule
 	public CatchAllExceptionsRule catchAllExceptionsRule = new CatchAllExceptionsRule();
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		handler = new Handler(19, 19);
+		handler = new NavSimulationHandler(19, 19);
 	}
 
 	@Before

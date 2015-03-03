@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.HandleValues;
 import de.null_pointer.navigation.test.GuiNavigation;
+import de.null_pointer.navigation.test.NavSimulationHandler;
 
 /**
  * Program for our robot to participate in the RoboCup Junior 2015 Rescue B.
@@ -53,7 +54,7 @@ public class PiServer {
 				s = args[i];
 				if (s.equals("navigation")) {
 					logger.debug("Starte Navigation-GUI");
-					GuiNavigation navGUI = new GuiNavigation();
+					NavSimulationHandler navSim = new NavSimulationHandler(15, 15);
 					logger.info("Navigation-GUI gestartet");
 
 				} else if (s.equals("normal")) {

@@ -31,7 +31,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 	private CellRenderer renderer = null;
 	private JTable table = null;
 
-	private Handler handler = null;
+	private NavSimulationHandler handler = null;
 
 	JButton jBload;
 	JButton jBsave;
@@ -46,11 +46,16 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 	public GuiNavigation() {
 		super();
-		initGUI();
-		handler = new Handler(this, sizeMapY, sizeMapX);
+		initGui_Competition();
 	}
 
-	private void initGUI() {
+	public GuiNavigation(NavSimulationHandler handler) {
+		super();
+		this.handler = handler;
+		initGui_Simulation();
+	}
+
+	private void initGui_Simulation() {
 		try {
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			getContentPane().setLayout(null);
@@ -66,6 +71,27 @@ public class GuiNavigation extends javax.swing.JFrame {
 
 			pack();
 			setSize(sizeX, sizeY);
+			this.setLocationRelativeTo(null);
+			this.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void initGui_Competition() {
+		try {
+			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+			getContentPane().setLayout(null);
+
+			renderer = new CellRenderer();
+			createTable();
+
+			JScrollPane scrollpane = new JScrollPane(table);
+			add(scrollpane);
+			scrollpane.setBounds(0, 0, sizeX, sizeY);
+
+			pack();
+			setSize(sizeX, sizeY - 30);
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);
 		} catch (Exception e) {
@@ -191,6 +217,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 		table.setEnabled(false);
 		table.setDefaultRenderer(Object.class, renderer);
 
+		if( handler != null){
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
@@ -205,6 +232,7 @@ public class GuiNavigation extends javax.swing.JFrame {
 				}
 			}
 		});
+		}
 	}
 
 	private void handleMouseClick(int row, int column, int button) {
