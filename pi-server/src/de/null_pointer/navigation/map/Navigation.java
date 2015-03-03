@@ -321,40 +321,40 @@ public class Navigation {
 	}
 
 	public void cutNodeConnections(Node lastIntersection) {
-		if (currentTile == null) {
-			logger.error("cutNodeconnectios: currentTile is NULL !");
-			return;
-		}
-		Node buffer = currentTile;
-		if (buffer.z == lastIntersection.z) {
-			int orientation = -1;
-			if (buffer.x == lastIntersection.x) {
-				if (buffer.y < lastIntersection.y) {
-					orientation = 2;
-				} else if (buffer.y == lastIntersection.y) {
-					orientation = -1;
-				} else {
+		try {
+			Node buffer = currentTile;
+			if (buffer.z == lastIntersection.z) {
+				int orientation = -1;
+				if (buffer.x == lastIntersection.x) {
+					if (buffer.y < lastIntersection.y) {
+						orientation = 2;
+					} else if (buffer.y == lastIntersection.y) {
+						orientation = -1;
+					} else {
 
-					orientation = 0;
-				}
-			} else if (buffer.y == lastIntersection.y) {
-				if (buffer.x < lastIntersection.x) {
-					orientation = 3;
-				} else {
-					orientation = 1;
-				}
-			}
-			if (orientation > -1) {
-				while (buffer != lastIntersection) {
-					if (buffer == null) {
-						logger.error("cutNodeconnectios: currentTile is NULL !");
-						return;
+						orientation = 0;
 					}
-					buffer = buffer.getNeighbor(orientation);
-					buffer.removeNeighbor(rightleftDirection(orientation, true));
-					buffer.removeNeighbor(rightleftDirection(orientation, false));
+				} else if (buffer.y == lastIntersection.y) {
+					if (buffer.x < lastIntersection.x) {
+						orientation = 3;
+					} else {
+						orientation = 1;
+					}
+				}
+				if (orientation > -1) {
+					while (buffer != lastIntersection) {
+						buffer = buffer.getNeighbor(orientation);
+						buffer.removeNeighbor(rightleftDirection(orientation,
+								true));
+						buffer.removeNeighbor(rightleftDirection(orientation,
+								false));
+					}
 				}
 			}
+		} catch (NullPointerException e) {
+			logger.error("cutNodeConnections: Nullpointer error occured: " + e);
+		} catch (Exception e) {
+			logger.error("cutNodeConnections: an error occured: " + e);
 		}
 	}
 
