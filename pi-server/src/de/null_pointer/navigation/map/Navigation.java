@@ -215,6 +215,7 @@ public class Navigation {
 			addTurn(direction, tremauxCounter, blackTileRetreat);
 			return direction;
 		} else {
+			logger.info("Direction already evaluated ! d: " + lastDirection);
 			return lastDirection;
 		}
 	}
@@ -420,10 +421,16 @@ public class Navigation {
 	}
 
 	public void removeNeighbor(int orientation) {
+		if (navComp != null) {
+			navComp.removeNeighbor(orientation);
+		}
 		currentTile.removeNeighbor(orientation);
 	}
 
 	public void switchTile(int orientation) {
+		if (navComp != null) {
+			navComp.switchTile(orientation);
+		}
 		currentTile.setTremauxAlreadyEvaluated(false);
 		currentTile = currentTile.getNeighbor(orientation);
 		if (currentTile == null) {
