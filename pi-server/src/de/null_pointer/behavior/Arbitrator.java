@@ -20,7 +20,7 @@ import lejos.robotics.subsumption.Behavior;
  * @see Behavior
  * @author Roger Glassey
  */
-public class Arbitrator
+public class Arbitrator extends Thread
 {
 
   private final int NONE = -1;
@@ -29,6 +29,7 @@ public class Arbitrator
   private int _highestPriority = NONE;
   private int _active = NONE; //  active behavior; set by montior, used by start();
   private boolean _returnWhenInactive;
+  private boolean moreArbitrator = true;
   /**
    * Monitor is an inner class.  It polls the behavior array to find the behavior of hightst
    * priority.  If higher than the active behavior, it calls active.suppress()
@@ -77,7 +78,7 @@ public class Arbitrator
     {
       Thread.yield();//wait for some behavior to take contro                    
     }
-    while (true)
+    while (moreArbitrator)
     {
       synchronized (monitor)
       {
@@ -100,8 +101,9 @@ public class Arbitrator
     }
   }
   
-  public void stop(){
+  public void stopArbitrator(){
 	  monitor.more = false;
+	  moreArbitrator = false;
   }
 
   /**

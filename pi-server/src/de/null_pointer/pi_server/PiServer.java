@@ -96,7 +96,7 @@ public class PiServer {
 					initProgram.initializeNavigation();
 				}
 				initProgram.initializeBehavior();
-
+				initProgram.getArbitrator().setDaemon(true);
 				initProgram.getArbitrator().start();
 				logger.info("Wettkampfprogramm gestartet");
 			}

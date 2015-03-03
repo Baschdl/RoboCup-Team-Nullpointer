@@ -19,7 +19,7 @@ public class Semaphore {
 		synchronized (lock) {
 			blockedMotors++;
 			if (blockedMotors == 1) {
-				arbitrator.stop();
+				arbitrator.stopArbitrator();
 			}
 		}
 
@@ -30,6 +30,7 @@ public class Semaphore {
 			blockedMotors--;
 			if (blockedMotors == 0) {
 				arbitrator = new Arbitrator(behaviors);
+				arbitrator.setDaemon(true);
 				arbitrator.start();
 			}
 		}
