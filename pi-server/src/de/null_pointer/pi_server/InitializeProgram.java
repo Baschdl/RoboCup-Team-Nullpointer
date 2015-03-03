@@ -273,7 +273,7 @@ public class InitializeProgram {
 		while (!programStarted) {
 			Delay.msDelay(250);
 		}
-		logger.info("Programm durch Betätigen des Enter-Buttons auf dem Brick gestartet");
+		logger.info("Programm durch Betaetigen des Enter-Buttons auf dem Brick gestartet");
 
 	}
 
