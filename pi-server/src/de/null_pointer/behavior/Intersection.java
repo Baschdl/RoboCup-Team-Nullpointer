@@ -111,7 +111,7 @@ public class Intersection implements Behavior {
 		}
 
 		if (lastIntersection != null) {
-			nav.cutWallConnections(lastIntersection);
+			nav.cutNodeConnections(lastIntersection);
 		}
 		lastIntersection = nav.getCurrentTile();
 

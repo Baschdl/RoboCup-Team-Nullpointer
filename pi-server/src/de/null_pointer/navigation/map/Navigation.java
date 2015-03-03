@@ -314,14 +314,17 @@ public class Navigation {
 		}
 	}
 
-	public void cutWallConnections(Node lastIntersection) {
+	public void cutNodeConnections(Node lastIntersection) {
 		Node buffer = currentTile;
 		if (buffer.z == lastIntersection.z) {
 			int orientation = -1;
 			if (buffer.x == lastIntersection.x) {
 				if (buffer.y < lastIntersection.y) {
 					orientation = 2;
+				} else if (buffer.y == lastIntersection.y) {
+					orientation = -1;
 				} else {
+
 					orientation = 0;
 				}
 			} else if (buffer.y == lastIntersection.y) {
@@ -331,10 +334,16 @@ public class Navigation {
 					orientation = 1;
 				}
 			}
-			while (buffer != lastIntersection) {
-				buffer = buffer.getNeighbor(orientation);
-				buffer.removeNeighbor(rightleftDirection(orientation, true));
-				buffer.removeNeighbor(rightleftDirection(orientation, false));
+			if (orientation > -1) {
+				while (buffer != lastIntersection) {
+					if (buffer == null) {
+						logger.error("cutNodeconnectios: currentTile is NULL !");
+						return;
+					}
+					buffer = buffer.getNeighbor(orientation);
+					buffer.removeNeighbor(rightleftDirection(orientation, true));
+					buffer.removeNeighbor(rightleftDirection(orientation, false));
+				}
 			}
 		}
 	}
@@ -561,8 +570,8 @@ public class Navigation {
 	public boolean getVictimFound(int direction) {
 		return currentTile.getVictimFound(direction);
 	}
-	
-	public void setVictimFound(int direction){
+
+	public void setVictimFound(int direction) {
 		currentTile.setVictimFound(direction);
 	}
 
