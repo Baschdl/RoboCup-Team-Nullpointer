@@ -1,9 +1,14 @@
 package de.null_pointer.motorcontrol_pi;
 
+import org.apache.log4j.Logger;
 import de.null_pointer.behavior.Arbitrator;
+import de.null_pointer.behavior.MovingForward;
 import lejos.robotics.subsumption.Behavior;
 
 public class Semaphore {
+
+	private static Logger logger = Logger.getLogger(Semaphore.class);
+
 	private Arbitrator arbitrator = null;
 	private Behavior[] behaviors = null;
 	private final Object lock = new Object();
@@ -20,6 +25,7 @@ public class Semaphore {
 			blockedMotors++;
 			if (blockedMotors == 1) {
 				arbitrator.stopArbitrator();
+				logger.info("Arbitrator beendet");
 			}
 		}
 
@@ -32,6 +38,7 @@ public class Semaphore {
 				arbitrator = new Arbitrator(behaviors);
 				arbitrator.setDaemon(true);
 				arbitrator.start();
+				logger.info("neuer Arbitrator gestartet");
 			}
 		}
 	}
