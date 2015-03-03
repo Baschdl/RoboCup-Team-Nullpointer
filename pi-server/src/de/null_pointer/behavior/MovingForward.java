@@ -32,14 +32,15 @@ public class MovingForward implements Behavior {
 
 	@Override
 	public boolean takeControl() {
+		logger.info("takeControl: Calling action: YES;");
 		return true;
 	}
 
 	@Override
 	public void action() {
+		logger.info("action: Running;");
 		time = 0;
 		moving = true;
-		logger.debug("Bewege mich vorwaerts");
 		motorControl.forward(speed);
 		while (moving) {
 			odometer.calculateDistance(time, speed);
@@ -55,6 +56,7 @@ public class MovingForward implements Behavior {
 
 	@Override
 	public void suppress() {
+		logger.debug("suppress: running");
 		moving = false;
 	}
 
@@ -64,11 +66,10 @@ public class MovingForward implements Behavior {
 
 	
 	public void testActionWithoutLoop(){
+		logger.info("action: running;");
 		time = 0;
 		moving = true;
-		logger.debug("Bewege mich vorwaerts");
 		motorControl.forward(speed);
-		
 		odometer.calculateDistance(time, speed);
 		time = System.currentTimeMillis();
 		try {

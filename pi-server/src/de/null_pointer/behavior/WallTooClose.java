@@ -56,44 +56,48 @@ public class WallTooClose implements Behavior {
 
 	@Override
 	public boolean takeControl() {
+		logger.info("takeControl: Running;");
 		if ((eopdRight.getDistance() >= minDistanceSide && eopdRight
 				.getDistance() < maxDistanceSide)
 				|| eopdLeft.getDistance() >= minDistanceSide
 				&& eopdLeft.getDistance() < maxDistanceSide) {
+			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
+		logger.info("takeControl: Calling action: NO;");
 		return false;
 	}
 
 	@Override
 	public void action() {
+		logger.info("action: Running;");
 		suppress = false;
 		time = 0;
-		logger.debug("korrigiere Fahrtrichtung (zu nah an einer Wand)");
+		logger.debug("action: Correcting driving direction;");
 		if (eopdRight.getDistance() >= minDistanceSide
 				&& eopdRight.getDistance() < maxDistanceSide) {
 			if(absImu.getTiltDataVertical() > angleToTakeControl){
-				logger.debug("korrigiere Fahrtrichtung (zu nah an linker Wand auf Rampe)");
+				logger.debug("action: Correcting driving direction; On slope; Left wall too near;");
 				motorControl.changeSpeedSingleMotorForward(2, 'A', slopeSpeed + slopeSpeed
 						* percentOfSpeed / 100);
 			}else{
-			logger.debug("korrigiere Fahrtrichtung (zu nah an linker Wand)");
+			logger.debug("action: Correcting driving direction; Left wall too near;");
 			motorControl.changeSpeedSingleMotorForward(2, 'A', speed + speed
 					* percentOfSpeed / 100);
 			}
 		} else if (eopdLeft.getDistance() >= minDistanceSide
 				&& eopdLeft.getDistance() < maxDistanceSide) {
 			if(absImu.getTiltDataVertical() > angleToTakeControl){
-				logger.debug("korrigiere Fahrtrichtung (zu nah an rechter Wand auf Rampe)");
+				logger.debug("action: Correcting driving direction; On slope; Right wall too near;");
 				motorControl.changeSpeedSingleMotorForward(2, 'B', slopeSpeed + slopeSpeed
 						* percentOfSpeed / 100);
 			}else{
-			logger.debug("korrigiere Fahrtrichtung (zu nah an rechter Wand)");
+				logger.debug("action: Correcting driving direction; Right wall too near;");
 			motorControl.changeSpeedSingleMotorForward(2, 'B', speed + speed
 					* percentOfSpeed / 100);
 			}
 		}
-
+		logger.debug("action: Correcting and measuring driven distance;");
 		while (!suppress
 				&& ((eopdRight.getDistance() >= minDistanceSide && eopdRight
 						.getDistance() < maxDistanceSide) || (eopdLeft
@@ -112,6 +116,7 @@ public class WallTooClose implements Behavior {
 
 	@Override
 	public void suppress() {
+		logger.info("suppress: Running");
 		suppress = true;
 
 	}

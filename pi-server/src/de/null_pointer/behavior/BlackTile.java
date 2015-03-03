@@ -47,49 +47,61 @@ public class BlackTile implements Behavior {
 
 	@Override
 	public boolean takeControl() {
+		logger.info("takeControl: running");
 		int[] values = lsa.getLSA();
 		int value = 0;
 		for (int val : values) {
 			value += val;
 		}
-		// Alle 8 Sensoren im Durchschnitt unter dem Schwellenwert
-		// lsaActionValue
+		// All 8 sensor values in average smaller than the threshold (threshold
+		// = lsaActionValue)
+		if (value < lsaActionValue * 8) {
+			logger.debug("takeControl: Average LSA-values: " + value);
+			logger.info("takeControl: Calling action: YES;");
+		} else {
+			logger.debug("takeControl: Average LSA-values: " + value);
+			logger.info("takeControl: Calling action: NO;");
+		}
 		return value < lsaActionValue * 8;
 	}
 
 	@Override
 	public void action() {
+		logger.info("action: Running");
 		time = 0;
 		moving = true;
-		logger.info("Schwarze Kachel erkannt");
 		motorControl.stop();
 		nav.setBlackTile();
-
-		motorControl.backward(speed);
-		while (moving && odometer.getDistanceCounter() > 0) {
-			odometer.calculateDistance(time, -speed);
-			time = System.currentTimeMillis();
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				logger.fatal("InterruptedException while sleep()");
+		if (odometer.getDistanceCounter() > 0) {
+			logger.debug("action: DistanceCounter is > 0");
+			motorControl.backward(speed);
+			while (moving && odometer.getDistanceCounter() > 0) {
+				odometer.calculateDistance(time, -speed);
+				time = System.currentTimeMillis();
+				try {
+					Thread.sleep(2);
+				} catch (InterruptedException e) {
+					logger.fatal("action: InterruptedException while sleep();");
+				}
+				time = System.currentTimeMillis() - time;
 			}
-			time = System.currentTimeMillis() - time;
+			motorControl.stop();
 		}
-		motorControl.stop();
 		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
 		// true);
 
 		int directionToMove = nav.tremauxAlgorithm(
 				motorControl.getRotationHeading(), true);
 
-		//motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
-		
-		motorControl.decideTurn(motorControl.getRotationHeading(), directionToMove);
+		// motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
+
+		motorControl.decideTurn(motorControl.getRotationHeading(),
+				directionToMove);
 	}
 
 	@Override
 	public void suppress() {
+		logger.debug("suppress: running");
 		moving = false;
 	}
 

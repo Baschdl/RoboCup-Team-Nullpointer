@@ -42,7 +42,8 @@ public class Victim implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		// Wird benoetigt, um Arbitrator zu verzoegern
+		logger.info("takeControl: Running;");
+		// needed to slow down the arbitrator
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
@@ -57,7 +58,7 @@ public class Victim implements Behavior {
 
 	@Override
 	public void action() {
-		logger.info("Victim detected");
+		logger.info("action: Running;");
 
 		// TODO: ggf. bis zur mitte der Kachel fahren (mittels Odometer)
 		motorControl.stop();
@@ -67,7 +68,7 @@ public class Victim implements Behavior {
 		brickControlLED.blinkColorSensorLED();
 
 		// TODO: Rettungspaket abwerfen
-
+		logger.debug("action: Incrementing counter of found victims;");
 		victimsFound++;
 	}
 

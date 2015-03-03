@@ -41,16 +41,23 @@ public class Slope implements Behavior {
 
 	@Override
 	public boolean takeControl() {
+		logger.info("takeControl: Running;");
+		if(absImu.getTiltDataVertical() > angleToTakeControl){
+			logger.info("takeControl: Calling action: YES;");
+		}else{
+			logger.info("takeControl: Calling action: NO;");
+		}
 		return (absImu.getTiltDataVertical() > angleToTakeControl);
 	}
 
 	@Override
 	public void action() {
-		logger.info("Steigung erkannt");
+		logger.info("action: Running;");
 		suppress = false;
 		// nav.slope(absImu.getAbsImuHeading(), mapSize, mapSize);
 		nav.slope(motorControl.getRotationHeading(), mapSize, mapSize);
 		motorControl.forward(speed);
+		logger.debug("action: Setting speed to slopeSpeed;");
 		while (suppress && absImu.getTiltDataVertical() > angleToTakeControl) {
 			try {
 				Thread.sleep(2);
@@ -62,6 +69,7 @@ public class Slope implements Behavior {
 
 	@Override
 	public void suppress() {
+		logger.info("suppress: Running;");
 		suppress = true;
 
 	}

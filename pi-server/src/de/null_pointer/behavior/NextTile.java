@@ -36,14 +36,16 @@ public class NextTile implements Behavior {
 	public boolean takeControl() {
 		// TODO ggf. Umschaltwert anpassen
 		if (odometer.getDistanceCounter() >= nextTileReachDistance) {
+			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
+		logger.info("takeControl: Calling action: NO;");
 		return false;
 	}
 
 	@Override
 	public void action() {
-		logger.info("Naechste Kachel erreicht");
+		logger.info("action: Running; Next tile reached;");
 		// nav.switchTile(absImu.getAbsImuHeading());
 		nav.switchTile(motorControl.getRotationHeading());
 		odometer.resetDistanceCounter();

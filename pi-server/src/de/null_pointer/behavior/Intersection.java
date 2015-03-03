@@ -59,37 +59,36 @@ public class Intersection implements Behavior {
 		int actualDistance;
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
-			logger.info("Wall ahead");
+			logger.info("takeControl: Wall ahead; Calling Action: YES;");
 			return true;
 		} else if (actualDistance < 0) {
-			logger.error("No DistNx-Values (negative value)");
+			logger.error("takeControl: No DistNx-Values (negative value), Calling action: NO;");
 		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
 			if (odometer.getDistanceCounter() < 15) {
-				logger.info("Behavior Intersection: detectet, but distanceCounter is < 15");
+				logger.info("takeControl: Hallway left detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
-			logger.info("Behavior Intersection: Hallway left");
+			logger.info("takeControl: Hallway left detected; Calling action: YES;");
 			return true;
 		} else if (eopdRight.getDistance() >= maximalDistanceSide) {
 			if (odometer.getDistanceCounter() < 15) {
-				logger.info("Behavior Intersection: detectet, but distanceCounter is < 15");
+				logger.info("takeControl: Hallway right detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
-			logger.info("Behavior Intersection: Hallway right");
+			logger.info("takeControl: Hallway right detected; Calling action: YES;");
 			return true;
 		}
+		logger.info("takeControl: No hallway detected; Calling action: NO;");
 		return false;
 	}
 
 	@Override
 	public void action() {
-		logger.info("Intersection detected");
+		logger.info("action: Running");
 		time = 0;
-		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
+		if ((actualDistance = distnx.getDistance()) > minimalDistanceFront
 				&& actualDistance >= 0) {
-			motorControl.stop();
-			findHallway();
-		} else {
+			logger.debug("action: Wall is not ahead, moving to the centre of the tile;");
 			motorControl.forward(speed);
 			while (odometer.getDistanceCounter() < 30) {
 				odometer.calculateDistance(time, speed);
@@ -97,18 +96,19 @@ public class Intersection implements Behavior {
 				try {
 					Thread.sleep(2);
 				} catch (InterruptedException e) {
-					logger.fatal("InterruptedException while sleep()");
+					logger.fatal("action: InterruptedException while sleep();");
 				}
 				time = System.currentTimeMillis() - time;
 				if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 						&& actualDistance >= 0) {
+					logger.debug("action: Wall is now ahead; Stopping movement;");
 					break;
 				}
 			}
-			odometer.resetDistanceCounter();
-			motorControl.stop();
-			findHallway();
 		}
+		odometer.resetDistanceCounter();
+		motorControl.stop();
+		findHallway();
 
 		if (lastIntersection != null) {
 			nav.cutNodeConnections(lastIntersection);
@@ -125,17 +125,20 @@ public class Intersection implements Behavior {
 
 		motorControl.decideTurn(motorControl.getRotationHeading(),
 				directionToMove);
+		logger.debug("action: finished;");
 	}
 
 	private void findHallway() {
 		double distanceSide = -1;
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
+			logger.debug("findHallway: Wall is ahead; Saving wall in front");
 			// nav.removeNeighbor(absImu.getAbsImuHeading());
 			nav.removeNeighbor(motorControl.getRotationHeading());
 		}
 		if ((distanceSide = eopdLeft.getDistance()) <= maximalDistanceSide
 				& distanceSide > 0) {
+			logger.debug("findHallway: Wall is left; Saving wall on the left");
 			// nav.removeNeighbor(nav.rightleftDirection(
 			// absImu.getAbsImuHeading(), false));
 			nav.removeNeighbor(nav.rightleftDirection(
@@ -143,6 +146,7 @@ public class Intersection implements Behavior {
 		}
 		if ((distanceSide = eopdRight.getDistance()) <= maximalDistanceSide
 				& distanceSide > 0) {
+			logger.debug("findHallway: Wall is right; Saving wall on the right");
 			// nav.removeNeighbor(nav.rightleftDirection(
 			// absImu.getAbsImuHeading(), true));
 			nav.removeNeighbor(nav.rightleftDirection(
