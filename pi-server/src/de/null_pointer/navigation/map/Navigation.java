@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import de.null_pointer.navigation.test.NavCompetitionHandler;
+
 /**
  * 
  * @author Jan Krebes (jankrebes@null-pointer.de)
@@ -22,16 +24,19 @@ public class Navigation {
 	private int lastDirection = -1;
 	private boolean firstTile = true;
 
-	public Navigation(Properties propPiServer) {
+	private NavCompetitionHandler navComp = null;
+
+	public Navigation(Properties propPiServer, NavCompetitionHandler navComp) {
 		int dimensionX = Integer.parseInt(propPiServer
 				.getProperty("Navigation.Navigation.mapWidth"));
 		int dimensionY = Integer.parseInt(propPiServer
 				.getProperty("Navigation.Navigation.mapHeight"));
-		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
-		currentTile.setVisited();
-		lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
-		lastCheckpointTile.setVisited();
-		startTile = currentTile;
+		this.currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		this.currentTile.setVisited();
+		this.lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
+		this.lastCheckpointTile.setVisited();
+		this.startTile = this.currentTile;
+		this.navComp = navComp;
 	}
 
 	/**

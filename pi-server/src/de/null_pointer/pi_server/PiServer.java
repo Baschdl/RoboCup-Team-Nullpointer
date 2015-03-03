@@ -5,7 +5,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.HandleValues;
-import de.null_pointer.navigation.test.GuiNavigation;
+import de.null_pointer.navigation.test.NavCompetitionHandler;
 import de.null_pointer.navigation.test.NavSimulationHandler;
 
 /**
@@ -53,8 +53,28 @@ public class PiServer {
 				i++;
 				s = args[i];
 				if (s.equals("navigation")) {
+					/*
+					 * Wenn der Parameter "-comp" uebergeben wurde, soll sich
+					 * die GUI oeffnen, die die Karte live anzeigt
+					 */
+					boolean comParam = false;
+					for (int j = 0; j < args.length; j++) {
+						if (args[j].equals("-comp")) {
+							comParam = true;
+							break;
+						}
+					}
+
 					logger.debug("Starte Navigation-GUI");
-					NavSimulationHandler navSim = new NavSimulationHandler(15, 15, true);
+					if (comParam == false) {
+						// test gui
+						NavSimulationHandler navSim = new NavSimulationHandler(
+								19, 19, true);
+					} else {
+						// competition gui
+						NavCompetitionHandler navComp = new NavCompetitionHandler();
+						initProgram.setNavCompetitionHandler(navComp);
+					}
 					logger.info("Navigation-GUI gestartet");
 
 				} else if (s.equals("normal")) {
@@ -67,6 +87,7 @@ public class PiServer {
 					for (int j = 0; j < args.length && j < i; j++) {
 						if (args[j].equals("-comp")) {
 							comParam = true;
+							break;
 						}
 					}
 					if (comParam == false) {
@@ -98,6 +119,7 @@ public class PiServer {
 				for (int j = 0; j < args.length && j < i; j++) {
 					if (args[j].equals("-gui") && args[j + 1].equals("normal")) {
 						guiNormalParam = true;
+						break;
 					}
 				}
 				if (guiNormalParam == false) {
