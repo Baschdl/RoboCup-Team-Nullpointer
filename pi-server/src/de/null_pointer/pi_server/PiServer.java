@@ -72,7 +72,7 @@ public class PiServer {
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
 							initProgram.getEopdRight(),
 							initProgram.getDistNx(), initProgram.getThermal(),
-							initProgram.getOdometer());
+							initProgram.getOdometer(), initProgram.getMotorControl(), initProgram.getBrickCon1(), initProgram.getBrickCon2());
 					logger.info("GUI gestartet");
 					vGUI.start();
 				}

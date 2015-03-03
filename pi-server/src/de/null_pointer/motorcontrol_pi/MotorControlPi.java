@@ -12,7 +12,7 @@ public class MotorControlPi {
 
 	// actualSpeed: positive: speed forward, negative: speed backward
 	private int actualSpeed = -1;
-	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3
+	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3, stop: 4, float: 5
 	private int mode = -1;
 	private int speedCurve = -1;
 	private int speedDifference = -1;
@@ -132,6 +132,7 @@ public class MotorControlPi {
 		speedDifference = 1;
 		speedCurve = 1;
 		actualSpeed = 1;
+		mode = 2;
 
 		int wheelAngle = (int) Math.round(((Math.PI * 16.8) / (360f / angle))
 				* (360 / (Math.PI * 4.8)));
@@ -156,6 +157,7 @@ public class MotorControlPi {
 		speedDifference = 1;
 		speedCurve = 1;
 		actualSpeed = 1;
+		mode = 3;
 
 		int wheelAngle = (int) Math.round(((Math.PI * 16.8) / (360f / angle))
 				* (360 / (Math.PI * 4.8)));
@@ -178,6 +180,7 @@ public class MotorControlPi {
 			speedDifference = 1;
 			speedCurve = 1;
 			actualSpeed = 1;
+			mode = 4;
 
 			logger.info("PC set all motor stop");
 			brickCon1.stop('D');
@@ -196,6 +199,7 @@ public class MotorControlPi {
 			speedDifference = 1;
 			speedCurve = 1;
 			actualSpeed = 1;
+			mode = 5;
 			brickCon1.flt('D');
 			brickCon2.flt('D');
 			notMoving = -10;

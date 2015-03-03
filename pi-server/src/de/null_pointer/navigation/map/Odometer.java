@@ -39,13 +39,12 @@ public class Odometer {
 	 *            current speed of the Robot in degrees per second
 	 */
 	public void calculateDistance(double time, int currentSpeed) {
-		milliVolt = accumulator.getMilliVolt();
-		angle = deviationAngle();
+		//milliVolt = accumulator.getMilliVolt();
 
 		// TODO Batteriestatus beachten
-		tmpDistance = (currentSpeed / 360) * 2 * Math.PI * wheelRadius
-				* (time / 1000);
-		distanceCounter += tmpDistance * Math.cos(angle);
+		tmpDistance = (currentSpeed / 360.0) * 2.0 * Math.PI * wheelRadius
+				* (time / 1000.0);
+		distanceCounter += tmpDistance;
 
 	}
 

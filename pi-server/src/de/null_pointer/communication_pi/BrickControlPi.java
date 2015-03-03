@@ -124,11 +124,11 @@ public class BrickControlPi extends Thread {
 			// ThermalSensor
 			thermal.setTemperature(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 9) {
-			if (receiveData[0] == 1) {
+			if (receiveData[1] == 1) {
 				// TODO Reset Button gedrueckt; ggf. muss noch weiteres getan
 				// werden
 				navi.loadMap();
-			} else if (receiveData[0] == 2) {
+			} else if (receiveData[1] == 2) {
 				initializeProgram.setProgramStarted();
 			}
 		} else if (receiveData[0] == 10) {
