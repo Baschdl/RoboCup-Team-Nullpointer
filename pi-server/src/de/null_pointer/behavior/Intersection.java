@@ -105,7 +105,7 @@ public class Intersection implements Behavior {
 					break;
 				}
 			}
-			//TODO: evtl. auﬂerhalb der if-Abfrage; (Konflikt mit NextTile)
+			//TODO: evtl. ausserhalb der if-Abfrage; (Konflikt mit NextTile)
 			nav.switchTile(motorControl.getRotationHeading());
 		}
 		
