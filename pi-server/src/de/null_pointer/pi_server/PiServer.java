@@ -54,7 +54,7 @@ public class PiServer {
 				s = args[i];
 				if (s.equals("navigation")) {
 					logger.debug("Starte Navigation-GUI");
-					NavSimulationHandler navSim = new NavSimulationHandler(15, 15);
+					NavSimulationHandler navSim = new NavSimulationHandler(15, 15, true);
 					logger.info("Navigation-GUI gestartet");
 
 				} else if (s.equals("normal")) {
