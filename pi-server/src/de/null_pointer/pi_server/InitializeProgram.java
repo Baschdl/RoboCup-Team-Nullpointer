@@ -28,6 +28,7 @@ import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.motorcontrol_pi.Semaphore;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.navigation.map.Odometer;
+import de.null_pointer.navigation.test.NavCompetitionHandler;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.AccumulatorProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
@@ -57,8 +58,8 @@ public class InitializeProgram {
 	private CommunicationPi comPi1 = null;
 	private CommunicationPi comPi2 = null;
 
+	private NavCompetitionHandler navComp = null;
 	private Semaphore available = null;
-
 	private Properties propPiServer = null;
 
 	private boolean programStarted = false;
@@ -133,6 +134,11 @@ public class InitializeProgram {
 
 	public void setProgramStarted() {
 		this.programStarted = true;
+	}
+
+	public void setNavCompetitionHandler(NavCompetitionHandler navComp) {
+		this.navComp = navComp;
+
 	}
 
 	public InitializeProgram(Logger logger) {
@@ -234,7 +240,7 @@ public class InitializeProgram {
 	}
 
 	public void initializeNavigation() {
-		nav = new Navigation(propPiServer);
+		nav = new Navigation(propPiServer, navComp);
 		odometer = new Odometer(accumulator, absImu, propPiServer);
 	}
 
