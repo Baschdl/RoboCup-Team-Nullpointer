@@ -32,7 +32,7 @@ public class MovingForward implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		logger.info("takeControl: Calling action: YES;");
+		logger.debug("takeControl: Calling action: YES;");
 		return true;
 	}
 

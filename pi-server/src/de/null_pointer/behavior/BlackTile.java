@@ -47,7 +47,7 @@ public class BlackTile implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		logger.info("takeControl: running");
+		logger.debug("takeControl: running");
 		int[] values = lsa.getLSA();
 		int value = 0;
 		for (int val : values) {
@@ -60,7 +60,7 @@ public class BlackTile implements Behavior {
 			logger.info("takeControl: Calling action: YES;");
 		} else {
 			logger.debug("takeControl: Average LSA-values: " + value);
-			logger.info("takeControl: Calling action: NO;");
+			logger.debug("takeControl: Calling action: NO;");
 		}
 		return value < lsaActionValue * 8;
 	}

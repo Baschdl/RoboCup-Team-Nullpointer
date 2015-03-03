@@ -41,11 +41,11 @@ public class Slope implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		logger.info("takeControl: Running;");
+		logger.debug("takeControl: Running;");
 		if(absImu.getTiltDataVertical() > angleToTakeControl){
 			logger.info("takeControl: Calling action: YES;");
 		}else{
-			logger.info("takeControl: Calling action: NO;");
+			logger.debug("takeControl: Calling action: NO;");
 		}
 		return (absImu.getTiltDataVertical() > angleToTakeControl);
 	}

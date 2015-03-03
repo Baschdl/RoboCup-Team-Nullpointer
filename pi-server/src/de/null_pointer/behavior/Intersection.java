@@ -65,20 +65,20 @@ public class Intersection implements Behavior {
 			logger.error("takeControl: No DistNx-Values (negative value), Calling action: NO;");
 		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
 			if (odometer.getDistanceCounter() < 15) {
-				logger.info("takeControl: Hallway left detected, but distanceCounter is < 15; Calling action: NO;");
+				logger.debug("takeControl: Hallway left detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
 			logger.info("takeControl: Hallway left detected; Calling action: YES;");
 			return true;
 		} else if (eopdRight.getDistance() >= maximalDistanceSide) {
 			if (odometer.getDistanceCounter() < 15) {
-				logger.info("takeControl: Hallway right detected, but distanceCounter is < 15; Calling action: NO;");
+				logger.debug("takeControl: Hallway right detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
 			logger.info("takeControl: Hallway right detected; Calling action: YES;");
 			return true;
 		}
-		logger.info("takeControl: No hallway detected; Calling action: NO;");
+		logger.debug("takeControl: No hallway detected; Calling action: NO;");
 		return false;
 	}
 

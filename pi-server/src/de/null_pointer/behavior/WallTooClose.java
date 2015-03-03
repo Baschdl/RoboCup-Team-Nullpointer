@@ -56,7 +56,7 @@ public class WallTooClose implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		logger.info("takeControl: Running;");
+		logger.debug("takeControl: Running;");
 		if ((eopdRight.getDistance() >= minDistanceSide && eopdRight
 				.getDistance() < maxDistanceSide)
 				|| eopdLeft.getDistance() >= minDistanceSide
@@ -64,7 +64,7 @@ public class WallTooClose implements Behavior {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
-		logger.info("takeControl: Calling action: NO;");
+		logger.debug("takeControl: Calling action: NO;");
 		return false;
 	}
 

@@ -42,7 +42,7 @@ public class Victim implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		logger.info("takeControl: Running;");
+		logger.debug("takeControl: Running;");
 		// needed to slow down the arbitrator
 		try {
 			Thread.sleep(10);

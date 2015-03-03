@@ -39,7 +39,7 @@ public class NextTile implements Behavior {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
-		logger.info("takeControl: Calling action: NO;");
+		logger.debug("takeControl: Calling action: NO;");
 		return false;
 	}
 
