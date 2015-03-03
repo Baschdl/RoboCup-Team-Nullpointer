@@ -17,6 +17,7 @@ public class Odometer {
 	private double wheelRadius = 0;
 	private int milliVolt = 0;
 	private int angle;
+	private Object lock;
 
 	private double tmpDistance = 0;
 
@@ -39,12 +40,14 @@ public class Odometer {
 	 *            current speed of the Robot in degrees per second
 	 */
 	public void calculateDistance(double time, int currentSpeed) {
-		//milliVolt = accumulator.getMilliVolt();
+		// milliVolt = accumulator.getMilliVolt();
 
 		// TODO Batteriestatus beachten
-		tmpDistance = (currentSpeed / 360.0) * 2.0 * Math.PI * wheelRadius
-				* (time / 1000.0);
-		distanceCounter += tmpDistance;
+		synchronized (lock) {
+			tmpDistance = (currentSpeed / 360.0) * 2.0 * Math.PI * wheelRadius
+					* (time / 1000.0);
+			distanceCounter += tmpDistance;
+		}
 
 	}
 
@@ -89,15 +92,21 @@ public class Odometer {
 	}
 
 	public double getDistanceCounter() {
-		return distanceCounter;
+		synchronized (lock) {
+			return distanceCounter;
+		}
 	}
 
-	public void setDistanceCounteR(int value) {
-		distanceCounter = value;
+	public void setDistanceCounter(int value) {
+		synchronized (lock) {
+			distanceCounter = value;
+		}
 	}
-
+	
 	public void resetDistanceCounter() {
-		distanceCounter = 0;
+		synchronized (lock) {
+			distanceCounter = 0;
+		}
 	}
 
 }

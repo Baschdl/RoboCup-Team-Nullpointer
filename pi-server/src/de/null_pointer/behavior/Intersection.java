@@ -90,7 +90,7 @@ public class Intersection implements Behavior {
 				&& actualDistance >= 0) {
 			logger.debug("action: Wall is not ahead, moving to the centre of the tile;");
 			motorControl.forward(speed);
-			while (odometer.getDistanceCounter() < 30) {
+			while ((odometer.getDistanceCounter() % 30) > 3) {
 				odometer.calculateDistance(time, speed);
 				time = System.currentTimeMillis();
 				try {
@@ -109,7 +109,7 @@ public class Intersection implements Behavior {
 			nav.switchTile(motorControl.getRotationHeading());
 		}
 		
-		odometer.resetDistanceCounter();
+		//odometer.resetDistanceCounter();
 		motorControl.stop();
 		findHallway();
 

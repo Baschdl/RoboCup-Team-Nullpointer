@@ -18,11 +18,12 @@ public class NextTile implements Behavior {
 	private MotorControlPi motorControl = null;
 	private Navigation nav = null;
 	private Odometer odometer = null;
+	private boolean nextTileFlag = true;
 
 	private int nextTileReachDistance = -1;
 
 	public NextTile(
-			/* Abs_ImuProcessingPi absImu, */MotorControlPi motorControl,
+	/* Abs_ImuProcessingPi absImu, */MotorControlPi motorControl,
 			Navigation nav, Odometer odometer, Properties propPiServer) {
 		// this.absImu = absImu;
 		this.motorControl = motorControl;
@@ -35,8 +36,10 @@ public class NextTile implements Behavior {
 	@Override
 	public boolean takeControl() {
 		// TODO ggf. Umschaltwert anpassen
-		if (odometer.getDistanceCounter() >= nextTileReachDistance) {
-			
+		double distance = 0;
+		
+		if ((distance = odometer.getDistanceCounter() % 30) < 1 || distance > 29 ) {
+
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -46,11 +49,10 @@ public class NextTile implements Behavior {
 
 	@Override
 	public void action() {
-		
-		logger.info("action: Running; Next tile reached;");
-		// nav.switchTile(absImu.getAbsImuHeading());
-		nav.switchTile(motorControl.getRotationHeading());
-		odometer.resetDistanceCounter();
+			logger.info("action: Running; Next tile reached;");
+			// nav.switchTile(absImu.getAbsImuHeading());
+			nav.switchTile(motorControl.getRotationHeading());
+			//odometer.resetDistanceCounter();
 	}
 
 	@Override
