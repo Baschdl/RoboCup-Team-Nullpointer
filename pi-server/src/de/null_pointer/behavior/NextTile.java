@@ -19,6 +19,7 @@ public class NextTile implements Behavior {
 	private Navigation nav = null;
 	private Odometer odometer = null;
 	private boolean nextTileFlag = true;
+	private double oldDistance = 0;
 
 	private int nextTileReachDistance = -1;
 
@@ -38,9 +39,10 @@ public class NextTile implements Behavior {
 		// TODO ggf. Umschaltwert anpassen
 		double distance = 0;
 		
-		if ((distance = odometer.getDistanceCounter() % 30) < 1 || distance > 29 ) {
+		if (((distance = odometer.getDistanceCounter() % 30) > 29) && (distance - oldDistance) > 29) {
 
 			logger.info("takeControl: Calling action: YES;");
+			oldDistance = distance;
 			return true;
 		}
 		logger.debug("takeControl: Calling action: NO;");

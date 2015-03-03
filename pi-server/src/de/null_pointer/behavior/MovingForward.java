@@ -11,7 +11,7 @@ import lejos.robotics.subsumption.Behavior;
 
 public class MovingForward implements Behavior {
 	private static Logger logger = Logger.getLogger(MovingForward.class);
-	private Properties  propPiServer = null;
+	private Properties propPiServer = null;
 
 	private MotorControlPi motorControl = null;
 	private Odometer odometer = null;
@@ -21,11 +21,12 @@ public class MovingForward implements Behavior {
 	private boolean moving = false;
 	private long time;
 
-	public MovingForward(MotorControlPi motorControl, Odometer odometer, Properties propPiServer) {
+	public MovingForward(MotorControlPi motorControl, Odometer odometer,
+			Properties propPiServer) {
 		this.motorControl = motorControl;
 		this.odometer = odometer;
 		this.propPiServer = propPiServer;
-		
+
 		speed = Integer.parseInt(propPiServer
 				.getProperty("Behavior.MovingForward.speed"));
 	}
@@ -60,13 +61,12 @@ public class MovingForward implements Behavior {
 		moving = false;
 	}
 
-	public boolean testGetMoving(){
+	public boolean testGetMoving() {
 		return moving;
 	}
 
-	
-	public void testActionWithoutLoop(){
-		logger.info("action: running;");
+	public void testActionWithoutLoop() {
+		logger.info("action: Running;");
 		time = 0;
 		moving = true;
 		motorControl.forward(speed);
@@ -78,9 +78,9 @@ public class MovingForward implements Behavior {
 			logger.fatal("InterruptedException while sleep()");
 		}
 		time = System.currentTimeMillis() - time;
-
 	}
-	public void testSetMoving(boolean mov){
+
+	public void testSetMoving(boolean mov) {
 		moving = mov;
 	}
 }

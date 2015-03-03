@@ -17,7 +17,7 @@ public class Odometer {
 	private double wheelRadius = 0;
 	private int milliVolt = 0;
 	private int angle;
-	private Object lock;
+	private Object lock = new Object();
 
 	private double tmpDistance = 0;
 
