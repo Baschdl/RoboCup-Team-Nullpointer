@@ -130,7 +130,6 @@ public class PiServer {
 				}
 				initProgram.initializeBehavior();
 				initProgram.getArbitrator().setDaemon(true);
-				initProgram.getArbitrator().start();
 				logger.info("Wettkampfprogramm gestartet");
 				compProgramStarted = true;
 			}
@@ -175,6 +174,7 @@ public class PiServer {
 				while (!initProgram.getProgramStarted()) {
 					Delay.msDelay(250);
 				}
+				initProgram.getArbitrator().start();
 				logger.info("Programm durch Betaetigen des Enter-Buttons auf dem Brick gestartet");
 			}
 
