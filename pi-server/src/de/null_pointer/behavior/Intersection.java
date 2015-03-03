@@ -113,9 +113,9 @@ public class Intersection implements Behavior {
 		motorControl.stop();
 		findHallway();
 
-		if (lastIntersection != null) {
-			nav.cutNodeConnections(lastIntersection);
-		}
+		//if (lastIntersection != null) { //auf Pi entfernt
+		//	nav.cutNodeConnections(lastIntersection);
+		//}
 		lastIntersection = nav.getCurrentTile();
 
 		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
