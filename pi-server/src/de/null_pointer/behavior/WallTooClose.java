@@ -7,8 +7,10 @@ import lejos.robotics.subsumption.Behavior;
 import org.apache.log4j.Logger;
 
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.navigation.map.Odometer;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
+import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
 
 public class WallTooClose implements Behavior {
@@ -19,10 +21,12 @@ public class WallTooClose implements Behavior {
 	private EOPDProcessingPi eopdRight = null;
 	private Odometer odometer = null;
 	private Abs_ImuProcessingPi absImu = null;
+	private DistNxProcessingPi distnx;
 	private double minDistanceSideEOPDRight;
 	private double minDistanceSideEOPDLeft;
 	private double maxDistanceSideEOPDRight;
 	private double maxDistanceSideEOPDLeft;
+	private int minimalDistanceFront = -1;
 	private long time;
 	private int speed;
 	private int slopeSpeed;
@@ -31,16 +35,19 @@ public class WallTooClose implements Behavior {
 	private boolean correctingToTheRight = false;
 	private boolean correctingToTheLeft = false;
 	private boolean suppress = false;
+	private Navigation nav;
 
-	public WallTooClose(EOPDProcessingPi eopdRight, EOPDProcessingPi eopdLeft,
+	public WallTooClose(EOPDProcessingPi eopdRight, DistNxProcessingPi distnx, EOPDProcessingPi eopdLeft,
 			MotorControlPi motorControl, Odometer odometer,
-			Properties propPiServer, Abs_ImuProcessingPi absImu) {
+			Properties propPiServer, Navigation nav, Abs_ImuProcessingPi absImu) {
 		this.propPiServer = propPiServer;
 		this.motorControl = motorControl;
 		this.eopdLeft = eopdLeft;
 		this.eopdRight = eopdRight;
 		this.odometer = odometer;
 		this.absImu = absImu;
+		this.distnx = distnx;
+		this.nav = nav;
 
 		minDistanceSideEOPDRight = Double
 				.parseDouble(propPiServer
@@ -63,6 +70,8 @@ public class WallTooClose implements Behavior {
 				.getProperty("Behavior.Slope.speed"));
 		angleToTakeControl = Integer.parseInt(propPiServer
 				.getProperty("Behavior.Slope.angleToTakeControl"));
+		minimalDistanceFront = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.minimalDistanceFront"));
 
 	}
 
@@ -71,7 +80,7 @@ public class WallTooClose implements Behavior {
 		logger.debug("takeControl: Running;");
 		if ((eopdRight.getDistance() >= minDistanceSideEOPDRight 
 				|| eopdLeft.getDistance() >= minDistanceSideEOPDLeft
-				) && (!correctingToTheRight || !correctingToTheLeft) && (eopdRight.getDistance() < maxDistanceSideEOPDRight && eopdLeft.getDistance() < maxDistanceSideEOPDLeft)){
+				) && (!correctingToTheRight || !correctingToTheLeft) && (eopdRight.getDistance() < maxDistanceSideEOPDRight && eopdLeft.getDistance() < maxDistanceSideEOPDLeft) && (distnx.getDistance() < minimalDistanceFront)){
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -114,10 +123,10 @@ public class WallTooClose implements Behavior {
 		}
 		logger.debug("action: Correcting and measuring driven distance;");
 		while (!suppress
-				&& ((eopdRight.getDistance() >= minDistanceSideEOPDRight && eopdRight
-						.getDistance() < maxDistanceSideEOPDRight) || (eopdLeft
-						.getDistance() >= minDistanceSideEOPDLeft && eopdLeft
-						.getDistance() < maxDistanceSideEOPDLeft))) {
+				&& (eopdRight.getDistance() >= minDistanceSideEOPDRight  || eopdLeft
+						.getDistance() >= minDistanceSideEOPDLeft) && (eopdRight
+								.getDistance() < maxDistanceSideEOPDRight && eopdLeft
+								.getDistance() < maxDistanceSideEOPDLeft) && (distnx.getDistance() < minimalDistanceFront)) {
 			odometer.calculateDistance(time, speed);
 			time = System.currentTimeMillis();
 			try {
@@ -126,7 +135,14 @@ public class WallTooClose implements Behavior {
 				logger.fatal("InterruptedException while sleep()");
 			}
 			time = System.currentTimeMillis() - time;
+			if((odometer.getDistanceCounter() % 30) > 29){
+				odometer.addValueToDistanceCounter(30 - (odometer
+						.getDistanceCounter() % 30));
+				nav.switchTile(motorControl.getRotationHeading());
+			}
 		}
+		correctingToTheLeft = false;
+		correctingToTheRight = false;
 		logger.debug("action: Finished correction;");
 	}
 

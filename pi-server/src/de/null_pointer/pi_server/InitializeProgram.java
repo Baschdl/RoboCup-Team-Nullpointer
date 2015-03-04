@@ -259,13 +259,13 @@ public class InitializeProgram {
 		Behavior b5 = new SilverTile(lsa, nav, propPiServer);
 		Behavior b6 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
 				propPiServer);
-		Behavior b7 = new WallTooClose(eopdRight, eopdLeft, motorControl,
-				odometer, propPiServer, absImu);
+		Behavior b7 = new WallTooClose(eopdRight, distNx, eopdLeft, motorControl,
+				odometer, propPiServer, nav, absImu);
 		Behavior b8 = new Victim(brickCon2, motorControl, nav, thermal,
 				propPiServer);
 
 		Behavior[] behavior = { b1, b2, /** b3, **/
-		b4, /**b5, b6, b7, **/
+		b4, /**b5, b6,**/ b7,
 		b8 };
 
 		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
