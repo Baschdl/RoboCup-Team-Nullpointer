@@ -28,33 +28,39 @@ public class WallTooClose implements Behavior {
 	private int slopeSpeed;
 	private int percentOfSpeed;
 	private int angleToTakeControl;
-	
+	private boolean correctingToTheRight = false;
+	private boolean correctingToTheLeft = false;
 	private boolean suppress = false;
-	
 
 	public WallTooClose(EOPDProcessingPi eopdRight, EOPDProcessingPi eopdLeft,
-			MotorControlPi motorControl, Odometer odometer, Properties propPiServer, Abs_ImuProcessingPi absImu) {
+			MotorControlPi motorControl, Odometer odometer,
+			Properties propPiServer, Abs_ImuProcessingPi absImu) {
 		this.propPiServer = propPiServer;
 		this.motorControl = motorControl;
 		this.eopdLeft = eopdLeft;
 		this.eopdRight = eopdRight;
 		this.odometer = odometer;
 		this.absImu = absImu;
-		
-		minDistanceSideEOPDRight = Double.parseDouble(propPiServer
-				.getProperty("Behavior.WallTooClose.minimalDistanceSideEOPDRight"));
-		minDistanceSideEOPDLeft = Double.parseDouble(propPiServer
-				.getProperty("Behavior.WallTooClose.minimalDistanceSideEOPDLeft"));
-		maxDistanceSideEOPDRight = Integer.parseInt(propPiServer
-				.getProperty("Behavior.Intersection.maximalDistanceSideEOPDRight"));
-		maxDistanceSideEOPDLeft = Integer.parseInt(propPiServer
-				.getProperty("Behavior.Intersection.maximalDistanceSideEOPDLeft"));
+
+		minDistanceSideEOPDRight = Double
+				.parseDouble(propPiServer
+						.getProperty("Behavior.WallTooClose.minimalDistanceSideEOPDRight"));
+		minDistanceSideEOPDLeft = Double
+				.parseDouble(propPiServer
+						.getProperty("Behavior.WallTooClose.minimalDistanceSideEOPDLeft"));
+		maxDistanceSideEOPDRight = Integer
+				.parseInt(propPiServer
+						.getProperty("Behavior.Intersection.maximalDistanceSideEOPDRight"));
+		maxDistanceSideEOPDLeft = Integer
+				.parseInt(propPiServer
+						.getProperty("Behavior.Intersection.maximalDistanceSideEOPDLeft"));
 		speed = Integer.parseInt(propPiServer
 				.getProperty("Behavior.MovingForward.speed"));
 		percentOfSpeed = Integer
 				.parseInt(propPiServer
 						.getProperty("Behavior.WallTooClose.percentOfOldSpeedForCorrection"));
-		slopeSpeed = Integer.parseInt(propPiServer.getProperty("Behavior.Slope.speed"));
+		slopeSpeed = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Slope.speed"));
 		angleToTakeControl = Integer.parseInt(propPiServer
 				.getProperty("Behavior.Slope.angleToTakeControl"));
 
@@ -63,10 +69,9 @@ public class WallTooClose implements Behavior {
 	@Override
 	public boolean takeControl() {
 		logger.debug("takeControl: Running;");
-		if ((eopdRight.getDistance() >= minDistanceSideEOPDRight && eopdRight
-				.getDistance() < maxDistanceSideEOPDRight)
+		if ((eopdRight.getDistance() >= minDistanceSideEOPDRight 
 				|| eopdLeft.getDistance() >= minDistanceSideEOPDLeft
-				&& eopdLeft.getDistance() < maxDistanceSideEOPDLeft) {
+				) && (!correctingToTheRight || !correctingToTheLeft) && (eopdRight.getDistance() < maxDistanceSideEOPDRight && eopdLeft.getDistance() < maxDistanceSideEOPDLeft)){
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -81,26 +86,30 @@ public class WallTooClose implements Behavior {
 		time = 0;
 		logger.debug("action: Correcting driving direction;");
 		if (eopdRight.getDistance() >= minDistanceSideEOPDRight
-				&& eopdRight.getDistance() < maxDistanceSideEOPDRight) {
-			if(absImu.getTiltDataVertical() > angleToTakeControl){
+				&& eopdRight.getDistance() < maxDistanceSideEOPDRight
+				&& !correctingToTheRight) {
+			correctingToTheRight = false;
+			if (absImu.getTiltDataVertical() > angleToTakeControl) {
 				logger.debug("action: Correcting driving direction; On slope; Left wall too near;");
-				motorControl.changeSpeedSingleMotorForward(2, 'A', slopeSpeed + slopeSpeed
-						* percentOfSpeed / 100);
-			}else{
-			logger.debug("action: Correcting driving direction; Left wall too near;");
-			motorControl.changeSpeedSingleMotorForward(2, 'A', speed + speed
-					* percentOfSpeed / 100);
+				motorControl.changeSpeedSingleMotorForward(2, 'A', slopeSpeed
+						+ slopeSpeed * percentOfSpeed / 100);
+			} else {
+				logger.debug("action: Correcting driving direction; Left wall too near;");
+				motorControl.changeSpeedSingleMotorForward(2, 'A', speed
+						+ speed * percentOfSpeed / 100);
 			}
 		} else if (eopdLeft.getDistance() >= minDistanceSideEOPDLeft
-				&& eopdLeft.getDistance() < maxDistanceSideEOPDLeft) {
-			if(absImu.getTiltDataVertical() > angleToTakeControl){
+				&& eopdLeft.getDistance() < maxDistanceSideEOPDLeft
+				&& !correctingToTheLeft) {
+			correctingToTheLeft = true;
+			if (absImu.getTiltDataVertical() > angleToTakeControl) {
 				logger.debug("action: Correcting driving direction; On slope; Right wall too near;");
-				motorControl.changeSpeedSingleMotorForward(2, 'B', slopeSpeed + slopeSpeed
-						* percentOfSpeed / 100);
-			}else{
+				motorControl.changeSpeedSingleMotorForward(2, 'B', slopeSpeed
+						+ slopeSpeed * percentOfSpeed / 100);
+			} else {
 				logger.debug("action: Correcting driving direction; Right wall too near;");
-			motorControl.changeSpeedSingleMotorForward(2, 'B', speed + speed
-					* percentOfSpeed / 100);
+				motorControl.changeSpeedSingleMotorForward(2, 'B', speed
+						+ speed * percentOfSpeed / 100);
 			}
 		}
 		logger.debug("action: Correcting and measuring driven distance;");
@@ -118,6 +127,7 @@ public class WallTooClose implements Behavior {
 			}
 			time = System.currentTimeMillis() - time;
 		}
+		logger.debug("action: Finished correction;");
 	}
 
 	@Override
