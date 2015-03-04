@@ -33,7 +33,7 @@ public class Intersection implements Behavior {
 	private int speed = -1;
 	private long time = 0;
 	// TODO: passender benennen
-	private int actualDistance = -1;
+	private int currentDistanceFront = -1;
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
@@ -97,8 +97,8 @@ public class Intersection implements Behavior {
 	public void action() {
 		logger.info("action: Running");
 		time = 0;
-		if ((actualDistance = distnx.getDistance()) > minimalDistanceFront
-				&& actualDistance >= 0) {
+		if ((currentDistanceFront = distnx.getDistance()) > minimalDistanceFront
+				&& currentDistanceFront >= 0) {
 			logger.debug("action: Wall is not ahead, moving to the centre of the tile;");
 			motorControl.forward(speed);
 			while ((odometer.getDistanceCounter() % 30) > 3) {
@@ -110,16 +110,17 @@ public class Intersection implements Behavior {
 					logger.fatal("action: InterruptedException while sleep();");
 				}
 				time = System.currentTimeMillis() - time;
-				if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
-						&& actualDistance >= 0) {
+				if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
+						&& currentDistanceFront >= 0) {
 					logger.debug("action: Wall is now ahead; Stopping movement;");
 					break;
 				}
 			}
 			logger.debug("action: Switching tile because roboter went to the centre of the tile;");
 			nav.switchTile(motorControl.getRotationHeading());
-		} else if (actualDistance <= minimalDistanceFront
-				&& actualDistance >= 0) {
+		} else if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
+				&& currentDistanceFront >= 0) {
+			motorControl.stop();
 			logger.debug("action: Wall is ahead, already in the centre of the tile;");
 			if ((odometer.getDistanceCounter() % 30) > 25) {
 				logger.debug("action: Switching tile because nextTile can not be called while intersection-action is active");
@@ -128,8 +129,6 @@ public class Intersection implements Behavior {
 				nav.switchTile(motorControl.getRotationHeading());
 			}
 		}
-
-		// odometer.resetDistanceCounter();
 		motorControl.stop();
 		findHallway();
 
@@ -153,8 +152,8 @@ public class Intersection implements Behavior {
 
 	private void findHallway() {
 		double distanceSide = -1;
-		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
-				&& actualDistance >= 0) {
+		if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
+				&& currentDistanceFront >= 0) {
 			logger.debug("findHallway: Wall is ahead; Saving wall in front");
 			// nav.removeNeighbor(absImu.getAbsImuHeading());
 			nav.removeNeighbor(motorControl.getRotationHeading());
