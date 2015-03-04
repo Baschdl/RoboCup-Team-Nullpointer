@@ -28,7 +28,8 @@ public class Intersection implements Behavior {
 	private Node lastIntersection = null;
 
 	private int minimalDistanceFront = -1;
-	private int maximalDistanceSide = -1;
+	private int maximalDistanceSideEOPDRight = -1;
+	private int maximalDistanceSideEOPDLeft = -1;
 	private int speed = -1;
 	private long time = 0;
 	// TODO: passender benennen
@@ -48,8 +49,10 @@ public class Intersection implements Behavior {
 
 		minimalDistanceFront = Integer.parseInt(propPiServer
 				.getProperty("Behavior.Intersection.minimalDistanceFront"));
-		maximalDistanceSide = Integer.parseInt(propPiServer
-				.getProperty("Behavior.Intersection.maximalDistanceSide"));
+		maximalDistanceSideEOPDRight = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.maximalDistanceSideEOPDRight"));
+		maximalDistanceSideEOPDLeft = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.maximalDistanceSideEOPDLeft"));
 		speed = Integer.parseInt(propPiServer
 				.getProperty("Behavior.MovingForward.speed"));
 	}
@@ -63,15 +66,23 @@ public class Intersection implements Behavior {
 			return true;
 		} else if (actualDistance < 0) {
 			logger.error("takeControl: No DistNx-Values (negative value), Calling action: NO;");
-		} else if (eopdLeft.getDistance() >= maximalDistanceSide) {
-			if (nav.getCurrentTile() == lastIntersection/*odometer.getDistanceCounter() < 15*/) {
+		} else if (eopdLeft.getDistance() >= maximalDistanceSideEOPDLeft) {
+			if (nav.getCurrentTile() == lastIntersection/*
+														 * odometer.
+														 * getDistanceCounter()
+														 * < 15
+														 */) {
 				logger.debug("takeControl: Hallway left detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
 			logger.info("takeControl: Hallway left detected; Calling action: YES;");
 			return true;
-		} else if (eopdRight.getDistance() >= maximalDistanceSide) {
-			if (nav.getCurrentTile() == lastIntersection/*odometer.getDistanceCounter() < 15*/) {
+		} else if (eopdRight.getDistance() >= maximalDistanceSideEOPDRight) {
+			if (nav.getCurrentTile() == lastIntersection/*
+														 * odometer.
+														 * getDistanceCounter()
+														 * < 15
+														 */) {
 				logger.debug("takeControl: Hallway right detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
@@ -105,17 +116,26 @@ public class Intersection implements Behavior {
 					break;
 				}
 			}
-			//TODO: evtl. ausserhalb der if-Abfrage; (Konflikt mit NextTile)
+			logger.debug("action: Switching tile because roboter went to the centre of the tile;");
 			nav.switchTile(motorControl.getRotationHeading());
+		} else if (actualDistance <= minimalDistanceFront
+				&& actualDistance >= 0) {
+			logger.debug("action: Wall is ahead, already in the centre of the tile;");
+			if ((odometer.getDistanceCounter() % 30) > 25) {
+				logger.debug("action: Switching tile because nextTile can not be called while intersection-action is active");
+				odometer.addValueToDistanceCounter(30 - (odometer
+						.getDistanceCounter() % 30));
+				nav.switchTile(motorControl.getRotationHeading());
+			}
 		}
-		
-		//odometer.resetDistanceCounter();
+
+		// odometer.resetDistanceCounter();
 		motorControl.stop();
 		findHallway();
 
-		//if (lastIntersection != null) { //auf Pi entfernt
-		//	nav.cutNodeConnections(lastIntersection);
-		//}
+		// if (lastIntersection != null) { //auf Pi entfernt
+		// nav.cutNodeConnections(lastIntersection);
+		// }
 		lastIntersection = nav.getCurrentTile();
 
 		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
@@ -139,7 +159,7 @@ public class Intersection implements Behavior {
 			// nav.removeNeighbor(absImu.getAbsImuHeading());
 			nav.removeNeighbor(motorControl.getRotationHeading());
 		}
-		if ((distanceSide = eopdLeft.getDistance()) <= maximalDistanceSide
+		if ((distanceSide = eopdLeft.getDistance()) <= maximalDistanceSideEOPDLeft
 				& distanceSide > 0) {
 			logger.debug("findHallway: Wall is left; Saving wall on the left");
 			// nav.removeNeighbor(nav.rightleftDirection(
@@ -147,7 +167,7 @@ public class Intersection implements Behavior {
 			nav.removeNeighbor(nav.rightleftDirection(
 					motorControl.getRotationHeading(), false));
 		}
-		if ((distanceSide = eopdRight.getDistance()) <= maximalDistanceSide
+		if ((distanceSide = eopdRight.getDistance()) <= maximalDistanceSideEOPDRight
 				& distanceSide > 0) {
 			logger.debug("findHallway: Wall is right; Saving wall on the right");
 			// nav.removeNeighbor(nav.rightleftDirection(

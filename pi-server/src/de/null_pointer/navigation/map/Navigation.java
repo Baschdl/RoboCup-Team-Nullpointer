@@ -421,6 +421,7 @@ public class Navigation {
 	}
 
 	public void removeNeighbor(int orientation) {
+		logger.info("removeNeighbor(): removing neighbor; ORIENTATION: " + orientation);
 		if (navComp != null) {
 			navComp.removeNeighbor(orientation);
 		}
@@ -428,13 +429,14 @@ public class Navigation {
 	}
 
 	public void switchTile(int orientation) {
+		logger.info("switchTile(): Switching tile");
 		if (navComp != null) {
 			navComp.switchTile(orientation);
 		}
 		currentTile.setTremauxAlreadyEvaluated(false);
 		currentTile = currentTile.getNeighbor(orientation);
 		if (currentTile == null) {
-			logger.warn("CurrentTile is NULL !");
+			logger.error("CurrentTile is NULL !");
 		}
 	}
 
