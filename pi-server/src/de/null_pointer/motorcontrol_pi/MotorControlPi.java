@@ -92,10 +92,14 @@ public class MotorControlPi {
 	 */
 	public void changeSpeedSingleMotorForward(int brick, char motorport,
 			int speed) {
+		if(mode != 6){
+			mode = 6;
+			actualSpeed = speed;
 		if (brick == 1) {
 			brickCon1.forward(speed, motorport);
 		} else if (brick == 2) {
 			brickCon2.forward(speed, motorport);
+		}
 		}
 	}
 
@@ -111,10 +115,14 @@ public class MotorControlPi {
 	 */
 	public void changeSpeedSingleMotorBackward(int brick, char motorport,
 			int speed) {
+		if(mode != 7){
+			mode = 7;
+			actualSpeed = speed;
 		if (brick == 1) {
 			brickCon1.backward(speed, motorport);
 		} else if (brick == 2) {
 			brickCon2.backward(speed, motorport);
+		}
 		}
 	}
 
