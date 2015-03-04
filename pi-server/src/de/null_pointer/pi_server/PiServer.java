@@ -128,6 +128,7 @@ public class PiServer {
 				if (guiNormalParam == false) {
 					initProgram.initializeNavigation();
 				}
+				logger.debug("Initialize behavior...");
 				initProgram.initializeBehavior();
 				initProgram.getArbitrator().setDaemon(true);
 				logger.info("Wettkampfprogramm gestartet");

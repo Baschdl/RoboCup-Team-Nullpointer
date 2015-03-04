@@ -271,9 +271,10 @@ public class InitializeProgram {
 		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
 		// wurden
+		logger.debug("Waiting for sensor data...");
 		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
 		}
-		logger.info("Genug Sensorwerte erhalten");
+		logger.info("Enough sensor data received");
 
 		arbitrator = new Arbitrator(behavior);
 		available = new Semaphore(arbitrator, behavior);

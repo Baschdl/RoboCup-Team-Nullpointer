@@ -29,6 +29,7 @@ public class TestBrickControlPi extends BrickControlPi {
 
 		super(com, nav, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator,
 				thermal, initializeProgram);
+		super.setSensorReady();
 	}
 
 	// Getter werden zum Testen der Klasse benoetigt

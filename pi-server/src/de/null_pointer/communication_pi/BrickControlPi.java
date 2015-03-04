@@ -478,7 +478,7 @@ public class BrickControlPi extends Thread {
 	public void calibrateLSAWhite() {
 		sendCommand(2, 4);
 	}
-
+ 
 	// TODO: Noch einzubauen
 	public void exitBrick() {
 		sendCommand(99, 0, 0);
@@ -491,6 +491,10 @@ public class BrickControlPi extends Thread {
 
 	public boolean getSensorReady() {
 		return sensorReady;
+	}
+
+	public void setSensorReady() {
+		sensorReady = false;
 	}
 
 	public void blinkColorSensorLED() {
