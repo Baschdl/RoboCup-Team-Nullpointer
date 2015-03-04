@@ -80,7 +80,7 @@ public class WallTooClose implements Behavior {
 		logger.debug("takeControl: Running;");
 		if ((eopdRight.getDistance() >= minDistanceSideEOPDRight 
 				|| eopdLeft.getDistance() >= minDistanceSideEOPDLeft
-				) && (!correctingToTheRight || !correctingToTheLeft) && (eopdRight.getDistance() < maxDistanceSideEOPDRight && eopdLeft.getDistance() < maxDistanceSideEOPDLeft) && (distnx.getDistance() < minimalDistanceFront)){
+				) && (!correctingToTheRight || !correctingToTheLeft) && (eopdRight.getDistance() < maxDistanceSideEOPDRight && eopdLeft.getDistance() < maxDistanceSideEOPDLeft) && (distnx.getDistance() > minimalDistanceFront)){
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -126,7 +126,7 @@ public class WallTooClose implements Behavior {
 				&& (eopdRight.getDistance() >= minDistanceSideEOPDRight  || eopdLeft
 						.getDistance() >= minDistanceSideEOPDLeft) && (eopdRight
 								.getDistance() < maxDistanceSideEOPDRight && eopdLeft
-								.getDistance() < maxDistanceSideEOPDLeft) && (distnx.getDistance() < minimalDistanceFront)) {
+								.getDistance() < maxDistanceSideEOPDLeft) && (distnx.getDistance() > minimalDistanceFront)) {
 			odometer.calculateDistance(time, speed);
 			time = System.currentTimeMillis();
 			try {
