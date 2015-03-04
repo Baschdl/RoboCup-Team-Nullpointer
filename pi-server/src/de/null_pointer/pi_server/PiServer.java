@@ -2,6 +2,8 @@ package de.null_pointer.pi_server;
 
 import java.util.Properties;
 
+import lejos.util.Delay;
+
 import org.apache.log4j.Logger;
 
 import de.null_pointer.gui.HandleValues;
@@ -29,6 +31,7 @@ import de.null_pointer.navigation.test.NavSimulationHandler;
 public class PiServer {
 
 	private static Logger logger = Logger.getLogger("TST.SIM");
+	private static boolean compProgramStarted = false;
 
 	public static void main(String[] args) {
 		InitializeProgram initProgram = new InitializeProgram(logger);
@@ -127,8 +130,8 @@ public class PiServer {
 				}
 				initProgram.initializeBehavior();
 				initProgram.getArbitrator().setDaemon(true);
-				initProgram.getArbitrator().start();
 				logger.info("Wettkampfprogramm gestartet");
+				compProgramStarted = true;
 			}
 
 			// startet ein Testprogramm, der nachfolgende String gibt an welches
@@ -165,6 +168,14 @@ public class PiServer {
 					testProgram.flash();
 				}
 				logger.info("Testprogramm gestartet");
+			}
+
+			if (i == (args.length - 1) && compProgramStarted) {
+				while (!initProgram.getProgramStarted()) {
+					Delay.msDelay(250);
+				}
+				initProgram.getArbitrator().start();
+				logger.info("Programm durch Betaetigen des Enter-Buttons auf dem Brick gestartet");
 			}
 
 		}
