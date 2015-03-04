@@ -34,6 +34,7 @@ public class NavCompetitionHandler {
 		}
 		}
 		gui.setColor(currentY, currentX, 1);
+		gui.repaint();
 	}
 
 	public void removeNeighbor(int direction) {
@@ -57,6 +58,7 @@ public class NavCompetitionHandler {
 		}
 		}
 		gui.setColor(bufferY, bufferX, -1);
+		gui.repaint();
 	}
 
 }

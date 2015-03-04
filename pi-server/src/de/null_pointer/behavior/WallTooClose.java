@@ -19,8 +19,10 @@ public class WallTooClose implements Behavior {
 	private EOPDProcessingPi eopdRight = null;
 	private Odometer odometer = null;
 	private Abs_ImuProcessingPi absImu = null;
-	private double minDistanceSide;
-	private double maxDistanceSide;
+	private double minDistanceSideEOPDRight;
+	private double minDistanceSideEOPDLeft;
+	private double maxDistanceSideEOPDRight;
+	private double maxDistanceSideEOPDLeft;
 	private long time;
 	private int speed;
 	private int slopeSpeed;
@@ -39,10 +41,14 @@ public class WallTooClose implements Behavior {
 		this.odometer = odometer;
 		this.absImu = absImu;
 		
-		minDistanceSide = Double.parseDouble(propPiServer
-				.getProperty("Behavior.WallTooClose.minimalDistanceSide"));
-		maxDistanceSide = Integer.parseInt(propPiServer
-				.getProperty("Behavior.Intersection.maximalDistanceSide"));
+		minDistanceSideEOPDRight = Double.parseDouble(propPiServer
+				.getProperty("Behavior.WallTooClose.minimalDistanceSideEOPDRight"));
+		minDistanceSideEOPDLeft = Double.parseDouble(propPiServer
+				.getProperty("Behavior.WallTooClose.minimalDistanceSideEOPDLeft"));
+		maxDistanceSideEOPDRight = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.maximalDistanceSideEOPDRight"));
+		maxDistanceSideEOPDLeft = Integer.parseInt(propPiServer
+				.getProperty("Behavior.Intersection.maximalDistanceSideEOPDLeft"));
 		speed = Integer.parseInt(propPiServer
 				.getProperty("Behavior.MovingForward.speed"));
 		percentOfSpeed = Integer
@@ -57,10 +63,10 @@ public class WallTooClose implements Behavior {
 	@Override
 	public boolean takeControl() {
 		logger.debug("takeControl: Running;");
-		if ((eopdRight.getDistance() >= minDistanceSide && eopdRight
-				.getDistance() < maxDistanceSide)
-				|| eopdLeft.getDistance() >= minDistanceSide
-				&& eopdLeft.getDistance() < maxDistanceSide) {
+		if ((eopdRight.getDistance() >= minDistanceSideEOPDRight && eopdRight
+				.getDistance() < maxDistanceSideEOPDRight)
+				|| eopdLeft.getDistance() >= minDistanceSideEOPDLeft
+				&& eopdLeft.getDistance() < maxDistanceSideEOPDLeft) {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -74,8 +80,8 @@ public class WallTooClose implements Behavior {
 		suppress = false;
 		time = 0;
 		logger.debug("action: Correcting driving direction;");
-		if (eopdRight.getDistance() >= minDistanceSide
-				&& eopdRight.getDistance() < maxDistanceSide) {
+		if (eopdRight.getDistance() >= minDistanceSideEOPDRight
+				&& eopdRight.getDistance() < maxDistanceSideEOPDRight) {
 			if(absImu.getTiltDataVertical() > angleToTakeControl){
 				logger.debug("action: Correcting driving direction; On slope; Left wall too near;");
 				motorControl.changeSpeedSingleMotorForward(2, 'A', slopeSpeed + slopeSpeed
@@ -85,8 +91,8 @@ public class WallTooClose implements Behavior {
 			motorControl.changeSpeedSingleMotorForward(2, 'A', speed + speed
 					* percentOfSpeed / 100);
 			}
-		} else if (eopdLeft.getDistance() >= minDistanceSide
-				&& eopdLeft.getDistance() < maxDistanceSide) {
+		} else if (eopdLeft.getDistance() >= minDistanceSideEOPDLeft
+				&& eopdLeft.getDistance() < maxDistanceSideEOPDLeft) {
 			if(absImu.getTiltDataVertical() > angleToTakeControl){
 				logger.debug("action: Correcting driving direction; On slope; Right wall too near;");
 				motorControl.changeSpeedSingleMotorForward(2, 'B', slopeSpeed + slopeSpeed
@@ -99,10 +105,10 @@ public class WallTooClose implements Behavior {
 		}
 		logger.debug("action: Correcting and measuring driven distance;");
 		while (!suppress
-				&& ((eopdRight.getDistance() >= minDistanceSide && eopdRight
-						.getDistance() < maxDistanceSide) || (eopdLeft
-						.getDistance() >= minDistanceSide && eopdLeft
-						.getDistance() < maxDistanceSide))) {
+				&& ((eopdRight.getDistance() >= minDistanceSideEOPDRight && eopdRight
+						.getDistance() < maxDistanceSideEOPDRight) || (eopdLeft
+						.getDistance() >= minDistanceSideEOPDLeft && eopdLeft
+						.getDistance() < maxDistanceSideEOPDLeft))) {
 			odometer.calculateDistance(time, speed);
 			time = System.currentTimeMillis();
 			try {

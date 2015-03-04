@@ -108,5 +108,16 @@ public class Odometer {
 			distanceCounter = 0;
 		}
 	}
+	/**
+	 * Method to add a value to the distanceCounter
+	 * @param valueToAdd Value to add :D
+	 */
+	
+	public void addValueToDistanceCounter(double valueToAdd){
+		synchronized (lock) {
+			distanceCounter = distanceCounter + valueToAdd;
+		}
+	}
+	
 
 }

@@ -37,24 +37,34 @@ public class NextTile implements Behavior {
 	@Override
 	public boolean takeControl() {
 		// TODO ggf. Umschaltwert anpassen
-		double distance = 0;
-		
-		if (((distance = odometer.getDistanceCounter() % 30) > 29) && (distance - oldDistance) > 29) {
+		double distance = odometer.getDistanceCounter();
 
-			logger.info("takeControl: Calling action: YES;");
-			oldDistance = distance;
+		if (((distance % 30) > 29) && (distance - oldDistance) > 29) {
+
+			logger.info("takeControl: Calling action: YES; DISTANCE: "
+					+ distance + "; MODULO: " + (distance % 30)
+					+ "; OLDDISTANCE: " + oldDistance + ";");
+			// oldDistance = distance;
 			return true;
 		}
 		logger.debug("takeControl: Calling action: NO;");
+		logger.info("takeControl: DISTANCE: " + distance + "; MODULO: "
+				+ (distance % 30) + "; OLDDISTANCE: " + oldDistance + ";");
 		return false;
+
 	}
 
 	@Override
 	public void action() {
+		double distance = odometer.getDistanceCounter();
+		if ((distance - oldDistance) > 29) {
+			oldDistance = distance;
 			logger.info("action: Running; Next tile reached;");
 			// nav.switchTile(absImu.getAbsImuHeading());
 			nav.switchTile(motorControl.getRotationHeading());
-			//odometer.resetDistanceCounter();
+			// odometer.resetDistanceCounter();
+		}
+
 	}
 
 	@Override
