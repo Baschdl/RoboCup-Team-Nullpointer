@@ -12,7 +12,10 @@ public class LSAProcessingBrick {
 	private int[][] values = { { 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 } };
-	private int[] midValues = new int[] { -1, -1, -1, -1, -1, -1, -1, -1 };
+	private int[][] midValues = { { 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+	private int[] midmidValues = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
 	/**
 	 * @param brickControl
@@ -32,26 +35,54 @@ public class LSAProcessingBrick {
 	public void processData() {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 8; j++) {
-				values[i][j] = values[i + 1][j];
+				midValues[i][j] = midValues[i + 1][j];
 			}
 		}
-		
-		values[4] = lsa.getLightValues();
-		
+
+		// first mid values get calculated
+		{
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 8; j++) {
+					values[i][j] = values[i + 1][j];
+				}
+			}
+
+			values[4] = lsa.getLightValues();
+
+			int[] buffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 8; j++) {
+					buffer[j] += values[i][j];
+				}
+			}
+			for (int i = 0; i < 8; i++) {
+				buffer[i] /= 5;
+			}
+			for (int i = 0; i < 8; i++) {
+				if (buffer[i] != midValues[0][i]) {
+					midValues[0][i] = buffer[i];
+				}
+			}
+		}
+
+		// final mid values get calculated
+
 		int[] buffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 8; j++) {
-				buffer[j] += values[i][j];
+				buffer[j] += midValues[i][j];
 			}
 		}
 		for (int i = 0; i < 8; i++) {
 			buffer[i] /= 5;
 		}
+
 		for (int i = 0; i < 8; i++) {
-			if (buffer[i] != midValues[i]) {
-				midValues[i] = buffer[i];
-				brickControl.sendData(2, i + 1, midValues[i]);
+			if (buffer[i] != midmidValues[i]) {
+				midmidValues[i] = buffer[i];
+				brickControl.sendData(2, i + 1, midmidValues[i]);
 			}
 		}
 	}

@@ -33,7 +33,7 @@ public class SensorProcessingThread extends Thread {
 		int counter = 0;
 		while (true) {
 			if (abs_imu != null) {
-				abs_imu.processData_Angle();
+				// abs_imu.processData_Angle();
 				abs_imu.processData_TiltData();
 			}
 			if (accumulator != null) {
