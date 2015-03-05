@@ -43,12 +43,6 @@ public class Victim implements Behavior {
 	@Override
 	public boolean takeControl() {
 		logger.debug("takeControl: Running;");
-		// needed to slow down the arbitrator
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			logger.fatal("InterruptedException while sleep()");
-		}
 		int temperature = -1;
 		return (temperature = thermal.getTemperature()) > minimumTemperature
 				&& temperature < maximumTemperature

@@ -146,6 +146,12 @@ public class Arbitrator extends Thread {
 						_behavior[active].suppress();
 					}
 				}// end synchronize block - main thread can run now
+					// sleep to slow down the Monitor
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					logger.fatal("InterruptedException while sleep()");
+				}
 				Thread.yield();
 			}
 		}
