@@ -11,6 +11,9 @@ public class NavCompetitionHandler {
 	private int currentY = 9;
 
 	public NavCompetitionHandler() {
+	}
+
+	public void createGui() {
 		this.gui = new GuiNavigation();
 	}
 
