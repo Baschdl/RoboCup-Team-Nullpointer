@@ -40,6 +40,7 @@ public class PiServer {
 
 		initProgram.initializeSensors();
 		initProgram.initializeCommunication();
+		NavCompetitionHandler navComp = new NavCompetitionHandler();
 		initProgram.initializeNavigation();
 
 		TestProgram testProgram = new TestProgram(initProgram, propPiServer);
@@ -76,8 +77,8 @@ public class PiServer {
 								19, 19, true);
 					} else {
 						// competition gui
-						NavCompetitionHandler navComp = new NavCompetitionHandler();
 						initProgram.setNavCompetitionHandler(navComp);
+						navComp.createGui();
 					}
 					logger.info("Navigation-GUI gestartet");
 
