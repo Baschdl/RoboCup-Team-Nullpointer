@@ -40,6 +40,7 @@ public class PiServer {
 
 		initProgram.initializeSensors();
 		initProgram.initializeCommunication();
+		initProgram.initializeNavigation();
 
 		TestProgram testProgram = new TestProgram(initProgram, propPiServer);
 
@@ -86,16 +87,16 @@ public class PiServer {
 					 * Wenn der Parameter "comp" vor "-gui normal" uebergeben
 					 * wurde, soll die Navigation nicht initialisiert werden
 					 */
-					boolean comParam = false;
-					for (int j = 0; j < args.length && j < i; j++) {
-						if (args[j].equals("-comp")) {
-							comParam = true;
-							break;
-						}
-					}
-					if (comParam == false) {
-						initProgram.initializeNavigation();
-					}
+					// boolean comParam = false;
+					// for (int j = 0; j < args.length && j < i; j++) {
+					// if (args[j].equals("-comp")) {
+					// comParam = true;
+					// break;
+					// }
+					// }
+					// if (comParam == false) {
+					// initProgram.initializeNavigation();
+					// }
 
 					HandleValues vGUI = new HandleValues(initProgram.getLsa(),
 							initProgram.getAbsImu(), initProgram.getEopdLeft(),
@@ -118,16 +119,16 @@ public class PiServer {
 				 * Wenn der Parameter "-gui normal" vor "comp" uebergeben wurde,
 				 * soll die Navigation nicht initialisiert werden
 				 */
-				boolean guiNormalParam = false;
-				for (int j = 0; j < args.length && j < i; j++) {
-					if (args[j].equals("-gui") && args[j + 1].equals("normal")) {
-						guiNormalParam = true;
-						break;
-					}
-				}
-				if (guiNormalParam == false) {
-					initProgram.initializeNavigation();
-				}
+				// boolean guiNormalParam = false;
+				// for (int j = 0; j < args.length && j < i; j++) {
+				// if (args[j].equals("-gui") && args[j + 1].equals("normal")) {
+				// guiNormalParam = true;
+				// break;
+				// }
+				// }
+				// if (guiNormalParam == false) {
+				// initProgram.initializeNavigation();
+				// }
 				logger.debug("Initialize behavior...");
 				initProgram.initializeBehavior();
 				initProgram.getArbitrator().setDaemon(true);
