@@ -19,8 +19,6 @@ public class NextTile implements Behavior {
 	private Navigation nav = null;
 	private Odometer odometer = null;
 	private boolean nextTileFlag = true;
-	private double oldDistance = 0;
-
 	private int nextTileReachDistance = -1;
 
 	public NextTile(
@@ -39,17 +37,17 @@ public class NextTile implements Behavior {
 		// TODO ggf. Umschaltwert anpassen
 		double distance = odometer.getDistanceCounter();
 
-		if (((distance % 30) > 29) && (distance - oldDistance) > 29) {
+		if (((distance % 30) > 29) && (distance - odometer.getOldDistance()) > 29) {
 
 			logger.info("takeControl: Calling action: YES; DISTANCE: "
 					+ distance + "; MODULO: " + (distance % 30)
-					+ "; OLDDISTANCE: " + oldDistance + ";");
+					+ "; OLDDISTANCE: " + odometer.getOldDistance() + ";");
 			// oldDistance = distance;
 			return true;
 		}
 		logger.debug("takeControl: Calling action: NO;");
 		logger.info("takeControl: DISTANCE: " + distance + "; MODULO: "
-				+ (distance % 30) + "; OLDDISTANCE: " + oldDistance + ";");
+				+ (distance % 30) + "; OLDDISTANCE: " + odometer.getOldDistance() + ";");
 		return false;
 
 	}
@@ -57,8 +55,8 @@ public class NextTile implements Behavior {
 	@Override
 	public void action() {
 		double distance = odometer.getDistanceCounter();
-		if ((distance - oldDistance) > 29) {
-			oldDistance = distance;
+		if ((distance - odometer.getOldDistance()) > 29) {
+			odometer.setOldDistance(distance);
 			logger.info("action: Running; Next tile reached;");
 			// nav.switchTile(absImu.getAbsImuHeading());
 			nav.switchTile(motorControl.getRotationHeading());
@@ -72,5 +70,7 @@ public class NextTile implements Behavior {
 		// TODO Auto-generated method stub
 
 	}
+	
+
 
 }

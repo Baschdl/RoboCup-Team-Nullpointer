@@ -20,6 +20,7 @@ public class Odometer {
 	private Object lock = new Object();
 
 	private double tmpDistance = 0;
+	private double oldDistance = 0;
 
 	public Odometer(AccumulatorProcessingPi accumulator,
 			Abs_ImuProcessingPi abs_imu, Properties propPiServer) {
@@ -117,6 +118,14 @@ public class Odometer {
 		synchronized (lock) {
 			distanceCounter = distanceCounter + valueToAdd;
 		}
+	}
+	
+	public void setOldDistance(double distance){
+		oldDistance = distance;
+	}
+	
+	public double getOldDistance(){
+		return oldDistance;
 	}
 	
 
