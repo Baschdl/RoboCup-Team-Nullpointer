@@ -118,6 +118,7 @@ public class Intersection implements Behavior {
 			}
 			logger.debug("action: Switching tile because roboter went to the centre of the tile;");
 			nav.switchTile(motorControl.getRotationHeading());
+			odometer.setOldDistance(odometer.getDistanceCounter());
 		} else if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
 				&& currentDistanceFront >= 0) {
 			motorControl.stop();
