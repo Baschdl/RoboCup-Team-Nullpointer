@@ -1,5 +1,12 @@
 package de.null_pointer.communication_pi;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
@@ -30,6 +37,7 @@ public class BrickControlPi extends Thread {
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
 	private InitializeProgram initializeProgram = null;
+	private Writer writer = null;
 
 	public BrickControlPi(CommunicationPi com, Navigation navi,
 			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
@@ -47,6 +55,13 @@ public class BrickControlPi extends Thread {
 		this.accumulator = accumulator;
 		this.thermal = thermal;
 		this.initializeProgram = initializeProgram;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream("sensordata.log"), "utf-8"));
+		} catch (UnsupportedEncodingException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -209,6 +224,16 @@ public class BrickControlPi extends Thread {
 			logger.debug("Lese Daten...");
 			dataString = com.receiveString();
 			logger.debug("gelesen: " + dataString);
+			try {
+				writer.write("dataString");
+			} catch (IOException ex) {
+				// report
+			} finally {
+				try {
+					writer.close();
+				} catch (Exception ex) {
+				}
+			}
 			return checkString(dataString);
 
 		} catch (Exception e) {
@@ -478,7 +503,7 @@ public class BrickControlPi extends Thread {
 	public void calibrateLSAWhite() {
 		sendCommand(2, 4);
 	}
- 
+
 	// TODO: Noch einzubauen
 	public void exitBrick() {
 		sendCommand(99, 0, 0);
