@@ -41,7 +41,9 @@ public class PiServer {
 		initProgram.initializeSensors();
 		initProgram.initializeCommunication();
 		NavCompetitionHandler navComp = new NavCompetitionHandler();
-		initProgram.setNavCompetitionHandler(navComp);
+		if (args[0].equals("nav")) {
+			initProgram.setNavCompetitionHandler(navComp);
+		}
 		initProgram.initializeNavigation();
 
 		TestProgram testProgram = new TestProgram(initProgram, propPiServer);
