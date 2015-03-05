@@ -36,7 +36,7 @@ import de.null_pointer.testmodules.virtualhardware.VirtualLSA;
 public class CommunicationTest {
 	private static Logger logger = Logger.getLogger(CommunicationTest.class);
 
-	InitializeProgram initProgramm = null;
+	InitializeProgram initProgram = null;
 
 	TestBrickControlPi brickControl = null;
 
@@ -69,26 +69,26 @@ public class CommunicationTest {
 
 	@Before
 	public void prepareTest() {
-		initProgramm = new InitializeProgram(logger);
-		initProgramm.initializeLogger();
-		initProgramm.initializeCommunication();
-		initProgramm.initializeSensors();
-		initProgramm.initializeNavigation();
-		initProgramm.initializeBehavior();
+		initProgram = new InitializeProgram(logger);
+		initProgram.initializeLogger();
+		initProgram.initializeCommunication();
+		initProgram.initializeSensors();
+		initProgram.initializeNavigation();
+		initProgram.initializeBehavior();
 
 		// TODO: Richting einrichten
-		comPi = initProgramm.getComPi1();
-		absImu = initProgramm.getAbsImu();
-		distNx = initProgramm.getDistNx();
-		eopdLeft = initProgramm.getEopdLeft();
-		eopdRight = initProgramm.getEopdRight();
-		lsa = initProgramm.getLsa();
-		motorControl = initProgramm.getMotorControl();
-		nav = initProgramm.getNav();
-		propPiServer = initProgramm.getPropPiServer();
-		accumulator = initProgramm.getAccumulator();
-		odometer = initProgramm.getOdometer();
-		thermal = initProgramm.getThermal();
+		comPi = initProgram.getComPi1();
+		absImu = initProgram.getAbsImu();
+		distNx = initProgram.getDistNx();
+		eopdLeft = initProgram.getEopdLeft();
+		eopdRight = initProgram.getEopdRight();
+		lsa = initProgram.getLsa();
+		motorControl = initProgram.getMotorControl();
+		nav = initProgram.getNav();
+		propPiServer = initProgram.getPropPiServer();
+		accumulator = initProgram.getAccumulator();
+		odometer = initProgram.getOdometer();
+		thermal = initProgram.getThermal();
 
 		virtAbsImu = new VirtualAbsIMUACG();
 		virtDistNX = new VirtualDistNX(propPiServer);
@@ -103,10 +103,10 @@ public class CommunicationTest {
 		testBlackTile = new TestBlackTile(motorControl, lsa, absImu, nav,
 				odometer, propPiServer);
 		testInters = new TestIntersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, odometer, nav, propPiServer);
+				eopdRight, absImu, odometer, nav, propPiServer,initProgram);
 
 		testMovFor = new TestMovingForward(motorControl,
-				initProgramm.getOdometer(), propPiServer);
+				initProgram.getOdometer(), propPiServer);
 
 		testNextTile = new TestNextTile(/* absImu, */motorControl, nav,
 				odometer, propPiServer);
@@ -117,7 +117,7 @@ public class CommunicationTest {
 				propPiServer);
 
 		brickControl = new TestBrickControlPi(comPi, nav, absImu, distNx,
-				eopdLeft, eopdRight, lsa, accumulator, thermal, initProgramm);
+				eopdLeft, eopdRight, lsa, accumulator, thermal, initProgram);
 	}
 
 	@Test

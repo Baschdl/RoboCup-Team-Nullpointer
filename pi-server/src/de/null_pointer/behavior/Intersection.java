@@ -10,6 +10,7 @@ import de.null_pointer.motorcontrol_pi.MotorControlPi;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.navigation.map.Node;
 import de.null_pointer.navigation.map.Odometer;
+import de.null_pointer.pi_server.InitializeProgram;
 import de.null_pointer.sensorprocessing_pi.Abs_ImuProcessingPi;
 import de.null_pointer.sensorprocessing_pi.DistNxProcessingPi;
 import de.null_pointer.sensorprocessing_pi.EOPDProcessingPi;
@@ -24,6 +25,7 @@ public class Intersection implements Behavior {
 	private Abs_ImuProcessingPi absImu;
 	private Odometer odometer;
 	private Navigation nav;
+	private InitializeProgram initProgram;
 
 	private Node lastIntersection = null;
 
@@ -38,7 +40,7 @@ public class Intersection implements Behavior {
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
 			Abs_ImuProcessingPi absImu, Odometer odometer, Navigation nav,
-			Properties propPiServer) {
+			Properties propPiServer, InitializeProgram initProgram) {
 		this.motorControl = motorControl;
 		this.distnx = distnx;
 		this.eopdLeft = eopdLeft;
@@ -46,6 +48,7 @@ public class Intersection implements Behavior {
 		this.absImu = absImu;
 		this.odometer = odometer;
 		this.nav = nav;
+		this.initProgram = initProgram;
 
 		minimalDistanceFront = Integer.parseInt(propPiServer
 				.getProperty("Behavior.Intersection.minimalDistanceFront"));
@@ -123,7 +126,7 @@ public class Intersection implements Behavior {
 				&& currentDistanceFront >= 0) {
 			motorControl.stop();
 			logger.debug("action: Wall is ahead, already in the centre of the tile;");
-			if ((odometer.getDistanceCounter() % 30) > 25) {
+			if ((odometer.getDistanceCounter() - odometer.getOldDistance()) > 29) {
 				logger.debug("action: Switching tile because nextTile can not be called while intersection-action is active");
 				odometer.addValueToDistanceCounter(30 - (odometer
 						.getDistanceCounter() % 30));
@@ -145,9 +148,14 @@ public class Intersection implements Behavior {
 				motorControl.getRotationHeading(), false);
 
 		// motorControl.decideTurn(absImu.getAbsImuHeading(), directionToMove);
-
+		if(directionToMove >= 0){
 		motorControl.decideTurn(motorControl.getRotationHeading(),
 				directionToMove);
+		}else if(directionToMove == -1){
+			logger.error("action: error in directionToMove-value;");
+		}else if(directionToMove == -2){
+			initProgram.finishCompetition();
+		}
 		logger.debug("action: finished;");
 	}
 

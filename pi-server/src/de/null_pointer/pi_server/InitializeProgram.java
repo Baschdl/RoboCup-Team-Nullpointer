@@ -255,7 +255,7 @@ public class InitializeProgram {
 				propPiServer);
 		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
 		Behavior b4 = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, odometer, nav, propPiServer);
+				eopdRight, absImu, odometer, nav, propPiServer, this);
 		Behavior b5 = new SilverTile(lsa, nav, propPiServer);
 		Behavior b6 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
 				propPiServer);
@@ -300,5 +300,12 @@ public class InitializeProgram {
 		}
 		return properties;
 
+	}
+	
+	public void finishCompetition(){
+		motorControl.stop();
+		available.up();
+		//TODO: Kommando fuer Smiley-Faze
+		brickCon2.blinkColorSensorLED();
 	}
 }

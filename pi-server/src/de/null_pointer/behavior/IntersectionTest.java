@@ -65,7 +65,7 @@ public class IntersectionTest {
 		abs_Imu = new Abs_ImuProcessingPi(props);
 		odometer = new Odometer(accumulator, abs_Imu, props);
 		classToTest = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, abs_Imu, odometer, null, props); // null == nav
+				eopdRight, abs_Imu, odometer, null, props, null); // null == nav
 	}
 
 	@Test
