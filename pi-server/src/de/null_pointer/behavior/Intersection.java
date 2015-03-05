@@ -131,6 +131,7 @@ public class Intersection implements Behavior {
 				odometer.addValueToDistanceCounter(30 - (odometer
 						.getDistanceCounter() % 30));
 				nav.switchTile(motorControl.getRotationHeading());
+				odometer.setOldDistance(odometer.getDistanceCounter());
 			}
 		}
 		motorControl.stop();
