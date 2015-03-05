@@ -1,10 +1,16 @@
 package de.null_pointer.communication_pi;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import lejos.pc.comm.NXTConnector;
 
@@ -18,9 +24,11 @@ import org.apache.log4j.Logger;
  * 
  */
 public class RealCommunicationPi extends CommunicationPi {
-	DataInputStream dataFromBrick;
-	DataOutputStream dataToBrick;
-	NXTConnector conn;
+	private DataInputStream dataFromBrick = null;
+	private DataOutputStream dataToBrick = null;
+	private NXTConnector conn = null;
+
+	private Writer writer = null;
 
 	private static Logger logger = Logger.getLogger(RealCommunicationPi.class);
 
@@ -32,6 +40,14 @@ public class RealCommunicationPi extends CommunicationPi {
 		dataFromBrick = new DataInputStream(inputStream);
 		dataToBrick = new DataOutputStream(outputStream);
 		conn = pConn;
+
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream("sensordata.log"), "utf-8"));
+		} catch (UnsupportedEncodingException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -45,6 +61,12 @@ public class RealCommunicationPi extends CommunicationPi {
 		try {
 
 			String data = dataFromBrick.readUTF();
+			try {
+				writer.write(data);
+			} catch (IOException ex) {
+				// report
+				ex.printStackTrace();
+			}
 			return data;
 
 		} catch (IOException e) {
@@ -69,13 +91,11 @@ public class RealCommunicationPi extends CommunicationPi {
 			logger.debug("flushes data");
 			dataToBrick.flush();
 			logger.debug("transmission finished");
-			
+
 		} catch (IOException e) {
 
-			
 			logger.error("IO Exception writing bytes");
 
-			
 		} catch (NullPointerException npe) {
 			logger.error("NullPointerException writing data");
 		}
@@ -91,16 +111,17 @@ public class RealCommunicationPi extends CommunicationPi {
 			dataFromBrick.close();
 			dataToBrick.close();
 			logger.info("Closed data streams");
-			
+			writer.close();
+
 		} catch (IOException ioe) {
 			logger.error("IO Exception Closing connection");
 		}
 
 		try {
-			
+
 			conn.close();
 			logger.info("Closed connection to brick");
-			
+
 		} catch (IOException ioe) {
 			logger.error("IO Exception Closing connection to brick");
 		}
