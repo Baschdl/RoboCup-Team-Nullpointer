@@ -55,6 +55,7 @@ public class BrickControlPi extends Thread {
 		this.accumulator = accumulator;
 		this.thermal = thermal;
 		this.initializeProgram = initializeProgram;
+		this.propPiServer = propPiServer;
 	}
 
 	/**
