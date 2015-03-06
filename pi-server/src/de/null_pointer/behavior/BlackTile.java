@@ -71,11 +71,11 @@ public class BlackTile implements Behavior {
 		time = 0;
 		moving = true;
 		motorControl.stop();
-		nav.setBlackTile();
-		if (odometer.getDistanceCounter() > 0) {
-			logger.debug("action: DistanceCounter is > 0");
+		// nav.setBlackTile();
+		if ((odometer.getDistanceCounter() % 30) > 1) {
+			logger.debug("action: DistanceCounter % 30 is > 1");
 			motorControl.backward(speed);
-			while (moving && odometer.getDistanceCounter() > 0) {
+			while (moving && (odometer.getDistanceCounter() % 30) > 1) {
 				odometer.calculateDistance(time, -speed);
 				time = System.currentTimeMillis();
 				try {
