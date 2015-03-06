@@ -124,7 +124,7 @@ public class MotorControlPi {
 	}
 
 	public void left(int speed) {
-		if (currentSideSpeed != -(speed) && mode != 8) {
+		if (currentSideSpeed != -(speed) && mode != 9) {
 			logger.info("PC set motors to left speed" + speed);
 			brickCon1.backward(speed, 'D');
 			brickCon2.stop('D');

@@ -206,7 +206,7 @@ public class BrickControlPi extends Thread {
 		try {
 			int linearAccelaration = Integer
 					.parseInt(propPiServer
-							.getProperty("CommunicationPi.BrickControlPi.forwardBackwardAccelaration"));
+							.getProperty("CommunicationPi.BrickControlPi.linearAccelaration"));
 			int rotationAccelaration = Integer
 					.parseInt(propPiServer
 							.getProperty("CommunicationPi.BrickControlPi.rotationAccelaration"));
@@ -217,6 +217,7 @@ public class BrickControlPi extends Thread {
 			setRotationAccelaration(rotationAccelaration);
 			setRotationSpeed(speed);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("sendSensorData: error while parsing properties");
 		}
 		// notifyAll();

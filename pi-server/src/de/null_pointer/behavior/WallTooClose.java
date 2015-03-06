@@ -105,13 +105,13 @@ public class WallTooClose implements Behavior {
 				&& !correctingToTheLeft) {
 			correctingToTheLeft = true;
 			if (absImu.getTiltDataVertical() > angleToTakeControl) {
-				logger.debug("action: Correcting driving direction; On slope; Left wall too close;");
+				logger.debug("action: Correcting driving direction; On slope; Right wall too close;");
 				motorControl.changeSpeedSingleMotorForward(2, 'A', slopeSpeed
 						+ slopeSpeed * percentOfSpeed / 100);
 				directionWhereCorrectionNeeded = 1;
 			} else {
 				motorControl.stop();
-				logger.debug("action: Correcting driving direction; Left wall too close;");
+				logger.debug("action: Correcting driving direction; Right wall too close;");
 				directionWhereCorrectionNeeded = 2;
 			}
 		} else if (eopdLeft.getDistance() <= minDistanceSideEOPDLeft
@@ -119,7 +119,7 @@ public class WallTooClose implements Behavior {
 				&& !correctingToTheRight) {
 			correctingToTheRight = true;
 			if (absImu.getTiltDataVertical() > angleToTakeControl) {
-				logger.debug("action: Correcting driving direction; On slope; Right wall too close;");
+				logger.debug("action: Correcting driving direction; On slope; Left wall too close;");
 				motorControl.changeSpeedSingleMotorForward(2, 'B', slopeSpeed
 						+ slopeSpeed * percentOfSpeed / 100);
 				directionWhereCorrectionNeeded = 3;
