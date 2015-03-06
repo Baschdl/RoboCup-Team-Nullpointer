@@ -359,6 +359,7 @@ public class BrickControlBrick extends Thread {
 				default:
 					break;
 				}
+				break;
 			case 5:
 				switch (command[2]) {
 				case 1:
@@ -370,7 +371,10 @@ public class BrickControlBrick extends Thread {
 				case 3:
 					rotationSpeed = command[3];
 					break;
+				default:
+					break;
 				}
+				break;
 			}
 			Delay.msDelay(1);
 			break;
