@@ -189,7 +189,6 @@ public class InitializeProgram {
 				comPi2 = initCom.initConnection(brickIDs[i]);
 			}
 			if (comPi1 instanceof RealCommunicationPi) {
-				// TODO: Angeschlossene Sensoren uebergeben
 				if (i == 0) {
 					brickCon1 = new BrickControlPi(
 							(RealCommunicationPi) comPi1, nav, absImu, distNx,

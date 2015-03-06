@@ -62,7 +62,8 @@ public class RealCommunicationPi extends CommunicationPi {
 
 			String data = dataFromBrick.readUTF();
 			try {
-				writer.write(data);
+				writer.write(System.currentTimeMillis() + ":" + data
+						+ System.getProperty("line.separator"));
 			} catch (IOException ex) {
 				// report
 				ex.printStackTrace();

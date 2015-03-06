@@ -20,6 +20,12 @@ public class TestBrickControlPi extends BrickControlPi {
 	private VirtualMotor motorB = new VirtualMotor();
 	private VirtualMotor motorC = new VirtualMotor();
 
+	private CommunicationPi com = null;
+
+	public CommunicationPi getCom() {
+		return com;
+	}
+
 	public TestBrickControlPi(CommunicationPi com, Navigation nav,
 			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
@@ -30,6 +36,7 @@ public class TestBrickControlPi extends BrickControlPi {
 		super(com, nav, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator,
 				thermal, initializeProgram);
 		super.setSensorReady();
+		this.com = com;
 	}
 
 	// Getter werden zum Testen der Klasse benoetigt
@@ -91,4 +98,5 @@ public class TestBrickControlPi extends BrickControlPi {
 			return null;
 		}
 	}
+
 }

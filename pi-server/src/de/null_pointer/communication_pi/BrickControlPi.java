@@ -35,6 +35,21 @@ public class BrickControlPi extends Thread {
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
 	private InitializeProgram initializeProgram = null;
+	private String[] sensor = null;
+
+	public static enum Sensor {
+		DistNx(1), LSA(2), EOPDLinks(3), EOPDRechts(4), AbsoluteIMU(5), LightSensorArray(
+				2), IRThermalSensor(8);
+		private final int number;
+
+		private Sensor(int number) {
+			this.number = number;
+		}
+
+		public int getNumber() {
+			return number;
+		}
+	}
 
 	public BrickControlPi(CommunicationPi com, Navigation navi,
 			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
@@ -52,6 +67,22 @@ public class BrickControlPi extends Thread {
 		this.accumulator = accumulator;
 		this.thermal = thermal;
 		this.initializeProgram = initializeProgram;
+	}
+
+	public boolean getSensorReady() {
+		return sensorReady;
+	}
+
+	public void setSensorReady() {
+		sensorReady = false;
+	}
+
+	public void setSemaphore(Semaphore semaphore) {
+		this.semaphore = semaphore;
+	}
+
+	public String[] getSensor() {
+		return sensor;
 	}
 
 	/**
@@ -96,20 +127,20 @@ public class BrickControlPi extends Thread {
 		// gibt empfangene Daten weiter
 
 		logger.debug("value processData:" + Arrays.toString(receiveData));
-		if (receiveData[0] == 1) {
+		if (receiveData[0] == Sensor.DistNx.getNumber()) {
 			// Dist-Nx
 			distNx.setDistance(Math.round(receiveData[2]));
-		} else if (receiveData[0] == 2) {
+		} else if (receiveData[0] == Sensor.LightSensorArray.getNumber()) {
 			// LSA
 			lsa.setLSA(Math.round(receiveData[1] - 1),
 					Math.round(receiveData[2]));
-		} else if (receiveData[0] == 3) {
+		} else if (receiveData[0] == Sensor.EOPDLinks.getNumber()) {
 			// linker EOPD
 			eopdLeft.setEOPDdistance(Math.round(receiveData[2]));
-		} else if (receiveData[0] == 4) {
+		} else if (receiveData[0] == Sensor.EOPDRechts.getNumber()) {
 			// rechter EOPD
 			eopdRight.setEOPDdistance(Math.round(receiveData[2]));
-		} else if (receiveData[0] == 5) {
+		} else if (receiveData[0] == Sensor.AbsoluteIMU.getNumber()) {
 			// AbsIMU-ACG
 			if (Math.round(receiveData[1]) >= 16) {
 				abs_Imu.setAngle(Math.round(receiveData[2]),
@@ -125,7 +156,7 @@ public class BrickControlPi extends Thread {
 		} else if (receiveData[0] == 7) {
 			logger.debug("Genuegend Werte uebermittelt: " + this);
 			sensorReady = false;
-		} else if (receiveData[0] == 8) {
+		} else if (receiveData[0] == Sensor.IRThermalSensor.getNumber()) {
 			// ThermalSensor
 			thermal.setTemperature(Math.round(receiveData[2]));
 		} else if (receiveData[0] == 9) {
@@ -159,39 +190,40 @@ public class BrickControlPi extends Thread {
 	 * Erhaelt die an dem jeweiligen Brick angeschlossenen Sensoren und
 	 * initialisert dazu passend die Sensorobjekte
 	 * 
-	 * @param Sensor
+	 * @param sensor
 	 *            Enthaelt die am Brick angeschlossenen Sensoren in der
 	 *            Reihenfolge, in der sie angesteckt sind (Sensorport 1-4)
 	 */
-	public void sendSensorData(String[] Sensor) {
-		logger.info("intializing sensors: " + Arrays.toString(Sensor));
+	public void sendSensorData(String[] sensor) {
+		logger.info("intializing sensors: " + Arrays.toString(sensor));
 		readyToProcessData = false;
-		for (int i = 0; i < Sensor.length; i++) {
-			if (Sensor[i].equals("Dist-Nx-v3")) {
+		this.sensor = sensor;
+		for (int i = 0; i < sensor.length; i++) {
+			if (sensor[i].equals("Dist-Nx-v3")) {
 				// dist_nx = controlClass.getDist_nx();
 				sendCommand(10, 1, i + 1, 0);
 				// logger.debug("DIST-NX:" + dist_nx);
-			} else if (Sensor[i].equals("LightSensorArray")) {
+			} else if (sensor[i].equals("LightSensorArray")) {
 				// lsa = controlClass.getLsa();
 				sendCommand(10, 2, i + 1, 0);
 				// logger.debug("LSA:" + lsa);
-			} else if (Sensor[i].equals("EOPDLinks")) {
+			} else if (sensor[i].equals("EOPDLinks")) {
 				// eopdLeft = controlClass.getEopdLeft();
 				sendCommand(10, 3, i + 1, 1);
 				// logger.debug("EOPD links" + eopdLeft);
-			} else if (Sensor[i].equals("EOPDRechts")) {
+			} else if (sensor[i].equals("EOPDRechts")) {
 				// eopdRight = controlClass.getEopdRight();
 				sendCommand(10, 3, i + 1, 2);
 				// logger.debug("EOPD rechts" + eopdRight);
-			} else if (Sensor[i].equals("AbsoluteIMU-ACG")) {
+			} else if (sensor[i].equals("AbsoluteIMU-ACG")) {
 				// absimu_acg = controlClass.getAbsimu_acg();
 				sendCommand(10, 4, i + 1, 0);
 				// logger.debug("Gyro" + absimu_acg);
-			} else if (Sensor[i].equals("IRThermalSensor")) {
+			} else if (sensor[i].equals("IRThermalSensor")) {
 				// tsLeft = controlClass.getTsLeft();
 				sendCommand(10, 5, i + 1, 1);
 				// logger.debug("ts left" + tsLeft);
-			} else if (Sensor[i].equals("ColourSensor")) {
+			} else if (sensor[i].equals("ColourSensor")) {
 				sendCommand(10, 6, i + 1, 0);
 			} else {
 				sendCommand(0, 0, 0, 0);
@@ -494,20 +526,7 @@ public class BrickControlPi extends Thread {
 
 	}
 
-	public boolean getSensorReady() {
-		return sensorReady;
-	}
-
-	public void setSensorReady() {
-		sensorReady = false;
-	}
-
 	public void blinkColorSensorLED() {
 		sendCommand(11, 1);
 	}
-
-	public void setSemaphore(Semaphore semaphore) {
-		this.semaphore = semaphore;
-	}
-
 }

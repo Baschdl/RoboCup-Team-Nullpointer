@@ -6,6 +6,7 @@ import lejos.util.Delay;
 
 import org.apache.log4j.Logger;
 
+import de.null_pointer.communication_pi.EmulateSensordata;
 import de.null_pointer.gui.HandleValues;
 import de.null_pointer.navigation.test.NavCompetitionHandler;
 import de.null_pointer.navigation.test.NavSimulationHandler;
@@ -32,9 +33,9 @@ public class PiServer {
 
 	private static Logger logger = Logger.getLogger("TST.SIM");
 	private static boolean compProgramStarted = false;
+	private static InitializeProgram initProgram = new InitializeProgram(logger);
 
 	public static void main(String[] args) {
-		InitializeProgram initProgram = new InitializeProgram(logger);
 		initProgram.initializeLogger();
 		Properties propPiServer = initProgram.getPropPiServer();
 
@@ -116,27 +117,7 @@ public class PiServer {
 
 			// comp steht fuer competition, fuehrt das Wettkampfprogramm aus
 			if (s.equals("-comp")) {
-				logger.debug("Starte Wettkampfprogramm");
-
-				/*
-				 * Wenn der Parameter "-gui normal" vor "comp" uebergeben wurde,
-				 * soll die Navigation nicht initialisiert werden
-				 */
-				// boolean guiNormalParam = false;
-				// for (int j = 0; j < args.length && j < i; j++) {
-				// if (args[j].equals("-gui") && args[j + 1].equals("normal")) {
-				// guiNormalParam = true;
-				// break;
-				// }
-				// }
-				// if (guiNormalParam == false) {
-				// initProgram.initializeNavigation();
-				// }
-				logger.debug("Initialize behavior...");
-				initProgram.initializeBehavior();
-				initProgram.getArbitrator().setDaemon(true);
-				logger.info("Wettkampfprogramm gestartet");
-				compProgramStarted = true;
+				startCompetitionProgram();
 			}
 
 			// startet ein Testprogramm, der nachfolgende String gibt an welches
@@ -144,33 +125,35 @@ public class PiServer {
 				logger.debug("Waehle Testprogramm aus");
 				i++;
 				s = args[i];
-				int speedAngle = 0;
-				int duration = 0;
-				try {
-					speedAngle = Integer.parseInt(args[i + 1]);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					duration = Integer.parseInt(args[i + 2]);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+
 				if (s.equals("forward")) {
 					logger.debug("Starte Testprogramm forward");
-					testProgram.forward(speedAngle, duration);
+
+					testProgram.forward(Integer.parseInt(args[i + 1]),
+							Integer.parseInt(args[i + 2]));
+					i += 2;
 				} else if (s.equals("backward")) {
 					logger.debug("Starte Testprogramm backward");
-					testProgram.backward(speedAngle, duration);
+					testProgram.backward(Integer.parseInt(args[i + 1]),
+							Integer.parseInt(args[i + 2]));
+					i += 2;
 				} else if (s.equals("rightturn")) {
 					logger.debug("Starte Testprogramm rightturn");
-					testProgram.rightturn(speedAngle);
+					testProgram.rightturn(Integer.parseInt(args[i + 1]));
+					i++;
 				} else if (s.equals("leftturn")) {
 					logger.debug("Starte Testprogramm leftturn");
-					testProgram.leftturn(speedAngle);
+					testProgram.leftturn(Integer.parseInt(args[i + 1]));
+					i++;
 				} else if (s.equals("flash")) {
 					logger.debug("Starte Testprogramm flash");
 					testProgram.flash();
+				} else if (s.equals("comp")) {
+					logger.debug("Starte Testprogramm comp");
+					startCompetitionProgram();
+					EmulateSensordata emulSensor = new EmulateSensordata(
+							initProgram.getBrickCon1(),
+							initProgram.getBrickCon2());
 				}
 				logger.info("Testprogramm gestartet");
 			}
@@ -184,5 +167,30 @@ public class PiServer {
 			}
 
 		}
+	}
+
+	private static void startCompetitionProgram() {
+		logger.debug("Starte Wettkampfprogramm");
+
+		/*
+		 * Wenn der Parameter "-gui normal" vor "comp" uebergeben wurde, soll
+		 * die Navigation nicht initialisiert werden
+		 */
+		// boolean guiNormalParam = false;
+		// for (int j = 0; j < args.length && j < i; j++) {
+		// if (args[j].equals("-gui") && args[j + 1].equals("normal")) {
+		// guiNormalParam = true;
+		// break;
+		// }
+		// }
+		// if (guiNormalParam == false) {
+		// initProgram.initializeNavigation();
+		// }
+		logger.debug("Initialize behavior...");
+		initProgram.initializeBehavior();
+		initProgram.getArbitrator().setDaemon(true);
+		logger.info("Wettkampfprogramm gestartet");
+		compProgramStarted = true;
+
 	}
 }
