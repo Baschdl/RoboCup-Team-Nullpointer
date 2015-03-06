@@ -194,12 +194,12 @@ public class InitializeProgram {
 					brickCon1 = new BrickControlPi(
 							(RealCommunicationPi) comPi1, nav, absImu, distNx,
 							eopdLeft, eopdRight, lsa, accumulator, thermal,
-							this);
+							this, propPiServer);
 				} else if (i == 1) {
 					brickCon2 = new BrickControlPi(
 							(RealCommunicationPi) comPi2, nav, absImu, distNx,
 							eopdLeft, eopdRight, lsa, accumulator, thermal,
-							this);
+							this, propPiServer);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
