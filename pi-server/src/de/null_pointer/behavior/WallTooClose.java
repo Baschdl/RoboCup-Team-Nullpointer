@@ -98,13 +98,12 @@ public class WallTooClose implements Behavior {
 	public void action() {
 		logger.info("action: Running;");
 		alreadyCorrecting = true;
-		suppress = false;
 		time = 0;
 		logger.debug("action: Correcting driving direction;");
-		if (eopdRight.getDistance() >= minDistanceSideEOPDRight
-				&& eopdRight.getDistance() < maxDistanceSideEOPDRight
-				&& !correctingToTheRight) {
-			correctingToTheRight = true;
+		if (eopdRight.getDistance() <= minDistanceSideEOPDRight
+				&& eopdRight.getDistance() > 0
+				&& !correctingToTheLeft) {
+			correctingToTheLeft = true;
 			if (absImu.getTiltDataVertical() > angleToTakeControl) {
 				logger.debug("action: Correcting driving direction; On slope; Left wall too close;");
 				motorControl.changeSpeedSingleMotorForward(2, 'A', slopeSpeed
@@ -115,10 +114,10 @@ public class WallTooClose implements Behavior {
 				logger.debug("action: Correcting driving direction; Left wall too close;");
 				directionWhereCorrectionNeeded = 2;
 			}
-		} else if (eopdLeft.getDistance() >= minDistanceSideEOPDLeft
-				&& eopdLeft.getDistance() < maxDistanceSideEOPDLeft
-				&& !correctingToTheLeft) {
-			correctingToTheLeft = true;
+		} else if (eopdLeft.getDistance() <= minDistanceSideEOPDLeft
+				&& eopdLeft.getDistance() > 0
+				&& !correctingToTheRight) {
+			correctingToTheRight = true;
 			if (absImu.getTiltDataVertical() > angleToTakeControl) {
 				logger.debug("action: Correcting driving direction; On slope; Right wall too close;");
 				motorControl.changeSpeedSingleMotorForward(2, 'B', slopeSpeed
@@ -169,6 +168,7 @@ public class WallTooClose implements Behavior {
 		directionWhereCorrectionNeeded = 0;
 		alreadyCorrecting = false;
 		logger.debug("action: Finished correction;");
+		suppress = false;
 	}
 
 	@Override
