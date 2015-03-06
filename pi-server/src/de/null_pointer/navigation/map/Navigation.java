@@ -35,8 +35,8 @@ public class Navigation {
 		this.currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		this.currentTile.setVisited();
 		for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
-			lastCheckpointTile[saveNumber] = initializeMap(dimensionX, dimensionY, 0, 0,
-					0);
+			lastCheckpointTile[saveNumber] = initializeMap(dimensionX,
+					dimensionY, 0, 0, 0);
 			lastCheckpointTile[saveNumber].setVisited();
 		}
 		this.startTile = this.currentTile;
@@ -53,8 +53,8 @@ public class Navigation {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
 		for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
-			lastCheckpointTile[saveNumber] = initializeMap(dimensionX, dimensionY, 0, 0,
-					0);
+			lastCheckpointTile[saveNumber] = initializeMap(dimensionX,
+					dimensionY, 0, 0, 0);
 			lastCheckpointTile[saveNumber].setVisited();
 		}
 
@@ -73,6 +73,24 @@ public class Navigation {
 	 *         wrong and -2, if the maze is solved
 	 */
 	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat) {
+		return tremauxAlgorithm(orientation, blackTileRetreat, false);
+	}
+
+	/**
+	 * evaluates the direction the robot should take based on the tremaux
+	 * maze-solving algorithm
+	 * 
+	 * @param orientation
+	 *            Current Orientation of the robot
+	 * @param blackTileRetreat
+	 *            true if robot recently retreated from a black tile
+	 * @param firstCall
+	 *            true if its the firstCall of this method
+	 * @return returns the direction the robot should take; -1 if something went
+	 *         wrong and -2, if the maze is solved
+	 */
+	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat,
+			boolean firstCall) {
 		try {
 			int direction = -1;
 
@@ -167,9 +185,9 @@ public class Navigation {
 								currentTile.incTremauxCounter(direction);
 							}
 							lastDirection = direction;
-//							addTurn(direction, tremauxCounter,
-//									currentTile.getVictimFound(),
-//									blackTileRetreat);
+							// addTurn(direction, tremauxCounter,
+							// currentTile.getVictimFound(),
+							// blackTileRetreat);
 							return direction;
 						}
 					}
@@ -228,9 +246,11 @@ public class Navigation {
 					currentTile.incTremauxCounter(direction);
 				}
 				lastDirection = direction;
-				currentTile.setTremauxAlreadyEvaluated(true);
-//				addTurn(direction, tremauxCounter,
-//						currentTile.getVictimFound(), blackTileRetreat);
+				if (firstCall == false) {
+					currentTile.setTremauxAlreadyEvaluated(true);
+				}
+				// addTurn(direction, tremauxCounter,
+				// currentTile.getVictimFound(), blackTileRetreat);
 				return direction;
 			} else {
 				logger.info("Direction already evaluated ! d: " + lastDirection);

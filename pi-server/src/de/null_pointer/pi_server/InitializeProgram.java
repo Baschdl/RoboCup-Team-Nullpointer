@@ -275,7 +275,7 @@ public class InitializeProgram {
 		}
 		logger.info("Enough sensor data received");
 
-		nav.tremauxAlgorithm(0, false);
+		nav.tremauxAlgorithm(0, false, true);
 
 		arbitrator = new Arbitrator(behavior);
 		available = new Semaphore(arbitrator, behavior);
@@ -302,7 +302,7 @@ public class InitializeProgram {
 		return properties;
 
 	}
-	
+
 	public void finishCompetition() {
 		motorControl.stop();
 		available.up();
