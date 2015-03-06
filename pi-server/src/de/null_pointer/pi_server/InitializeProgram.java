@@ -259,14 +259,14 @@ public class InitializeProgram {
 		Behavior b5 = new SilverTile(lsa, nav, propPiServer);
 		Behavior b6 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
 				propPiServer);
-		Behavior b7 = new WallTooClose(eopdRight, distNx, eopdLeft, motorControl,
-				odometer, propPiServer, nav, absImu);
+		Behavior b7 = new WallTooClose(eopdRight, distNx, eopdLeft,
+				motorControl, odometer, propPiServer, nav, absImu);
 		Behavior b8 = new Victim(brickCon2, motorControl, nav, thermal,
 				propPiServer);
 
 		Behavior[] behavior = { b1, b2, /** b3, **/
-		b4, /**b5, b6,**/ b7,
-		b8 };
+		b4, /** b5, b6, **/
+		b7, b8 };
 
 		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
@@ -275,6 +275,8 @@ public class InitializeProgram {
 		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
 		}
 		logger.info("Enough sensor data received");
+
+		nav.tremauxAlgorithm(0, false);
 
 		arbitrator = new Arbitrator(behavior);
 		available = new Semaphore(arbitrator, behavior);
@@ -301,11 +303,11 @@ public class InitializeProgram {
 		return properties;
 
 	}
-	
-	public void finishCompetition(){
+
+	public void finishCompetition() {
 		motorControl.stop();
 		available.up();
-		//TODO: Kommando fuer Smiley-Faze
+		// TODO: Kommando fuer Smiley-Faze
 		brickCon2.blinkColorSensorLED();
 	}
 }
