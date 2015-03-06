@@ -26,9 +26,9 @@ public class BrickControlBrick extends Thread {
 
 	SensorProcessingThread sensorProcessing = null;
 
-	private int forwardBackwardAcceleration = 6000;
-	private int rotateAcceleration = 6000;
-	private int rotateSpeed = 50;
+	private int linearAcceleration = 6000;
+	private int rotationAcceleration = 6000;
+	private int rotationSpeed = 50;
 
 	CommunicationBrick com = null;
 
@@ -163,15 +163,15 @@ public class BrickControlBrick extends Thread {
 				switch (command[3]) {
 				case 1:
 					// forward
-					if (Motor.A.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.A.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.A.getAcceleration() != linearAcceleration) {
+						Motor.A.setAcceleration(linearAcceleration);
 					}
 					Motor.A.forward();
 					break;
 				case 2:
 					// forward
-					if (Motor.A.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.A.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.A.getAcceleration() != linearAcceleration) {
+						Motor.A.setAcceleration(linearAcceleration);
 					}
 					Motor.A.backward();
 					break;
@@ -185,11 +185,11 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					// rotate
-					if (Motor.A.getAcceleration() != rotateAcceleration) {
-						Motor.A.setAcceleration(rotateAcceleration);
+					if (Motor.A.getAcceleration() != rotationAcceleration) {
+						Motor.A.setAcceleration(rotationAcceleration);
 					}
-					if (Motor.A.getSpeed() != rotateSpeed) {
-						Motor.A.setSpeed(rotateSpeed);
+					if (Motor.A.getSpeed() != rotationSpeed) {
+						Motor.A.setSpeed(rotationSpeed);
 					}
 					Motor.A.rotate(command[2], true);
 					while (Motor.A.isMoving()) {
@@ -212,15 +212,15 @@ public class BrickControlBrick extends Thread {
 				switch (command[3]) {
 				case 1:
 					// forward
-					if (Motor.B.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.B.getAcceleration() != linearAcceleration) {
+						Motor.B.setAcceleration(linearAcceleration);
 					}
 					Motor.B.forward();
 					break;
 				case 2:
 					// backward
-					if (Motor.B.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.B.getAcceleration() != linearAcceleration) {
+						Motor.B.setAcceleration(linearAcceleration);
 					}
 					Motor.B.backward();
 					break;
@@ -234,11 +234,11 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					// rotate
-					if (Motor.B.getAcceleration() != rotateAcceleration) {
-						Motor.B.setAcceleration(rotateAcceleration);
+					if (Motor.B.getAcceleration() != rotationAcceleration) {
+						Motor.B.setAcceleration(rotationAcceleration);
 					}
-					if (Motor.B.getSpeed() != rotateSpeed) {
-						Motor.B.setSpeed(rotateSpeed);
+					if (Motor.B.getSpeed() != rotationSpeed) {
+						Motor.B.setSpeed(rotationSpeed);
 					}
 					Motor.B.rotate(command[2], true);
 					while (Motor.B.isMoving()) {
@@ -260,15 +260,15 @@ public class BrickControlBrick extends Thread {
 				switch (command[3]) {
 				case 1:
 					// forward
-					if (Motor.C.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.C.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.C.getAcceleration() != linearAcceleration) {
+						Motor.C.setAcceleration(linearAcceleration);
 					}
 					Motor.C.forward();
 					break;
 				case 2:
 					// backward
-					if (Motor.C.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.C.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.C.getAcceleration() != linearAcceleration) {
+						Motor.C.setAcceleration(linearAcceleration);
 					}
 					Motor.C.backward();
 					break;
@@ -282,11 +282,11 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					// rotate
-					if (Motor.C.getAcceleration() != rotateAcceleration) {
-						Motor.C.setAcceleration(rotateAcceleration);
+					if (Motor.C.getAcceleration() != rotationAcceleration) {
+						Motor.C.setAcceleration(rotationAcceleration);
 					}
-					if (Motor.C.getSpeed() != rotateSpeed) {
-						Motor.C.setSpeed(rotateSpeed);
+					if (Motor.C.getSpeed() != rotationSpeed) {
+						Motor.C.setSpeed(rotationSpeed);
 					}
 					Motor.C.rotate(command[2], true);
 					while (Motor.C.isMoving()) {
@@ -310,20 +310,20 @@ public class BrickControlBrick extends Thread {
 				switch (command[3]) {
 				case 1:
 					// forward
-					if (Motor.A.getAcceleration() != forwardBackwardAcceleration
-							|| Motor.B.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.A.setAcceleration(forwardBackwardAcceleration);
-						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.A.getAcceleration() != linearAcceleration
+							|| Motor.B.getAcceleration() != linearAcceleration) {
+						Motor.A.setAcceleration(linearAcceleration);
+						Motor.B.setAcceleration(linearAcceleration);
 					}
 					Motor.A.forward();
 					Motor.B.backward();
 					break;
 				case 2:
 					// backward
-					if (Motor.A.getAcceleration() != forwardBackwardAcceleration
-							|| Motor.B.getAcceleration() != forwardBackwardAcceleration) {
-						Motor.A.setAcceleration(forwardBackwardAcceleration);
-						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					if (Motor.A.getAcceleration() != linearAcceleration
+							|| Motor.B.getAcceleration() != linearAcceleration) {
+						Motor.A.setAcceleration(linearAcceleration);
+						Motor.B.setAcceleration(linearAcceleration);
 					}
 					Motor.A.backward();
 					Motor.B.forward();
@@ -340,15 +340,15 @@ public class BrickControlBrick extends Thread {
 					break;
 				case 5:
 					// rotate
-					if (Motor.A.getAcceleration() != rotateAcceleration
-							|| Motor.B.getAcceleration() != rotateAcceleration) {
-						Motor.A.setAcceleration(rotateAcceleration);
-						Motor.B.setAcceleration(rotateAcceleration);
+					if (Motor.A.getAcceleration() != rotationAcceleration
+							|| Motor.B.getAcceleration() != rotationAcceleration) {
+						Motor.A.setAcceleration(rotationAcceleration);
+						Motor.B.setAcceleration(rotationAcceleration);
 					}
-					if (Motor.A.getSpeed() != rotateSpeed
-							|| Motor.B.getSpeed() != rotateSpeed) {
-						Motor.A.setSpeed(rotateSpeed);
-						Motor.B.setSpeed(rotateSpeed);
+					if (Motor.A.getSpeed() != rotationSpeed
+							|| Motor.B.getSpeed() != rotationSpeed) {
+						Motor.A.setSpeed(rotationSpeed);
+						Motor.B.setSpeed(rotationSpeed);
 					}
 					Motor.A.rotate(command[2], true);
 					Motor.B.rotate(command[2], true);
@@ -362,13 +362,13 @@ public class BrickControlBrick extends Thread {
 			case 5:
 				switch (command[2]) {
 				case 1:
-					forwardBackwardAcceleration = command[3];
+					linearAcceleration = command[3];
 					break;
 				case 2:
-					rotateAcceleration = command[3];
+					rotationAcceleration = command[3];
 					break;
 				case 3:
-					rotateSpeed = command[3];
+					rotationSpeed = command[3];
 					break;
 				}
 			}
