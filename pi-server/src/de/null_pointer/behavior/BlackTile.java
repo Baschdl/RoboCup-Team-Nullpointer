@@ -89,6 +89,7 @@ public class BlackTile implements Behavior {
 		}
 		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
 		// true);
+		nav.disconnectTile(nav.getNeighbor(motorControl.getRotationHeading()));
 
 		int directionToMove = nav.tremauxAlgorithm(
 				motorControl.getRotationHeading(), true);
