@@ -65,158 +65,169 @@ public class Navigation {
 	 *         wrong and -2, if the maze is solved
 	 */
 	public int tremauxAlgorithm(int orientation, boolean blackTileRetreat) {
-		int direction = -1;
+		try {
+			int direction = -1;
 
-		// check if direction to move was already evaluated
-		// if so, the last evaluated direction gets returned
-		if (currentTile.getTremauxAlreadyEvaluated() == false) {
-			int[] tremauxCounter = currentTile.getTremauxCounter();
+			// check if direction to move was already evaluated
+			// if so, the last evaluated direction gets returned
+			if (currentTile.getTremauxAlreadyEvaluated() == false) {
+				int[] tremauxCounter = currentTile.getTremauxCounter();
 
-			if (blackTileRetreat == false && firstTile == false) {
-				currentTile.incTremauxCounter(currentTile
-						.invertOrientation(orientation));
-			}
-
-			// check if maze is solved already
-			if (checkSolved(tremauxCounter) && currentTile == startTile) {
-
-				logger.info("maze is solved ! d: -2");
-				return -2;
-				// method returns error, if there is no way to go
-			} else if (possibleDirections(tremauxCounter) == 0) {
-				direction = -1;
-
-				logger.warn("there's no way to go ! d: " + direction);
-
-				// check for dead end; if detected, robot takes only possible
-				// direction
-			} else if (possibleDirections(tremauxCounter) == 1) {
-				for (int i = 0; i < 4; i++) {
-					if (tremauxCounter[i] != -2) {
-						direction = i;
-						break;
-					}
+				if (blackTileRetreat == false && firstTile == false) {
+					currentTile.incTremauxCounter(currentTile
+							.invertOrientation(orientation));
 				}
 
-				logger.info("dead end, taking only possible direction ! d: "
-						+ direction);
+				// check if maze is solved already
+				if (checkSolved(tremauxCounter) && currentTile == startTile) {
 
-				// check for hallway and follow it if it's not a black tile
-				// retreat
-			} else if (possibleDirections(tremauxCounter) == 2) {
-				if (blackTileRetreat == false) {
+					logger.info("maze is solved ! d: -2");
+					return -2;
+					// method returns error, if there is no way to go
+				} else if (possibleDirections(tremauxCounter) == 0) {
+					direction = -1;
+
+					logger.warn("there's no way to go ! d: " + direction);
+
+					// check for dead end; if detected, robot takes only
+					// possible
+					// direction
+				} else if (possibleDirections(tremauxCounter) == 1) {
 					for (int i = 0; i < 4; i++) {
-						if (tremauxCounter[i] != -2
-								&& i != currentTile
-										.invertOrientation(orientation)) {
+						if (tremauxCounter[i] != -2) {
 							direction = i;
 							break;
 						}
 					}
 
-					logger.info("hallway detectet ! d: " + direction);
+					logger.info("dead end, taking only possible direction ! d: "
+							+ direction);
 
+					// check for hallway and follow it if it's not a black tile
+					// retreat
+				} else if (possibleDirections(tremauxCounter) == 2) {
+					if (blackTileRetreat == false) {
+						for (int i = 0; i < 4; i++) {
+							if (tremauxCounter[i] != -2
+									&& i != currentTile
+											.invertOrientation(orientation)) {
+								direction = i;
+								break;
+							}
+						}
+
+						logger.info("hallway detectet ! d: " + direction);
+
+					} else {
+						for (int i = 0; i < 4; i++) {
+							if (tremauxCounter[i] != -2
+									&& i != currentTile
+											.invertOrientation(lastDirection)) {
+								direction = i;
+								break;
+							}
+						}
+						logger.info("BlackTileRetreat: hallway detectet ! d: "
+								+ direction);
+					}
+
+					// -> real intersection; check TremauxCounter to evaluate
+					// direction
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (tremauxCounter[i] != -2
-								&& i != currentTile
-										.invertOrientation(lastDirection)) {
-							direction = i;
-							break;
+
+					// if tile was already visited and the previous corridor was
+					// only taken once, the robot reverses and passes it a
+					// second
+					// time
+					if (blackTileRetreat == false) {
+						if (currentTile.isVisited()
+								&& tremauxCounter[currentTile
+										.invertOrientation(orientation)] == 1) {
+
+							direction = currentTile
+									.invertOrientation(orientation);
+
+							if (blackTileRetreat) {
+								logger.info("BlackTileRetreat: already visited, turning around ! d: "
+										+ direction);
+							} else {
+								logger.info("already visited, turning around ! d: "
+										+ direction);
+							}
+
+							if (direction >= 0) {
+								currentTile.incTremauxCounter(direction);
+							}
+							lastDirection = direction;
+							addTurn(direction, tremauxCounter, blackTileRetreat);
+							return direction;
 						}
 					}
-					logger.info("BlackTileRetreat: hallway detectet ! d: "
-							+ direction);
-				}
+					if (currentTile.isVisited()) {
 
-				// -> real intersection; check TremauxCounter to evaluate
-				// direction
-			} else {
-
-				// if tile was already visited and the previous corridor was
-				// only taken once, the robot reverses and passes it a second
-				// time
-				if (blackTileRetreat == false) {
-					if (currentTile.isVisited()
-							&& tremauxCounter[currentTile
-									.invertOrientation(orientation)] == 1) {
-
-						direction = currentTile.invertOrientation(orientation);
-
-						if (blackTileRetreat) {
-							logger.info("BlackTileRetreat: already visited, turning around ! d: "
-									+ direction);
-						} else {
-							logger.info("already visited, turning around ! d: "
-									+ direction);
-						}
-
-						if (direction >= 0) {
-							currentTile.incTremauxCounter(direction);
-						}
-						lastDirection = direction;
-						addTurn(direction, tremauxCounter, blackTileRetreat);
-						return direction;
-					}
-				}
-				if (currentTile.isVisited()) {
-
-					direction = rightmostDirection(orientation, tremauxCounter,
-							0);
-
-					// if there is no corridor which was never passed, the robot
-					// takes the rightmost once passed corridor
-					if (direction == -1) {
 						direction = rightmostDirection(orientation,
-								tremauxCounter, 1);
+								tremauxCounter, 0);
 
-						if (blackTileRetreat) {
-							logger.info("BlackTileRetreat: tile already visited, passing rightmost once visited corridor ! d: "
-									+ direction);
-						} else {
-							logger.info("tile already visited, passing rightmost once visited corridor ! d: "
-									+ direction);
+						// if there is no corridor which was never passed, the
+						// robot
+						// takes the rightmost once passed corridor
+						if (direction == -1) {
+							direction = rightmostDirection(orientation,
+									tremauxCounter, 1);
+
+							if (blackTileRetreat) {
+								logger.info("BlackTileRetreat: tile already visited, passing rightmost once visited corridor ! d: "
+										+ direction);
+							} else {
+								logger.info("tile already visited, passing rightmost once visited corridor ! d: "
+										+ direction);
+							}
+						}
+
+						// if there is a corridor which was never passed, the
+						// robot
+						// takes the rightmost one
+						else {
+							if (blackTileRetreat) {
+								logger.info("BlackTileRetreat: tile already visited, passing rightmost never passed corridor ! d: "
+										+ direction);
+							} else {
+								logger.info("tile already visited, passing rightmost never passed corridor ! d: "
+										+ direction);
+							}
 						}
 					}
-
-					// if there is a corridor which was never passed, the robot
-					// takes the rightmost one
+					// tile was visited the first time; robot takes the
+					// rightmost
+					// direction
 					else {
-						if (blackTileRetreat) {
-							logger.info("BlackTileRetreat: tile already visited, passing rightmost never passed corridor ! d: "
-									+ direction);
-						} else {
-							logger.info("tile already visited, passing rightmost never passed corridor ! d: "
-									+ direction);
-						}
+						direction = rightmostDirection(orientation,
+								tremauxCounter, 0);
+
+						logger.info("tile was visited the first time, taking rightmost direction ! d: "
+								+ direction);
+
+						currentTile.setVisited();
 					}
 				}
-				// tile was visited the first time; robot takes the rightmost
-				// direction
-				else {
-					direction = rightmostDirection(orientation, tremauxCounter,
-							0);
 
-					logger.info("tile was visited the first time, taking rightmost direction ! d: "
-							+ direction);
-
-					currentTile.setVisited();
+				if (firstTile) {
+					firstTile = false;
 				}
+				if (direction >= 0) {
+					currentTile.incTremauxCounter(direction);
+				}
+				lastDirection = direction;
+				currentTile.setTremauxAlreadyEvaluated(true);
+				addTurn(direction, tremauxCounter, blackTileRetreat);
+				return direction;
+			} else {
+				logger.info("Direction already evaluated ! d: " + lastDirection);
+				return lastDirection;
 			}
-
-			if (firstTile) {
-				firstTile = false;
-			}
-			if (direction >= 0) {
-				currentTile.incTremauxCounter(direction);
-			}
-			lastDirection = direction;
-			currentTile.setTremauxAlreadyEvaluated(true);
-			addTurn(direction, tremauxCounter, blackTileRetreat);
-			return direction;
-		} else {
-			logger.info("Direction already evaluated ! d: " + lastDirection);
-			return lastDirection;
+		} catch (Exception e) {
+			logger.error("TremauxAlgorithm: an error occured: " + e);
+			return -1;
 		}
 	}
 
@@ -315,11 +326,24 @@ public class Navigation {
 	 *            Tile to be cut out of the map
 	 */
 	public void disconnectTile(Node tile) {
-		for (int i = 0; i < 4; i++) {
-			tile.removeNeighbor(i);
+		try {
+			for (int i = 0; i < 4; i++) {
+				tile.removeNeighbor(i);
+			}
+		} catch (Exception e) {
+			logger.error("disconnectTile: an error occured: " + e);
 		}
 	}
 
+	/**
+	 * Warning: errors occured when using this method !
+	 * 
+	 * Cuts all side-Node-Connections from the currentTile to the last
+	 * Intersection
+	 * 
+	 * @param lastIntersection
+	 *            Node of the last Intersection
+	 */
 	public void cutNodeConnections(Node lastIntersection) {
 		try {
 			Node buffer = currentTile;
@@ -351,8 +375,6 @@ public class Navigation {
 					}
 				}
 			}
-		} catch (NullPointerException e) {
-			logger.error("cutNodeConnections: Nullpointer error occured: " + e);
 		} catch (Exception e) {
 			logger.error("cutNodeConnections: an error occured: " + e);
 		}
@@ -371,24 +393,29 @@ public class Navigation {
 	 *            uneven)
 	 */
 	public void slope(int orientation, int mSizeX, int mSizeY) {
-		int x = currentTile.x;
-		int y = currentTile.y;
-		if (orientation == 0) {
-			y += 30;
-		} else if (orientation == 1) {
-			x += 30;
-		} else if (orientation == 2) {
-			y -= 30;
-		} else if (orientation == 3) {
-			x -= 30;
-		}
-		Node buffer = initializeMap(mSizeX, mSizeY, x, y, 1);
-		Node buffer2 = buffer
-				.getNeighbor(buffer.invertOrientation(orientation));
-		disconnectTile(buffer2);
+		try {
+			int x = currentTile.x;
+			int y = currentTile.y;
+			if (orientation == 0) {
+				y += 30;
+			} else if (orientation == 1) {
+				x += 30;
+			} else if (orientation == 2) {
+				y -= 30;
+			} else if (orientation == 3) {
+				x -= 30;
+			}
+			Node buffer = initializeMap(mSizeX, mSizeY, x, y, 1);
+			Node buffer2 = buffer.getNeighbor(buffer
+					.invertOrientation(orientation));
+			disconnectTile(buffer2);
 
-		currentTile.removeNeighbor(orientation);
-		currentTile.addNeighbor(buffer, orientation, 0);
+			currentTile.removeNeighbor(orientation);
+			currentTile.addNeighbor(buffer, orientation, 0);
+
+		} catch (Exception e) {
+			logger.error("slope: an error occured: " + e);
+		}
 	}
 
 	/**
@@ -400,72 +427,157 @@ public class Navigation {
 		return currentTile;
 	}
 
+	/**
+	 * 
+	 * @return returns true if currentTile is marked as a black-tile <br>
+	 *         false if not
+	 */
 	public boolean isBlackTile() {
-		return currentTile.isBlackTile();
-	}
-
-	public void setBlackTile() {
-		currentTile.setBlackTile();
-	}
-
-	public Node[] getNeighbors() {
-		return currentTile.getNeighbors();
-	}
-
-	public Node getNeighbor(int orientation) {
-		return currentTile.getNeighbor(orientation);
-	}
-
-	public boolean removeNeighbor(Node neighbor) {
-		return currentTile.removeNeighbor(neighbor);
-	}
-
-	public void removeNeighbor(int orientation) {
-		logger.info("removeNeighbor(): removing neighbor; ORIENTATION: " + orientation);
-		if (navComp != null) {
-			navComp.removeNeighbor(orientation);
-		}
-		currentTile.removeNeighbor(orientation);
-	}
-
-	public void switchTile(int orientation) {
-		logger.info("switchTile(): Switching tile");
-		if (navComp != null) {
-			navComp.switchTile(orientation);
-		}
-		currentTile.setTremauxAlreadyEvaluated(false);
-		currentTile = currentTile.getNeighbor(orientation);
-		if (currentTile == null) {
-			logger.error("CurrentTile is NULL !");
+		try {
+			return currentTile.isBlackTile();
+		} catch (Exception e) {
+			logger.error("isBlackTile: an error occured: " + e);
+			return false;
 		}
 	}
 
 	/**
-	 * used for testing purposes
+	 * marks the currentTile as a black-tile
+	 */
+	public void setBlackTile() {
+		try {
+			currentTile.setBlackTile();
+		} catch (Exception e) {
+			logger.error("setBlackTile: an error occured: " + e);
+		}
+	}
+
+	/**
+	 * @return returns an array[4] of the neighbors of the currentTile
+	 */
+	public Node[] getNeighbors() {
+		try {
+			return currentTile.getNeighbors();
+		} catch (Exception e) {
+			logger.error("getNeighbors: an error occured: " + e);
+			return null;
+		}
+	}
+
+	/**
+	 * returns the Neighbor of the currentTile in given orientation
 	 * 
-	 * @return
+	 * @param orientation
+	 *            orientation of the wanted neighbor
+	 * @return Neighbor of given orientation
+	 */
+	public Node getNeighbor(int orientation) {
+		try {
+			return currentTile.getNeighbor(orientation);
+		} catch (Exception e) {
+			logger.error("getNeighbor: an error occured: " + e);
+			return null;
+		}
+	}
+
+	/**
+	 * removes the given neighbor of the currentTile
+	 * 
+	 * @param neighbor
+	 *            neighboring node to remove
+	 * @return true if successfully; false if given node was not a neighbor of
+	 *         the currentTile or is the currentTile is NULL
+	 */
+	public boolean removeNeighbor(Node neighbor) {
+		try {
+			return currentTile.removeNeighbor(neighbor);
+		} catch (Exception e) {
+			logger.error("removeNeighbor(Node): an error occured: " + e);
+			return false;
+		}
+	}
+
+	/**
+	 * remove the Neighbor of the currentTile in the given orientation
+	 * 
+	 * @param orientation
+	 *            orientation of the to be removed neighbor
+	 */
+	public void removeNeighbor(int orientation) {
+		try {
+			logger.info("removeNeighbor(int): removing neighbor; ORIENTATION: "
+					+ orientation);
+			if (navComp != null) {
+				navComp.removeNeighbor(orientation);
+			}
+			currentTile.removeNeighbor(orientation);
+		} catch (Exception e) {
+			logger.error("removeNeighbor(int): an error occured: " + e);
+		}
+	}
+
+	/**
+	 * used to switch the currentTile with its neighbor in given orientation
+	 * 
+	 * @param orientation
+	 *            direction to switch the Tile
+	 */
+	public void switchTile(int orientation) {
+		try {
+			logger.info("switchTile(): Switching tile");
+			if (navComp != null) {
+				navComp.switchTile(orientation);
+			}
+			currentTile.setTremauxAlreadyEvaluated(false);
+			currentTile = currentTile.getNeighbor(orientation);
+			if (currentTile == null) {
+				logger.error("CurrentTile is NULL !");
+			}
+		} catch (Exception e) {
+			logger.error("switchTile: an error occured: " + e);
+		}
+	}
+
+	/**
+	 * @return returns the TremauxCounter of the currentTile; null if currentTle
+	 *         is null
 	 */
 	public int[] getTremauxCounter() {
-		return currentTile.getTremauxCounter();
+		try {
+			return currentTile.getTremauxCounter();
+		} catch (Exception e) {
+			logger.error("getTremauxCounter: an error occured: " + e);
+			return null;
+		}
 	}
 
 	/**
 	 * used for testing purposes
 	 * 
-	 * @param tremaux
+	 * @param tremauxCounter
 	 */
-	public void setTremauxCounter(int[] tremaux) {
-		currentTile.setTremauxCounter(tremaux);
+	public void setTremauxCounter(int[] tremauxCounter) {
+		try {
+			currentTile.setTremauxCounter(tremauxCounter);
+		} catch (Exception e) {
+			logger.error("setTremauxCounter: an error occured: " + e);
+		}
 	}
 
 	/**
-	 * creates Rectangular Nodemap of given dimensions; returns startNode, which
-	 * is in the center of the Nodemap;
+	 * creates Rectangular node-map of given dimensions; returns center-node
 	 * 
 	 * @param dimensionX
 	 *            width of the map; has to be at least 3, has to be uneven
 	 * @param dimensionY
 	 *            height of the map; has to be at least 3, has to be uneven
+	 * @param startX
+	 *            x-coordinate of the center-node
+	 * @param startY
+	 *            y-coordinate of the center-node
+	 * @param startZ
+	 *            z-coordinate of the center-node
+	 * @return returns the center-node of the newly created node-map
 	 */
 	private Node initializeMap(int dimensionX, int dimensionY, int startX,
 			int startY, int startZ) {
@@ -550,47 +662,86 @@ public class Navigation {
 	 * checkpoint
 	 */
 	public void loadMap() {
-		currentTile = lastCheckpointTile;
-		currentTurn = null;
+		try {
+			currentTile = lastCheckpointTile;
+			currentTurn = null;
+		} catch (Exception e) {
+			logger.error("loadMap: an error occured: " + e);
+		}
+
 	}
 
+	/**
+	 * saves the current state of the map to a backup-map
+	 */
 	public void saveMap() {
-		currentTurn = initialTurn;
-		while (currentTurn != null) {
-			int[] tremauxCounter = currentTurn.getTremauxCounter();
-			for (int i = 0; i < 4; i++) {
-				if (tremauxCounter[i] == -2) {
-					lastCheckpointTile.removeNeighbor(i);
+		try {
+			currentTurn = initialTurn;
+			while (currentTurn != null) {
+				int[] tremauxCounter = currentTurn.getTremauxCounter();
+				for (int i = 0; i < 4; i++) {
+					if (tremauxCounter[i] == -2) {
+						lastCheckpointTile.removeNeighbor(i);
+					}
 				}
+				lastCheckpointTile.setTremauxCounter(tremauxCounter);
+				lastCheckpointTile.setVisited();
+				lastCheckpointTile = lastCheckpointTile.getNeighbor(currentTurn
+						.getMoveDirection());
+				currentTurn = currentTurn.getNextTurn();
 			}
-			lastCheckpointTile.setTremauxCounter(tremauxCounter);
-			lastCheckpointTile.setVisited();
-			lastCheckpointTile = lastCheckpointTile.getNeighbor(currentTurn
-					.getMoveDirection());
-			currentTurn = currentTurn.getNextTurn();
+		} catch (Exception e) {
+			logger.error("saveMap: an error occured: " + e);
 		}
 	}
 
 	private void addTurn(int moveDirection, int[] tremauxCounter,
 			boolean blackTileRetreat) {
-		TurnSave nextTurn = new TurnSave(moveDirection, tremauxCounter);
-		if (currentTurn != null) {
-			if (blackTileRetreat == false) {
-				currentTurn.setNextTurn(nextTurn);
+		try {
+			TurnSave nextTurn = new TurnSave(moveDirection, tremauxCounter);
+			if (currentTurn != null) {
+				if (blackTileRetreat == false) {
+					currentTurn.setNextTurn(nextTurn);
+				}
+				currentTurn = nextTurn;
+			} else {
+				initialTurn = nextTurn;
+				currentTurn = initialTurn;
 			}
-			currentTurn = nextTurn;
-		} else {
-			initialTurn = nextTurn;
-			currentTurn = initialTurn;
+		} catch (Exception e) {
+			logger.error("addTurn: an error occured: " + e);
 		}
 	}
 
+	/**
+	 * used to ask if a victim was already found on a wall in the given
+	 * direction on the currentTile
+	 * 
+	 * @param direction
+	 *            direction to search for a found victim
+	 * @return true if a victim has already been found; false if not
+	 */
 	public boolean getVictimFound(int direction) {
-		return currentTile.getVictimFound(direction);
+		try {
+			return currentTile.getVictimFound(direction);
+		} catch (Exception e) {
+			logger.error("getVictimFound: an error occured: " + e);
+			return false;
+		}
 	}
 
+	/**
+	 * used to save the position of a found victim on the currentTile
+	 * 
+	 * @param direction
+	 *            direction in which the victim was found
+	 */
 	public void setVictimFound(int direction) {
-		currentTile.setVictimFound(direction);
+		try {
+			currentTile.setVictimFound(direction);
+		} catch (Exception e) {
+			logger.error("setVictimFound: an error occured: " + e);
+		}
 	}
 
 }
