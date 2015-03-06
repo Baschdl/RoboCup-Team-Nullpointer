@@ -76,17 +76,19 @@ public class WallTooClose implements Behavior {
 				.getProperty("Behavior.Slope.angleToTakeControl"));
 		minimalDistanceFront = Integer.parseInt(propPiServer
 				.getProperty("Behavior.Intersection.minimalDistanceFront"));
-		correctionSpeed = Integer.parseInt(propPiServer.getProperty("Behavior.WallTooClose.correctionSpeed"));
+		correctionSpeed = Integer.parseInt(propPiServer
+				.getProperty("Behavior.WallTooClose.correctionSpeed"));
 
 	}
 
 	@Override
 	public boolean takeControl() {
 		logger.debug("takeControl: Running;");
-		if ((eopdRight.getDistance() <= minDistanceSideEOPDRight && eopdRight
-				.getDistance() > 0)
-				|| (eopdLeft.getDistance() <= minDistanceSideEOPDLeft && eopdLeft.getDistance() > 0)
-				&& (!alreadyCorrecting) && (distnx.getDistance() > minimalDistanceFront)) {
+		if (((eopdRight.getDistance() <= minDistanceSideEOPDRight && eopdRight
+				.getDistance() > 0) || (eopdLeft.getDistance() <= minDistanceSideEOPDLeft && eopdLeft
+				.getDistance() > 0))
+				&& (!alreadyCorrecting)
+				&& (distnx.getDistance() > minimalDistanceFront)) {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -101,8 +103,7 @@ public class WallTooClose implements Behavior {
 		time = 0;
 		logger.debug("action: Correcting driving direction;");
 		if (eopdRight.getDistance() <= minDistanceSideEOPDRight
-				&& eopdRight.getDistance() > 0
-				&& !correctingToTheLeft) {
+				&& eopdRight.getDistance() > 0 && !correctingToTheLeft) {
 			correctingToTheLeft = true;
 			if (absImu.getTiltDataVertical() > angleToTakeControl) {
 				logger.debug("action: Correcting driving direction; On slope; Right wall too close;");
@@ -115,8 +116,7 @@ public class WallTooClose implements Behavior {
 				directionWhereCorrectionNeeded = 2;
 			}
 		} else if (eopdLeft.getDistance() <= minDistanceSideEOPDLeft
-				&& eopdLeft.getDistance() > 0
-				&& !correctingToTheRight) {
+				&& eopdLeft.getDistance() > 0 && !correctingToTheRight) {
 			correctingToTheRight = true;
 			if (absImu.getTiltDataVertical() > angleToTakeControl) {
 				logger.debug("action: Correcting driving direction; On slope; Left wall too close;");
@@ -133,33 +133,26 @@ public class WallTooClose implements Behavior {
 		while (!suppress
 				&& ((eopdRight.getDistance() <= minDistanceSideEOPDRight && eopdRight
 						.getDistance() > 0) || (eopdLeft.getDistance() <= minDistanceSideEOPDRight && eopdLeft
-						.getDistance() > 0)) && (distnx.getDistance() > minimalDistanceFront)) {
+						.getDistance() > 0))
+				&& (distnx.getDistance() > minimalDistanceFront)) {
 			if (directionWhereCorrectionNeeded == 2) {
-				motorControl.right(correctionSpeed);
+				motorControl.rightward(correctionSpeed);
 			} else if (directionWhereCorrectionNeeded == 4) {
-				motorControl.left(correctionSpeed);
+				motorControl.leftward(correctionSpeed);
 			} else if (directionWhereCorrectionNeeded == 1
 					|| directionWhereCorrectionNeeded == 3) {
-				odometer.calculateDistance(time, speed);
-				time = System.currentTimeMillis();
 				try {
 					Thread.sleep(2);
 				} catch (InterruptedException e) {
 					logger.fatal("InterruptedException while sleep()");
 				}
-				time = System.currentTimeMillis() - time;
-				if ((odometer.getDistanceCounter() % 30) > 29) {
-					odometer.addValueToDistanceCounter(30 - (odometer
-							.getDistanceCounter() % 30));
-					nav.switchTile(motorControl.getRotationHeading());
-				}
 			}
-			
+
 		}
-		if(directionWhereCorrectionNeeded == 2){
+		if (directionWhereCorrectionNeeded == 2) {
 			motorControl.stop();
 			motorControl.rotateleft(5);
-		}else if(directionWhereCorrectionNeeded == 4){
+		} else if (directionWhereCorrectionNeeded == 4) {
 			motorControl.stop();
 			motorControl.rotateright(5);
 		}

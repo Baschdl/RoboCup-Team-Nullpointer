@@ -37,6 +37,8 @@ public class MotorControlPi {
 	 * 5: float <br>
 	 * 6: changeSpeedSingleMotorForward <br>
 	 * 7: changeSpeedSingleMotorBackward <br>
+	 * 8: rightward <br>
+	 * 9: leftward <br>
 	 */
 	private int mode = -1;
 
@@ -53,14 +55,14 @@ public class MotorControlPi {
 	/**
 	 * used for testing purposes
 	 */
-	public int getActualSpeed() {
+	public int getCurrentSpeed() {
 		return currentSpeed;
 	}
 
 	/**
 	 * used for testing purposes
 	 */
-	public int getActualSideSpeed() {
+	public int getCurrentSideSpeed() {
 		return currentSideSpeed;
 	}
 
@@ -112,7 +114,7 @@ public class MotorControlPi {
 		}
 	}
 
-	public void right(int speed) {
+	public void rightward(int speed) {
 		if (currentSideSpeed != (speed) && mode != 8) {
 			logger.info("PC set motors to right speed" + speed);
 			brickCon1.forward(speed, 'D');
@@ -123,7 +125,7 @@ public class MotorControlPi {
 		}
 	}
 
-	public void left(int speed) {
+	public void leftward(int speed) {
 		if (currentSideSpeed != -(speed) && mode != 9) {
 			logger.info("PC set motors to left speed" + speed);
 			brickCon1.backward(speed, 'D');
@@ -193,7 +195,7 @@ public class MotorControlPi {
 		int wheelAngle = (int) Math.round(((Math.PI * 16.8) / (360f / angle))
 				* (360 / (Math.PI * 4.8)));
 
-		logger.info("PC set motor rotate left angle " + angle);
+		logger.info("PC set motor rotate right angle " + angle);
 		brickCon1.rotate(wheelAngle, 'D');
 		brickCon2.rotate(wheelAngle, 'D');
 
