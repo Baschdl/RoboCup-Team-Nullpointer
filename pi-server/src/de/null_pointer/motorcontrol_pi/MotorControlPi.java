@@ -8,8 +8,9 @@ import de.null_pointer.communication_pi.BrickControlPi;
  * Layer of abstraction for the motors to control our individual robot
  * 
  * @author Sebastian Bischoff (sebastianbischoff@null-pointer.de) ("Baschdl" on
- *         the leJOS-Forum), Jan Krebes (jankrebes@null-pointer.de), Samuel
- *         Scherer (samuelscherer@null-pointer.de)
+ *         the leJOS-Forum)
+ * @author Jan Krebes (jankrebes@null-pointer.de)
+ * @author Samuel Scherer (samuelscherer@null-pointer.de)
  * 
  */
 public class MotorControlPi {
@@ -18,41 +19,65 @@ public class MotorControlPi {
 	private BrickControlPi brickCon1 = null;
 	private BrickControlPi brickCon2 = null;
 
-	// currentSpeed:
-	// positive: speed forward, negative: speed backward
+	/**
+	 * positive: moving forward, negative: moving backward
+	 */
 	private int currentSpeed = -1;
-	// currentSideSpeed:
-	// positive: speed right, negative: speed left
+	/**
+	 * positive: moving rightward, negative: moving leftward
+	 */
 	private int currentSideSpeed = -1;
 
-	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3, stop: 4, float:
-	// 5, changeSpeedSingleMotorForward: 6, changeSpeedSingleMotorBackward: 7,
-	// right: 8, left: 9;
-	// float: 5
+	/**
+	 * 0: forward <br>
+	 * 1: backward <br>
+	 * 2: rightturn <br>
+	 * 3: leftturn <br>
+	 * 4: stop <br>
+	 * 5: float <br>
+	 * 6: changeSpeedSingleMotorForward <br>
+	 * 7: changeSpeedSingleMotorBackward <br>
+	 * 8: rightward <br>
+	 * 9: leftward <br>
+	 */
 	private int mode = -1;
 
+	/**
+	 * current heading of the robot based on how the robot rotates
+	 */
 	private int rotationHeading = 0;
-
-	// Getters needed for testing purposes
-	public int getActualSpeed() {
-		return currentSpeed;
-	}
-
-	public int getActualSideSpeed() {
-		return currentSideSpeed;
-	}
-
-	public int getMode() {
-		return mode;
-	}
-
-	public int getRotationHeading() {
-		return rotationHeading;
-	}
 
 	public MotorControlPi(BrickControlPi brickCon1, BrickControlPi brickCon2) {
 		this.brickCon1 = brickCon1;
 		this.brickCon2 = brickCon2;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getCurrentSpeed() {
+		return currentSpeed;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getCurrentSideSpeed() {
+		return currentSideSpeed;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getMode() {
+		return mode;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getRotationHeading() {
+		return rotationHeading;
 	}
 
 	/**
@@ -89,7 +114,7 @@ public class MotorControlPi {
 		}
 	}
 
-	public void right(int speed) {
+	public void rightward(int speed) {
 		if (currentSideSpeed != (speed) && mode != 8) {
 			logger.info("PC set motors to right speed" + speed);
 			brickCon1.forward(speed, 'D');
@@ -100,8 +125,8 @@ public class MotorControlPi {
 		}
 	}
 
-	public void left(int speed) {
-		if (currentSideSpeed != -(speed) && mode != 8) {
+	public void leftward(int speed) {
+		if (currentSideSpeed != -(speed) && mode != 9) {
 			logger.info("PC set motors to left speed" + speed);
 			brickCon1.backward(speed, 'D');
 			brickCon2.stop('D');
@@ -170,7 +195,7 @@ public class MotorControlPi {
 		int wheelAngle = (int) Math.round(((Math.PI * 16.8) / (360f / angle))
 				* (360 / (Math.PI * 4.8)));
 
-		logger.info("PC set motor rotate left angle " + angle);
+		logger.info("PC set motor rotate right angle " + angle);
 		brickCon1.rotate(wheelAngle, 'D');
 		brickCon2.rotate(wheelAngle, 'D');
 

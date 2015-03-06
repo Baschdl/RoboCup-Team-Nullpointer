@@ -34,7 +34,7 @@ public class TestBrickControlPi extends BrickControlPi {
 			InitializeProgram initializeProgram) {
 
 		super(com, nav, abs_Imu, distNx, eopdLeft, eopdRight, lsa, accumulator,
-				thermal, initializeProgram);
+				thermal, initializeProgram, null);
 		super.setSensorReady();
 		this.com = com;
 	}

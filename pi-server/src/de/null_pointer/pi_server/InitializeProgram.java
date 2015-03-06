@@ -193,12 +193,12 @@ public class InitializeProgram {
 					brickCon1 = new BrickControlPi(
 							(RealCommunicationPi) comPi1, nav, absImu, distNx,
 							eopdLeft, eopdRight, lsa, accumulator, thermal,
-							this);
+							this, propPiServer);
 				} else if (i == 1) {
 					brickCon2 = new BrickControlPi(
 							(RealCommunicationPi) comPi2, nav, absImu, distNx,
 							eopdLeft, eopdRight, lsa, accumulator, thermal,
-							this);
+							this, propPiServer);
 				} else {
 					logger.warn("Es wurde versucht Verbindungen zu mehr als zwei Bricks einzurichten");
 				}
@@ -253,19 +253,19 @@ public class InitializeProgram {
 		Behavior b2 = new NextTile(/* absImu, */motorControl, nav, odometer,
 				propPiServer);
 		Behavior b3 = new Slope(motorControl, absImu, nav, propPiServer);
-		Behavior b4 = new Intersection(motorControl, distNx, eopdLeft,
-				eopdRight, absImu, odometer, nav, propPiServer, this);
-		Behavior b5 = new SilverTile(lsa, nav, propPiServer);
-		Behavior b6 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
+		Behavior b4 = new SilverTile(lsa, nav, propPiServer);
+		Behavior b5 = new BlackTile(motorControl, lsa, absImu, nav, odometer,
 				propPiServer);
-		Behavior b7 = new WallTooClose(eopdRight, distNx, eopdLeft, motorControl,
-				odometer, propPiServer, nav, absImu);
+		Behavior b6 = new WallTooClose(eopdRight, distNx, eopdLeft,
+				motorControl, odometer, propPiServer, nav, absImu);
+		Behavior b7 = new Intersection(motorControl, distNx, eopdLeft,
+				eopdRight, absImu, odometer, nav, propPiServer, this);
 		Behavior b8 = new Victim(brickCon2, motorControl, nav, thermal,
 				propPiServer);
 
 		Behavior[] behavior = { b1, b2, /** b3, **/
-		b4, /**b5, b6,**/ b7,
-		b8 };
+		b4, /** b5, b6, **/
+		b7, b8 };
 
 		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
@@ -274,6 +274,8 @@ public class InitializeProgram {
 		while (brickCon1.getSensorReady() && brickCon2.getSensorReady()) {
 		}
 		logger.info("Enough sensor data received");
+
+		nav.tremauxAlgorithm(0, false);
 
 		arbitrator = new Arbitrator(behavior);
 		available = new Semaphore(arbitrator, behavior);
@@ -301,10 +303,10 @@ public class InitializeProgram {
 
 	}
 	
-	public void finishCompetition(){
+	public void finishCompetition() {
 		motorControl.stop();
 		available.up();
-		//TODO: Kommando fuer Smiley-Faze
+		// TODO: Kommando fuer Smiley-Faze
 		brickCon2.blinkColorSensorLED();
 	}
 }

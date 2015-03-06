@@ -34,7 +34,6 @@ public class Intersection implements Behavior {
 	private int maximalDistanceSideEOPDLeft = -1;
 	private int speed = -1;
 	private long time = 0;
-	// TODO: passender benennen
 	private int currentDistanceFront = -1;
 
 	public Intersection(MotorControlPi motorControl, DistNxProcessingPi distnx,
