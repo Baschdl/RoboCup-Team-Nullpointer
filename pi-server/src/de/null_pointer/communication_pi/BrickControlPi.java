@@ -203,18 +203,22 @@ public class BrickControlPi extends Thread {
 		}
 		readyToProcessData = true;
 
-		int linearAccelaration = Integer
-				.parseInt(propPiServer
-						.getProperty("CommunicationPi.BrickControlPi.forwardBackwardAccelaration"));
-		int rotationAccelaration = Integer
-				.parseInt(propPiServer
-						.getProperty("CommunicationPi.BrickControlPi.rotationAccelaration"));
-		int speed = Integer.parseInt(propPiServer
-				.getProperty("CommunicationPi.BrickControlPi.rotationSpeed"));
-
-		setLinearAccelaration(linearAccelaration);
-		setRotationAccelaration(rotationAccelaration);
-		setRotationSpeed(speed);
+		try {
+			int linearAccelaration = Integer
+					.parseInt(propPiServer
+							.getProperty("CommunicationPi.BrickControlPi.forwardBackwardAccelaration"));
+			int rotationAccelaration = Integer
+					.parseInt(propPiServer
+							.getProperty("CommunicationPi.BrickControlPi.rotationAccelaration"));
+			int speed = Integer
+					.parseInt(propPiServer
+							.getProperty("CommunicationPi.BrickControlPi.rotationSpeed"));
+			setLinearAccelaration(linearAccelaration);
+			setRotationAccelaration(rotationAccelaration);
+			setRotationSpeed(speed);
+		} catch (Exception e) {
+			logger.error("sendSensorData: error while parsing properties");
+		}
 		// notifyAll();
 		logger.debug("sendSensorData flag set to: " + readyToProcessData);
 	}
