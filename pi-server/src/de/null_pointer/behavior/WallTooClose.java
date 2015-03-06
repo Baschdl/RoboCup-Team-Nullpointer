@@ -38,6 +38,7 @@ public class WallTooClose implements Behavior {
 	private boolean suppress = false;
 	private Navigation nav;
 	private int directionWhereCorrectionNeeded = 0;
+	private boolean alreadyCorrecting = false;
 
 	public WallTooClose(EOPDProcessingPi eopdRight, DistNxProcessingPi distnx,
 			EOPDProcessingPi eopdLeft, MotorControlPi motorControl,
@@ -86,7 +87,7 @@ public class WallTooClose implements Behavior {
 				.getDistance() < maxDistanceSideEOPDRight)
 				|| (eopdLeft.getDistance() >= minDistanceSideEOPDLeft && eopdLeft
 						.getDistance() < maxDistanceSideEOPDLeft)
-				&& (!correctingToTheRight && !correctingToTheLeft)) {
+				&& (!alreadyCorrecting)) {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -97,6 +98,7 @@ public class WallTooClose implements Behavior {
 	@Override
 	public void action() {
 		logger.info("action: Running;");
+		alreadyCorrecting = true;
 		suppress = false;
 		time = 0;
 		logger.debug("action: Correcting driving direction;");
@@ -155,10 +157,12 @@ public class WallTooClose implements Behavior {
 					nav.switchTile(motorControl.getRotationHeading());
 				}
 			}
+			
 		}
 		correctingToTheLeft = false;
 		correctingToTheRight = false;
 		directionWhereCorrectionNeeded = 0;
+		alreadyCorrecting = false;
 		logger.debug("action: Finished correction;");
 	}
 
