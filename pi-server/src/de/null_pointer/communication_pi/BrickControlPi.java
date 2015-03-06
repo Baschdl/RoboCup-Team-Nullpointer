@@ -6,8 +6,11 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
+
+import com.sun.javafx.collections.SetAdapterChange;
 
 import de.null_pointer.motorcontrol_pi.Semaphore;
 import de.null_pointer.navigation.map.Navigation;
@@ -32,16 +35,18 @@ public class BrickControlPi extends Thread {
 	private AccumulatorProcessingPi accumulator = null;
 	private ThermalSensorProcessingPi thermal = null;
 	private Semaphore semaphore = null;
+	private InitializeProgram initializeProgram = null;
+	private Properties propPiServer = null;
+
 	private boolean readyToProcessData = true;
 	private boolean sensorReady = true;
-	private InitializeProgram initializeProgram = null;
 
 	public BrickControlPi(CommunicationPi com, Navigation navi,
 			Abs_ImuProcessingPi abs_Imu, DistNxProcessingPi distNx,
 			EOPDProcessingPi eopdLeft, EOPDProcessingPi eopdRight,
 			LSAProcessingPi lsa, AccumulatorProcessingPi accumulator,
 			ThermalSensorProcessingPi thermal,
-			InitializeProgram initializeProgram) {
+			InitializeProgram initializeProgram, Properties propPiServer) {
 		this.com = com;
 		this.navi = navi;
 		this.abs_Imu = abs_Imu;
@@ -199,6 +204,19 @@ public class BrickControlPi extends Thread {
 			}
 		}
 		readyToProcessData = true;
+
+		int linearAccelaration = Integer
+				.parseInt(propPiServer
+						.getProperty("CommunicationPi.BrickControlPi.forwardBackwardAccelaration"));
+		int rotationAccelaration = Integer
+				.parseInt(propPiServer
+						.getProperty("CommunicationPi.BrickControlPi.rotationAccelaration"));
+		int speed = Integer.parseInt(propPiServer
+				.getProperty("CommunicationPi.BrickControlPi.rotationSpeed"));
+
+		setLinearAccelaration(linearAccelaration);
+		setRotationAccelaration(rotationAccelaration);
+		setRotationSpeed(speed);
 		// notifyAll();
 		logger.debug("sendSensorData flag set to: " + readyToProcessData);
 	}
@@ -447,6 +465,33 @@ public class BrickControlPi extends Thread {
 			break;
 		}
 		logger.debug("Senden des Kommandos rotate beendet");
+	}
+
+	/**
+	 * sets accelaration for linear movements like forward or backward
+	 * 
+	 * @param accelaration
+	 */
+	public void setLinearAccelaration(int accelaration) {
+		sendCommand(9, 5, 1, accelaration);
+	}
+
+	/**
+	 * sets the accelaration for movements like turning the robot
+	 * 
+	 * @param accelaration
+	 */
+	public void setRotationAccelaration(int accelaration) {
+		sendCommand(9, 5, 2, accelaration);
+	}
+
+	/**
+	 * sets the speed for rotating the motor
+	 * 
+	 * @param speed
+	 */
+	public void setRotationSpeed(int speed) {
+		sendCommand(9, 5, 3, speed);
 	}
 
 	/**

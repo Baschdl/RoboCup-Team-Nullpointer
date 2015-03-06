@@ -8,8 +8,9 @@ import de.null_pointer.communication_pi.BrickControlPi;
  * Layer of abstraction for the motors to control our individual robot
  * 
  * @author Sebastian Bischoff (sebastianbischoff@null-pointer.de) ("Baschdl" on
- *         the leJOS-Forum), Jan Krebes (jankrebes@null-pointer.de), Samuel
- *         Scherer (samuelscherer@null-pointer.de)
+ *         the leJOS-Forum)
+ * @author Jan Krebes (jankrebes@null-pointer.de)
+ * @author Samuel Scherer (samuelscherer@null-pointer.de)
  * 
  */
 public class MotorControlPi {
@@ -18,41 +19,63 @@ public class MotorControlPi {
 	private BrickControlPi brickCon1 = null;
 	private BrickControlPi brickCon2 = null;
 
-	// currentSpeed:
-	// positive: speed forward, negative: speed backward
+	/**
+	 * positive: moving forward, negative: moving backward
+	 */
 	private int currentSpeed = -1;
-	// currentSideSpeed:
-	// positive: speed right, negative: speed left
+	/**
+	 * positive: moving rightward, negative: moving leftward
+	 */
 	private int currentSideSpeed = -1;
 
-	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3, stop: 4, float:
-	// 5, changeSpeedSingleMotorForward: 6, changeSpeedSingleMotorBackward: 7,
-	// right: 8, left: 9;
-	// float: 5
+	/**
+	 * 0: forward <br>
+	 * 1: backward <br>
+	 * 2: rightturn <br>
+	 * 3: leftturn <br>
+	 * 4: stop <br>
+	 * 5: float <br>
+	 * 6: changeSpeedSingleMotorForward <br>
+	 * 7: changeSpeedSingleMotorBackward <br>
+	 */
 	private int mode = -1;
 
+	/**
+	 * current heading of the robot based on how the robot rotates
+	 */
 	private int rotationHeading = 0;
-
-	// Getters needed for testing purposes
-	public int getActualSpeed() {
-		return currentSpeed;
-	}
-
-	public int getActualSideSpeed() {
-		return currentSideSpeed;
-	}
-
-	public int getMode() {
-		return mode;
-	}
-
-	public int getRotationHeading() {
-		return rotationHeading;
-	}
 
 	public MotorControlPi(BrickControlPi brickCon1, BrickControlPi brickCon2) {
 		this.brickCon1 = brickCon1;
 		this.brickCon2 = brickCon2;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getActualSpeed() {
+		return currentSpeed;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getActualSideSpeed() {
+		return currentSideSpeed;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getMode() {
+		return mode;
+	}
+
+	/**
+	 * used for testing purposes
+	 */
+	public int getRotationHeading() {
+		return rotationHeading;
 	}
 
 	/**
