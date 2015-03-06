@@ -18,11 +18,16 @@ public class MotorControlPi {
 	private BrickControlPi brickCon1 = null;
 	private BrickControlPi brickCon2 = null;
 
-	// actualSpeed:
+	// currentSpeed:
 	// positive: speed forward, negative: speed backward
-	private int actualSpeed = -1;
+	private int currentSpeed = -1;
+	// currentSideSpeed:
+	// positive: speed right, negative: speed left
+	private int currentSideSpeed = -1;
 
-	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3, stop: 4,
+	// mode: forward: 0, backward: 1, rightturn: 2, leftturn: 3, stop: 4, float:
+	// 5, changeSpeedSingleMotorForward: 6, changeSpeedSingleMotorBackward: 7,
+	// right: 8, left: 9;
 	// float: 5
 	private int mode = -1;
 
@@ -30,7 +35,11 @@ public class MotorControlPi {
 
 	// Getters needed for testing purposes
 	public int getActualSpeed() {
-		return actualSpeed;
+		return currentSpeed;
+	}
+
+	public int getActualSideSpeed() {
+		return currentSideSpeed;
 	}
 
 	public int getMode() {
@@ -54,11 +63,11 @@ public class MotorControlPi {
 	 */
 	// synchronized noetig?
 	public void forward(int speed) {
-		if (actualSpeed != (speed) && mode != 0) {
+		if (currentSpeed != (speed) && mode != 0) {
 			logger.info("PC set all motors forward speed " + speed);
 			brickCon2.forward(speed, 'D');
 			brickCon1.stop('D');
-			actualSpeed = speed;
+			currentSpeed = speed;
 			mode = 0;
 		}
 	}
@@ -71,12 +80,34 @@ public class MotorControlPi {
 	 */
 	// synchronized noetig?
 	public void backward(int speed) {
-		if (actualSpeed != -(speed) && mode != 1) {
+		if (currentSpeed != -(speed) && mode != 1) {
 			logger.info("PC set all motors backward speed " + speed);
 			brickCon2.backward(speed, 'D');
 			brickCon1.stop('D');
-			actualSpeed = -speed;
+			currentSpeed = -speed;
 			mode = 1;
+		}
+	}
+
+	public void right(int speed) {
+		if (currentSideSpeed != (speed) && mode != 8) {
+			logger.info("PC set motors to right speed" + speed);
+			brickCon1.forward(speed, 'D');
+			brickCon2.stop('D');
+			currentSideSpeed = speed;
+			currentSpeed = 0;
+			mode = 8;
+		}
+	}
+
+	public void left(int speed) {
+		if (currentSideSpeed != -(speed) && mode != 8) {
+			logger.info("PC set motors to left speed" + speed);
+			brickCon2.backward(speed, 'D');
+			brickCon2.stop('D');
+			currentSideSpeed = -speed;
+			currentSpeed = 0;
+			mode = 9;
 		}
 	}
 
@@ -92,14 +123,14 @@ public class MotorControlPi {
 	 */
 	public void changeSpeedSingleMotorForward(int brick, char motorport,
 			int speed) {
-		if(mode != 6){
+		if (mode != 6) {
 			mode = 6;
-			actualSpeed = speed;
-		if (brick == 1) {
-			brickCon1.forward(speed, motorport);
-		} else if (brick == 2) {
-			brickCon2.forward(speed, motorport);
-		}
+			currentSpeed = speed;
+			if (brick == 1) {
+				brickCon1.forward(speed, motorport);
+			} else if (brick == 2) {
+				brickCon2.forward(speed, motorport);
+			}
 		}
 	}
 
@@ -115,14 +146,14 @@ public class MotorControlPi {
 	 */
 	public void changeSpeedSingleMotorBackward(int brick, char motorport,
 			int speed) {
-		if(mode != 7){
+		if (mode != 7) {
 			mode = 7;
-			actualSpeed = speed;
-		if (brick == 1) {
-			brickCon1.backward(speed, motorport);
-		} else if (brick == 2) {
-			brickCon2.backward(speed, motorport);
-		}
+			currentSpeed = speed;
+			if (brick == 1) {
+				brickCon1.backward(speed, motorport);
+			} else if (brick == 2) {
+				brickCon2.backward(speed, motorport);
+			}
 		}
 	}
 
@@ -133,7 +164,7 @@ public class MotorControlPi {
 	 *            rotation angle
 	 */
 	public void rotateright(int angle) {
-		actualSpeed = 1;
+		currentSpeed = 1;
 		mode = 2;
 
 		int wheelAngle = (int) Math.round(((Math.PI * 16.8) / (360f / angle))
@@ -155,7 +186,7 @@ public class MotorControlPi {
 	 *            rotation angle
 	 */
 	public void rotateleft(int angle) {
-		actualSpeed = 1;
+		currentSpeed = 1;
 		mode = 3;
 
 		int wheelAngle = (int) Math.round(((Math.PI * 16.8) / (360f / angle))
@@ -175,7 +206,7 @@ public class MotorControlPi {
 	 */
 	public void stop() {
 		if (mode != 4) {
-			actualSpeed = 1;
+			currentSpeed = 1;
 			mode = 4;
 
 			logger.info("PC set all motor stop");
@@ -191,7 +222,7 @@ public class MotorControlPi {
 	public void flt() {
 		if (mode != 5) {
 			logger.info("PC set all motor flt");
-			actualSpeed = 1;
+			currentSpeed = 1;
 			mode = 5;
 			brickCon1.flt('D');
 			brickCon2.flt('D');

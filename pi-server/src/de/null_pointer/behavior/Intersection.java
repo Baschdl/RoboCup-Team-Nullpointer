@@ -70,7 +70,7 @@ public class Intersection implements Behavior {
 		} else if (actualDistance < 0) {
 			logger.error("takeControl: No DistNx-Values (negative value), Calling action: NO;");
 		} else if (eopdLeft.getDistance() >= maximalDistanceSideEOPDLeft) {
-			if (nav.getCurrentTile() == lastIntersection/*
+			if ((nav.getCurrentTile() == lastIntersection) && ((odometer.getDistanceCounter() % 30) <= 20)/*
 														 * odometer.
 														 * getDistanceCounter()
 														 * < 15
@@ -81,7 +81,7 @@ public class Intersection implements Behavior {
 			logger.info("takeControl: Hallway left detected; Calling action: YES;");
 			return true;
 		} else if (eopdRight.getDistance() >= maximalDistanceSideEOPDRight) {
-			if (nav.getCurrentTile() == lastIntersection/*
+			if ((nav.getCurrentTile() == lastIntersection) && ((odometer.getDistanceCounter() % 30) <= 20)/*
 														 * odometer.
 														 * getDistanceCounter()
 														 * < 15
