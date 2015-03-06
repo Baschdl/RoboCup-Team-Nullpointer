@@ -26,6 +26,10 @@ public class BrickControlBrick extends Thread {
 
 	SensorProcessingThread sensorProcessing = null;
 
+	private int forwardBackwardAcceleration = 6000;
+	private int rotateAcceleration = 6000;
+	private int rotateSpeed = 50;
+
 	CommunicationBrick com = null;
 
 	public BrickControlBrick(CommunicationBrick communication) {
@@ -158,21 +162,40 @@ public class BrickControlBrick extends Thread {
 				}
 				switch (command[3]) {
 				case 1:
+					// forward
+					if (Motor.A.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.A.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.A.forward();
 					break;
 				case 2:
+					// forward
+					if (Motor.A.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.A.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.A.backward();
 					break;
 				case 3:
+					// stop
 					Motor.A.stop();
 					break;
 				case 4:
+					// float
 					Motor.A.flt();
 					break;
 				case 5:
+					// rotate
+					if (Motor.A.getAcceleration() != rotateAcceleration) {
+						Motor.A.setAcceleration(rotateAcceleration);
+					}
+					if (Motor.A.getSpeed() != rotateSpeed) {
+						Motor.A.setSpeed(rotateSpeed);
+					}
 					Motor.A.rotate(command[2], true);
-					while(Motor.A.isMoving()){};
-					sendData(10,1,0);
+					while (Motor.A.isMoving()) {
+					}
+					;
+					sendData(10, 1, 0);
 					break;
 				case 6:
 					Motor.A.resetTachoCount();
@@ -188,21 +211,40 @@ public class BrickControlBrick extends Thread {
 				}
 				switch (command[3]) {
 				case 1:
+					// forward
+					if (Motor.B.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.B.forward();
 					break;
 				case 2:
+					// backward
+					if (Motor.B.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.B.backward();
 					break;
 				case 3:
+					// stop
 					Motor.B.stop();
 					break;
 				case 4:
+					// float
 					Motor.B.flt();
 					break;
 				case 5:
+					// rotate
+					if (Motor.B.getAcceleration() != rotateAcceleration) {
+						Motor.B.setAcceleration(rotateAcceleration);
+					}
+					if (Motor.B.getSpeed() != rotateSpeed) {
+						Motor.B.setSpeed(rotateSpeed);
+					}
 					Motor.B.rotate(command[2], true);
-					while(Motor.B.isMoving()){};
-					sendData(11,1,0);
+					while (Motor.B.isMoving()) {
+					}
+					;
+					sendData(11, 1, 0);
 					break;
 				case 6:
 					Motor.B.resetTachoCount();
@@ -217,21 +259,40 @@ public class BrickControlBrick extends Thread {
 				}
 				switch (command[3]) {
 				case 1:
+					// forward
+					if (Motor.C.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.C.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.C.forward();
 					break;
 				case 2:
+					// backward
+					if (Motor.C.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.C.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.C.backward();
 					break;
 				case 3:
+					// stop
 					Motor.C.stop();
 					break;
 				case 4:
+					// float
 					Motor.C.flt();
 					break;
 				case 5:
+					// rotate
+					if (Motor.C.getAcceleration() != rotateAcceleration) {
+						Motor.C.setAcceleration(rotateAcceleration);
+					}
+					if (Motor.C.getSpeed() != rotateSpeed) {
+						Motor.C.setSpeed(rotateSpeed);
+					}
 					Motor.C.rotate(command[2], true);
-					while(Motor.C.isMoving()){};
-					sendData(12,1,0);
+					while (Motor.C.isMoving()) {
+					}
+					;
+					sendData(12, 1, 0);
 					break;
 				case 6:
 					Motor.C.resetTachoCount();
@@ -248,30 +309,66 @@ public class BrickControlBrick extends Thread {
 
 				switch (command[3]) {
 				case 1:
-					// TODO: ueberpruefen ob richtiger Motor
+					// forward
+					if (Motor.A.getAcceleration() != forwardBackwardAcceleration
+							|| Motor.B.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.A.setAcceleration(forwardBackwardAcceleration);
+						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.A.forward();
 					Motor.B.backward();
 					break;
 				case 2:
-					// TODO: ueberpruefen ob richtiger Motor
+					// backward
+					if (Motor.A.getAcceleration() != forwardBackwardAcceleration
+							|| Motor.B.getAcceleration() != forwardBackwardAcceleration) {
+						Motor.A.setAcceleration(forwardBackwardAcceleration);
+						Motor.B.setAcceleration(forwardBackwardAcceleration);
+					}
 					Motor.A.backward();
 					Motor.B.forward();
 					break;
 				case 3:
+					// stop
 					Motor.A.stop();
 					Motor.B.stop();
 					break;
 				case 4:
+					// float
 					Motor.A.flt();
 					Motor.B.flt();
 					break;
 				case 5:
+					// rotate
+					if (Motor.A.getAcceleration() != rotateAcceleration
+							|| Motor.B.getAcceleration() != rotateAcceleration) {
+						Motor.A.setAcceleration(rotateAcceleration);
+						Motor.B.setAcceleration(rotateAcceleration);
+					}
+					if (Motor.A.getSpeed() != rotateSpeed
+							|| Motor.B.getSpeed() != rotateSpeed) {
+						Motor.A.setSpeed(rotateSpeed);
+						Motor.B.setSpeed(rotateSpeed);
+					}
 					Motor.A.rotate(command[2], true);
 					Motor.B.rotate(command[2], true);
-					while(Motor.A.isMoving() || Motor.B.isMoving()){};
+					while (Motor.A.isMoving() || Motor.B.isMoving()) {
+					}
 					sendData(13, 1, 0);
 					break;
 				default:
+					break;
+				}
+			case 5:
+				switch (command[2]) {
+				case 1:
+					forwardBackwardAcceleration = command[3];
+					break;
+				case 2:
+					rotateAcceleration = command[3];
+					break;
+				case 3:
+					rotateSpeed = command[3];
 					break;
 				}
 			}
