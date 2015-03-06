@@ -34,11 +34,11 @@ public class Navigation {
 				.getProperty("Navigation.Navigation.mapHeight"));
 		this.currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		this.currentTile.setVisited();
-		for (int i = 0; i < 3; i++) {
-			lastCheckpointTile[i] = initializeMap(dimensionX, dimensionY, 0, 0,
+		for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
+			lastCheckpointTile[saveNumber] = initializeMap(dimensionX, dimensionY, 0, 0,
 					0);
+			lastCheckpointTile[saveNumber].setVisited();
 		}
-		this.lastCheckpointTile[0].setVisited();
 		this.startTile = this.currentTile;
 		this.navComp = navComp;
 	}
@@ -52,11 +52,12 @@ public class Navigation {
 	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
-		for (int i = 0; i < 3; i++) {
-			lastCheckpointTile[i] = initializeMap(dimensionX, dimensionY, 0, 0,
+		for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
+			lastCheckpointTile[saveNumber] = initializeMap(dimensionX, dimensionY, 0, 0,
 					0);
+			lastCheckpointTile[saveNumber].setVisited();
 		}
-		lastCheckpointTile[0].setVisited();
+
 		startTile = currentTile;
 	}
 
@@ -166,9 +167,9 @@ public class Navigation {
 								currentTile.incTremauxCounter(direction);
 							}
 							lastDirection = direction;
-							addTurn(direction, tremauxCounter,
-									currentTile.getVictimFound(),
-									blackTileRetreat);
+//							addTurn(direction, tremauxCounter,
+//									currentTile.getVictimFound(),
+//									blackTileRetreat);
 							return direction;
 						}
 					}
@@ -228,8 +229,8 @@ public class Navigation {
 				}
 				lastDirection = direction;
 				currentTile.setTremauxAlreadyEvaluated(true);
-				addTurn(direction, tremauxCounter,
-						currentTile.getVictimFound(), blackTileRetreat);
+//				addTurn(direction, tremauxCounter,
+//						currentTile.getVictimFound(), blackTileRetreat);
 				return direction;
 			} else {
 				logger.info("Direction already evaluated ! d: " + lastDirection);
