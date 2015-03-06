@@ -84,10 +84,9 @@ public class WallTooClose implements Behavior {
 	public boolean takeControl() {
 		logger.debug("takeControl: Running;");
 		if ((eopdRight.getDistance() >= minDistanceSideEOPDRight && eopdRight
-				.getDistance() < maxDistanceSideEOPDRight)
-				|| (eopdLeft.getDistance() >= minDistanceSideEOPDLeft && eopdLeft
-						.getDistance() < maxDistanceSideEOPDLeft)
-				&& (!alreadyCorrecting)) {
+				.getDistance() > 0)
+				|| (eopdLeft.getDistance() >= minDistanceSideEOPDLeft && eopdLeft.getDistance() > 0)
+				&& (!alreadyCorrecting) && (distnx.getDistance() > minimalDistanceFront)) {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -133,10 +132,9 @@ public class WallTooClose implements Behavior {
 		}
 		logger.debug("action: Correcting and measuring driven distance;");
 		while (!suppress
-				&& (eopdRight.getDistance() >= minDistanceSideEOPDRight || eopdLeft
-						.getDistance() >= minDistanceSideEOPDLeft)
-				&& (eopdRight.getDistance() < maxDistanceSideEOPDRight && eopdLeft
-						.getDistance() < maxDistanceSideEOPDLeft)) {
+				&& ((eopdRight.getDistance() <= minDistanceSideEOPDRight && eopdRight
+						.getDistance() > 0) || (eopdLeft.getDistance() <= minDistanceSideEOPDRight && eopdLeft
+						.getDistance() > 0)) && (distnx.getDistance() > minimalDistanceFront)) {
 			if (directionWhereCorrectionNeeded == 2) {
 				motorControl.right(correctionSpeed);
 			} else if (directionWhereCorrectionNeeded == 4) {
@@ -158,6 +156,13 @@ public class WallTooClose implements Behavior {
 				}
 			}
 			
+		}
+		if(directionWhereCorrectionNeeded == 2){
+			motorControl.stop();
+			motorControl.rotateright(5);
+		}else if(directionWhereCorrectionNeeded == 4){
+			motorControl.stop();
+			motorControl.rotateleft(5);
 		}
 		correctingToTheLeft = false;
 		correctingToTheRight = false;
