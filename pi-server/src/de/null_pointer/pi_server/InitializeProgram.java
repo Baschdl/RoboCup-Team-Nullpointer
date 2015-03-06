@@ -264,7 +264,7 @@ public class InitializeProgram {
 				propPiServer);
 
 		Behavior[] behavior = { b1, b2, /** b3, **/
-		b4, /** b5, b6, **/
+		/**b4, b5,**/ b6,
 		b7, b8 };
 
 		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
@@ -302,7 +302,6 @@ public class InitializeProgram {
 		return properties;
 
 	}
-
 	public void finishCompetition() {
 		motorControl.stop();
 		available.up();

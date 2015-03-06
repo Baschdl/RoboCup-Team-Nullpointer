@@ -128,6 +128,7 @@ public class BrickControlPi extends Thread {
 		logger.debug("value processData:" + Arrays.toString(receiveData));
 		if (receiveData[0] == Sensor.DistNx.getNumber()) {
 			// Dist-Nx
+			logger.info("DistNX-Werte: " + receiveData[2]);
 			distNx.setDistance(Math.round(receiveData[2]));
 		} else if (receiveData[0] == Sensor.LightSensorArray.getNumber()) {
 			// LSA

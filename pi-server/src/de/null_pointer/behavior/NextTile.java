@@ -39,14 +39,14 @@ public class NextTile implements Behavior {
 
 		if (((distance % 30) > 29) && (distance - odometer.getOldDistance()) > 29) {
 
-			logger.info("takeControl: Calling action: YES; DISTANCE: "
+			logger.debug("takeControl: Calling action: YES; DISTANCE: "
 					+ distance + "; MODULO: " + (distance % 30)
 					+ "; OLDDISTANCE: " + odometer.getOldDistance() + ";");
 			// oldDistance = distance;
 			return true;
 		}
 		logger.debug("takeControl: Calling action: NO;");
-		logger.info("takeControl: DISTANCE: " + distance + "; MODULO: "
+		logger.debug("takeControl: DISTANCE: " + distance + "; MODULO: "
 				+ (distance % 30) + "; OLDDISTANCE: " + odometer.getOldDistance() + ";");
 		return false;
 

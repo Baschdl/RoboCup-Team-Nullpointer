@@ -62,36 +62,37 @@ public class Intersection implements Behavior {
 	@Override
 	public boolean takeControl() {
 		int actualDistance;
+		logger.info("takeControl: right EOPD: " + eopdRight.getDistance() + "; left EOPD: " + eopdLeft.getDistance() + ";");
 		if ((actualDistance = distnx.getDistance()) <= minimalDistanceFront
 				&& actualDistance >= 0) {
 			logger.info("takeControl: Wall ahead; Calling Action: YES;");
 			return true;
 		} else if (actualDistance < 0) {
 			logger.error("takeControl: No DistNx-Values (negative value), Calling action: NO;");
-		} else if (eopdLeft.getDistance() >= maximalDistanceSideEOPDLeft) {
+		} else if (eopdLeft.getDistance() >= maximalDistanceSideEOPDLeft || eopdLeft.getDistance() == 0.0) {
 			if ((nav.getCurrentTile() == lastIntersection) && ((odometer.getDistanceCounter() % 30) <= 20)/*
 														 * odometer.
 														 * getDistanceCounter()
 														 * < 15
 														 */) {
-				logger.debug("takeControl: Hallway left detected, but distanceCounter is < 15; Calling action: NO;");
+				logger.info("takeControl: Hallway left detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
 			logger.info("takeControl: Hallway left detected; Calling action: YES;");
 			return true;
-		} else if (eopdRight.getDistance() >= maximalDistanceSideEOPDRight) {
+		} else if (eopdRight.getDistance() >= maximalDistanceSideEOPDRight || eopdRight.getDistance() == 0.0) {
 			if ((nav.getCurrentTile() == lastIntersection) && ((odometer.getDistanceCounter() % 30) <= 20)/*
 														 * odometer.
 														 * getDistanceCounter()
 														 * < 15
 														 */) {
-				logger.debug("takeControl: Hallway right detected, but distanceCounter is < 15; Calling action: NO;");
+				logger.info("takeControl: Hallway right detected, but distanceCounter is < 15; Calling action: NO;");
 				return false;
 			}
 			logger.info("takeControl: Hallway right detected; Calling action: YES;");
 			return true;
 		}
-		logger.debug("takeControl: No hallway detected; Calling action: NO;");
+		logger.info("takeControl: No hallway detected; Calling action: NO;");
 		return false;
 	}
 
@@ -101,7 +102,7 @@ public class Intersection implements Behavior {
 		time = 0;
 		if ((currentDistanceFront = distnx.getDistance()) > minimalDistanceFront
 				&& currentDistanceFront >= 0) {
-			logger.debug("action: Wall is not ahead, moving to the centre of the tile;");
+			logger.info("action: Wall is not ahead, moving to the centre of the tile;");
 			motorControl.forward(speed);
 			while ((odometer.getDistanceCounter() % 30) > 3) {
 				odometer.calculateDistance(time, speed);
@@ -114,19 +115,19 @@ public class Intersection implements Behavior {
 				time = System.currentTimeMillis() - time;
 				if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
 						&& currentDistanceFront >= 0) {
-					logger.debug("action: Wall is now ahead; Stopping movement;");
+					logger.info("action: Wall is now ahead; Stopping movement;");
 					break;
 				}
 			}
-			logger.debug("action: Switching tile because roboter went to the centre of the tile;");
+			logger.info("action: Switching tile because roboter went to the centre of the tile;");
 			nav.switchTile(motorControl.getRotationHeading());
 			odometer.setOldDistance(odometer.getDistanceCounter());
 		} else if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
 				&& currentDistanceFront >= 0) {
 			motorControl.stop();
-			logger.debug("action: Wall is ahead, already in the centre of the tile;");
-			if ((odometer.getDistanceCounter() - odometer.getOldDistance()) > 29) {
-				logger.debug("action: Switching tile because nextTile can not be called while intersection-action is active");
+			logger.info("action: Wall is ahead, already in the centre of the tile;");
+			if ((odometer.getDistanceCounter() - odometer.getOldDistance()) > 27) {
+				logger.info("action: Switching tile because nextTile can not be called while intersection-action is active");
 				odometer.addValueToDistanceCounter(30 - (odometer
 						.getDistanceCounter() % 30));
 				nav.switchTile(motorControl.getRotationHeading());
@@ -156,20 +157,20 @@ public class Intersection implements Behavior {
 		}else if(directionToMove == -2){
 			initProgram.finishCompetition();
 		}
-		logger.debug("action: finished;");
+		logger.info("action: finished;");
 	}
 
 	private void findHallway() {
 		double distanceSide = -1;
 		if ((currentDistanceFront = distnx.getDistance()) <= minimalDistanceFront
 				&& currentDistanceFront >= 0) {
-			logger.debug("findHallway: Wall is ahead; Saving wall in front");
+			logger.info("findHallway: Wall is ahead; Saving wall in front");
 			// nav.removeNeighbor(absImu.getAbsImuHeading());
 			nav.removeNeighbor(motorControl.getRotationHeading());
 		}
 		if ((distanceSide = eopdLeft.getDistance()) <= maximalDistanceSideEOPDLeft
 				& distanceSide > 0) {
-			logger.debug("findHallway: Wall is left; Saving wall on the left");
+			logger.info("findHallway: Wall is left; Saving wall on the left");
 			// nav.removeNeighbor(nav.rightleftDirection(
 			// absImu.getAbsImuHeading(), false));
 			nav.removeNeighbor(nav.rightleftDirection(
@@ -177,7 +178,7 @@ public class Intersection implements Behavior {
 		}
 		if ((distanceSide = eopdRight.getDistance()) <= maximalDistanceSideEOPDRight
 				& distanceSide > 0) {
-			logger.debug("findHallway: Wall is right; Saving wall on the right");
+			logger.info("findHallway: Wall is right; Saving wall on the right");
 			// nav.removeNeighbor(nav.rightleftDirection(
 			// absImu.getAbsImuHeading(), true));
 			nav.removeNeighbor(nav.rightleftDirection(
