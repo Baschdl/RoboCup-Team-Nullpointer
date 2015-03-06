@@ -98,12 +98,16 @@ public class Node {
 	public void setTremauxAlreadyEvaluated(boolean value) {
 		tremauxAlreadyEvaluated = value;
 	}
-	
-	public boolean getVictimFound(int direction){
+
+	public boolean getVictimFound(int direction) {
 		return victimFound[direction];
 	}
-	
-	public void setVictimFound(int direction){
+
+	public boolean[] getVictimFound() {
+		return victimFound;
+	}
+
+	public void setVictimFound(int direction) {
 		victimFound[direction] = true;
 	}
 

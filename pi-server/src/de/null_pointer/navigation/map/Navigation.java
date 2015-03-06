@@ -17,9 +17,10 @@ public class Navigation {
 	private Node currentTile;
 	private Node startTile;
 
-	private Node lastCheckpointTile;
-	private TurnSave currentTurn = null;
-	private TurnSave initialTurn = null;
+	private Node[] lastCheckpointTile = { null, null, null };
+	private TurnSave[] currentTurn = { null, null, null };
+	private TurnSave[] initialTurn = { null, null, null };
+	private int resetCounter = 0;
 
 	private int lastDirection = -1;
 	private boolean firstTile = true;
@@ -33,8 +34,11 @@ public class Navigation {
 				.getProperty("Navigation.Navigation.mapHeight"));
 		this.currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		this.currentTile.setVisited();
-		this.lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
-		this.lastCheckpointTile.setVisited();
+		for (int i = 0; i < 3; i++) {
+			lastCheckpointTile[i] = initializeMap(dimensionX, dimensionY, 0, 0,
+					0);
+		}
+		this.lastCheckpointTile[0].setVisited();
 		this.startTile = this.currentTile;
 		this.navComp = navComp;
 	}
@@ -48,8 +52,11 @@ public class Navigation {
 	public Navigation(int dimensionX, int dimensionY) {
 		currentTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
 		currentTile.setVisited();
-		lastCheckpointTile = initializeMap(dimensionX, dimensionY, 0, 0, 0);
-		lastCheckpointTile.setVisited();
+		for (int i = 0; i < 3; i++) {
+			lastCheckpointTile[i] = initializeMap(dimensionX, dimensionY, 0, 0,
+					0);
+		}
+		lastCheckpointTile[0].setVisited();
 		startTile = currentTile;
 	}
 
@@ -159,7 +166,9 @@ public class Navigation {
 								currentTile.incTremauxCounter(direction);
 							}
 							lastDirection = direction;
-							addTurn(direction, tremauxCounter, blackTileRetreat);
+							addTurn(direction, tremauxCounter,
+									currentTile.getVictimFound(),
+									blackTileRetreat);
 							return direction;
 						}
 					}
@@ -219,7 +228,8 @@ public class Navigation {
 				}
 				lastDirection = direction;
 				currentTile.setTremauxAlreadyEvaluated(true);
-				addTurn(direction, tremauxCounter, blackTileRetreat);
+				addTurn(direction, tremauxCounter,
+						currentTile.getVictimFound(), blackTileRetreat);
 				return direction;
 			} else {
 				logger.info("Direction already evaluated ! d: " + lastDirection);
@@ -227,6 +237,7 @@ public class Navigation {
 			}
 		} catch (Exception e) {
 			logger.error("TremauxAlgorithm: an error occured: " + e);
+			e.printStackTrace();
 			return -1;
 		}
 	}
@@ -332,6 +343,7 @@ public class Navigation {
 			}
 		} catch (Exception e) {
 			logger.error("disconnectTile: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -377,6 +389,7 @@ public class Navigation {
 			}
 		} catch (Exception e) {
 			logger.error("cutNodeConnections: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -415,6 +428,7 @@ public class Navigation {
 
 		} catch (Exception e) {
 			logger.error("slope: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -437,6 +451,7 @@ public class Navigation {
 			return currentTile.isBlackTile();
 		} catch (Exception e) {
 			logger.error("isBlackTile: an error occured: " + e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -449,6 +464,7 @@ public class Navigation {
 			currentTile.setBlackTile();
 		} catch (Exception e) {
 			logger.error("setBlackTile: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -460,6 +476,7 @@ public class Navigation {
 			return currentTile.getNeighbors();
 		} catch (Exception e) {
 			logger.error("getNeighbors: an error occured: " + e);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -476,6 +493,7 @@ public class Navigation {
 			return currentTile.getNeighbor(orientation);
 		} catch (Exception e) {
 			logger.error("getNeighbor: an error occured: " + e);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -493,6 +511,7 @@ public class Navigation {
 			return currentTile.removeNeighbor(neighbor);
 		} catch (Exception e) {
 			logger.error("removeNeighbor(Node): an error occured: " + e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -513,6 +532,7 @@ public class Navigation {
 			currentTile.removeNeighbor(orientation);
 		} catch (Exception e) {
 			logger.error("removeNeighbor(int): an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -535,6 +555,7 @@ public class Navigation {
 			}
 		} catch (Exception e) {
 			logger.error("switchTile: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -547,6 +568,7 @@ public class Navigation {
 			return currentTile.getTremauxCounter();
 		} catch (Exception e) {
 			logger.error("getTremauxCounter: an error occured: " + e);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -561,6 +583,7 @@ public class Navigation {
 			currentTile.setTremauxCounter(tremauxCounter);
 		} catch (Exception e) {
 			logger.error("setTremauxCounter: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -663,10 +686,12 @@ public class Navigation {
 	 */
 	public void loadMap() {
 		try {
-			currentTile = lastCheckpointTile;
-			currentTurn = null;
+			currentTile = lastCheckpointTile[resetCounter];
+			currentTurn[resetCounter] = null;
+			resetCounter++;
 		} catch (Exception e) {
 			logger.error("loadMap: an error occured: " + e);
+			e.printStackTrace();
 		}
 
 	}
@@ -676,40 +701,67 @@ public class Navigation {
 	 */
 	public void saveMap() {
 		try {
-			currentTurn = initialTurn;
-			while (currentTurn != null) {
-				int[] tremauxCounter = currentTurn.getTremauxCounter();
-				for (int i = 0; i < 4; i++) {
-					if (tremauxCounter[i] == -2) {
-						lastCheckpointTile.removeNeighbor(i);
+			for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
+				if (saveNumber >= resetCounter) {
+					currentTurn = initialTurn;
+					while (currentTurn != null) {
+						int[] tremauxCounter = currentTurn[saveNumber]
+								.getTremauxCounter();
+						for (int i = 0; i < 4; i++) {
+							if (tremauxCounter[i] == -2) {
+								lastCheckpointTile[saveNumber]
+										.removeNeighbor(i);
+							}
+						}
+						lastCheckpointTile[saveNumber]
+								.setTremauxCounter(tremauxCounter);
+						lastCheckpointTile[saveNumber].setVisited();
+						lastCheckpointTile[saveNumber] = lastCheckpointTile[0]
+								.getNeighbor(currentTurn[saveNumber]
+										.getMoveDirection());
+						currentTurn[saveNumber] = currentTurn[saveNumber]
+								.getNextTurn();
 					}
 				}
-				lastCheckpointTile.setTremauxCounter(tremauxCounter);
-				lastCheckpointTile.setVisited();
-				lastCheckpointTile = lastCheckpointTile.getNeighbor(currentTurn
-						.getMoveDirection());
-				currentTurn = currentTurn.getNextTurn();
 			}
 		} catch (Exception e) {
 			logger.error("saveMap: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
 	private void addTurn(int moveDirection, int[] tremauxCounter,
-			boolean blackTileRetreat) {
+			boolean[] victimFound, boolean blackTileRetreat) {
 		try {
-			TurnSave nextTurn = new TurnSave(moveDirection, tremauxCounter);
+			TurnSave nextTurn[] = {
+					new TurnSave(moveDirection, tremauxCounter, victimFound),
+					new TurnSave(moveDirection, tremauxCounter, victimFound),
+					new TurnSave(moveDirection, tremauxCounter, victimFound) };
 			if (currentTurn != null) {
 				if (blackTileRetreat == false) {
-					currentTurn.setNextTurn(nextTurn);
+					for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
+						if (saveNumber >= resetCounter) {
+							currentTurn[saveNumber]
+									.setNextTurn(nextTurn[saveNumber]);
+						}
+					}
 				}
-				currentTurn = nextTurn;
+				for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
+					if (saveNumber >= resetCounter) {
+						currentTurn[saveNumber] = nextTurn[saveNumber];
+					}
+				}
 			} else {
-				initialTurn = nextTurn;
-				currentTurn = initialTurn;
+				for (int saveNumber = 0; saveNumber < 3; saveNumber++) {
+					if (saveNumber >= resetCounter) {
+						initialTurn[saveNumber] = nextTurn[saveNumber];
+						currentTurn[saveNumber] = initialTurn[saveNumber];
+					}
+				}
 			}
 		} catch (Exception e) {
 			logger.error("addTurn: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -726,6 +778,7 @@ public class Navigation {
 			return currentTile.getVictimFound(direction);
 		} catch (Exception e) {
 			logger.error("getVictimFound: an error occured: " + e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -741,6 +794,7 @@ public class Navigation {
 			currentTile.setVictimFound(direction);
 		} catch (Exception e) {
 			logger.error("setVictimFound: an error occured: " + e);
+			e.printStackTrace();
 		}
 	}
 
