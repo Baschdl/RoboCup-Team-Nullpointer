@@ -10,8 +10,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.sun.javafx.collections.SetAdapterChange;
-
 import de.null_pointer.motorcontrol_pi.Semaphore;
 import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.pi_server.InitializeProgram;
