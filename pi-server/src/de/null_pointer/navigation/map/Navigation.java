@@ -822,4 +822,8 @@ public class Navigation {
 		}
 	}
 
+	public void setAlreadyEvaluated(boolean value) {
+		currentTile.setTremauxAlreadyEvaluated(value);
+	}
+
 }

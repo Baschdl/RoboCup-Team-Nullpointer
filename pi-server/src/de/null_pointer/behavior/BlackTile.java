@@ -90,6 +90,7 @@ public class BlackTile implements Behavior {
 		// int directionToMove = nav.tremauxAlgorithm(absImu.getAbsImuHeading(),
 		// true);
 		nav.disconnectTile(nav.getNeighbor(motorControl.getRotationHeading()));
+		nav.setAlreadyEvaluated(false);
 
 		int directionToMove = nav.tremauxAlgorithm(
 				motorControl.getRotationHeading(), true);
@@ -105,8 +106,8 @@ public class BlackTile implements Behavior {
 		logger.debug("suppress: running");
 		moving = false;
 	}
-	
-	public void setNavigation(Navigation nav){
+
+	public void setNavigation(Navigation nav) {
 		this.nav = nav;
 	}
 
