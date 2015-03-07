@@ -359,9 +359,12 @@ public class Navigation {
 	 */
 	public void disconnectTile(Node tile) {
 		try {
-			for (int i = 0; i < 4; i++) {
-				tile.removeNeighbor(i);
+			if (tile != null) {
+				for (int i = 0; i < 4; i++) {
+					tile.removeNeighbor(i);
+				}
 			}
+
 		} catch (Exception e) {
 			logger.error("disconnectTile: an error occured: " + e);
 			e.printStackTrace();
