@@ -44,10 +44,19 @@ public class Victim implements Behavior {
 	public boolean takeControl() {
 		logger.debug("takeControl: Running;");
 		int temperature = -1;
-		return (temperature = thermal.getTemperature()) > minimumTemperature
-				&& temperature < maximumTemperature
-				&& nav.getVictimFound(nav.rightleftDirection(
-						motorControl.getRotationHeading(), true)) == false;
+		if ((temperature = thermal.getTemperature()) > minimumTemperature
+				&& temperature < maximumTemperature) {
+			if (nav.getVictimFound(nav.rightleftDirection(
+					motorControl.getRotationHeading(), true)) == false) {
+				logger.info("takeControl: Victim detected, but already marked as found; Calling action: NO;");
+				return false;
+			}
+			logger.info("takeControl: Victim detected; Calling action: YES;");
+			return true;
+		} else {
+			logger.info("takeControl: no victim detected; Calling action: NO;");
+			return false;
+		}
 	}
 
 	@Override
