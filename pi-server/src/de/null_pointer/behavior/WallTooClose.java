@@ -83,11 +83,13 @@ public class WallTooClose implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		logger.debug("takeControl: right EOPD: " + eopdRight.getDistance() + "; left EOPD: " + eopdLeft.getDistance() + ";");
+		logger.debug("takeControl: right EOPD: " + eopdRight.getDistance()
+				+ "; left EOPD: " + eopdLeft.getDistance() + ";");
 		logger.debug("takeControl: Running;");
 		if (((eopdRight.getDistance() <= minDistanceSideEOPDRight && eopdRight
 				.getDistance() > 0) || (eopdLeft.getDistance() <= minDistanceSideEOPDLeft && eopdLeft
-				.getDistance() > 0)) && (!alreadyCorrecting)) {
+				.getDistance() > 0))
+				&& (!alreadyCorrecting)) {
 			logger.info("takeControl: Calling action: YES;");
 			return true;
 		}
@@ -168,6 +170,10 @@ public class WallTooClose implements Behavior {
 		logger.info("suppress: Running");
 		suppress = true;
 
+	}
+
+	public void setNavigation(Navigation nav) {
+		this.nav = nav;
 	}
 
 }

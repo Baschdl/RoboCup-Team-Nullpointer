@@ -62,6 +62,8 @@ public class InitializeProgram {
 	private Semaphore available = null;
 	private Properties propPiServer = null;
 
+	Behavior[] behaviors = null;
+
 	private boolean programStarted = false;
 
 	public Arbitrator getArbitrator() {
@@ -264,8 +266,9 @@ public class InitializeProgram {
 				propPiServer);
 
 		Behavior[] behavior = { b1, b2, /** b3, **/
-		/**b4, b5,**/ b6,
+		/* b4, b5, b6, */
 		b7, b8 };
+		behaviors = behavior;
 
 		// Abritrator wird erst initialisiert, wenn von beiden Bricks gemeldet
 		// wird, dass jeweils mindestens 10 Sensorwerte an pi-server geschickt
@@ -302,10 +305,23 @@ public class InitializeProgram {
 		return properties;
 
 	}
+
 	public void finishCompetition() {
 		motorControl.stop();
 		available.up();
 		// TODO: Kommando fuer Smiley-Faze
 		brickCon2.blinkColorSensorLED();
+	}
+
+	public void renewNavigation() {
+		this.nav = new Navigation(propPiServer, navComp);
+		nav.tremauxAlgorithm(0, false, true);
+
+		((MovingForward) behaviors[0]).setNavigation(nav);
+		((NextTile) behaviors[1]).setNavigation(nav);
+		((Intersection) behaviors[2]).setNavigation(nav);
+		((Victim) behaviors[3]).setNavigation(nav);
+		brickCon1.setNavigation(nav);
+		brickCon2.setNavigation(nav);
 	}
 }

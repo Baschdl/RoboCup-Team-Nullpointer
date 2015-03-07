@@ -71,6 +71,8 @@ public class NextTile implements Behavior {
 
 	}
 	
-
+	public void setNavigation(Navigation nav){
+		this.nav = nav;
+	}
 
 }

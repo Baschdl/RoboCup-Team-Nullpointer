@@ -105,5 +105,9 @@ public class BlackTile implements Behavior {
 		logger.debug("suppress: running");
 		moving = false;
 	}
+	
+	public void setNavigation(Navigation nav){
+		this.nav = nav;
+	}
 
 }

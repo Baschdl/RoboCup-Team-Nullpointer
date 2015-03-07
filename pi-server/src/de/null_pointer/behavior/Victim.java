@@ -84,4 +84,8 @@ public class Victim implements Behavior {
 	public int getVictimsFound() {
 		return victimsFound;
 	}
+	
+	public void setNavigation(Navigation nav){
+		this.nav = nav;
+	}
 }

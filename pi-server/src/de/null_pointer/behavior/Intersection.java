@@ -189,5 +189,9 @@ public class Intersection implements Behavior {
 	@Override
 	public void suppress() {
 	}
+	
+	public void setNavigation(Navigation nav){
+		this.nav = nav;
+	}
 
 }

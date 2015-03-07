@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import de.null_pointer.communication_pi.BrickControlPi;
 import de.null_pointer.motorcontrol_pi.MotorControlPi;
+import de.null_pointer.navigation.map.Navigation;
 import de.null_pointer.navigation.map.Odometer;
 import lejos.robotics.subsumption.Behavior;
 
@@ -82,5 +83,8 @@ public class MovingForward implements Behavior {
 
 	public void testSetMoving(boolean mov) {
 		moving = mov;
+	}
+	
+	public void setNavigation(Navigation nav){
 	}
 }

@@ -163,7 +163,7 @@ public class BrickControlPi extends Thread {
 			if (receiveData[1] == 1) {
 				// TODO Reset Button gedrueckt; ggf. muss noch weiteres getan
 				// werden
-				navi.loadMap();
+				initializeProgram.renewNavigation();
 			} else if (receiveData[1] == 2) {
 				initializeProgram.setProgramStarted();
 			}
@@ -573,5 +573,9 @@ public class BrickControlPi extends Thread {
 
 	public void blinkColorSensorLED() {
 		sendCommand(11, 1);
+	}
+
+	public void setNavigation(Navigation nav) {
+		this.navi = nav;
 	}
 }

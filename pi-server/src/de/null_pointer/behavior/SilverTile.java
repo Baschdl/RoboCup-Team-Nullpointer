@@ -52,4 +52,7 @@ public class SilverTile implements Behavior {
 	public void suppress() {
 	}
 
+	public void setNavigation(Navigation nav){
+		this.nav = nav;
+	}
 }
