@@ -30,6 +30,9 @@ public class RealCommunicationPi extends CommunicationPi {
 
 	private Writer writer = null;
 
+	private Object lockReceive = new Object();
+	private Object lockSend = new Object();
+
 	private static Logger logger = Logger.getLogger(RealCommunicationPi.class);
 
 	private RealCommunicationPi() {
@@ -57,25 +60,26 @@ public class RealCommunicationPi extends CommunicationPi {
 	 *         einer Exception den String "ENDE".
 	 */
 	@Override
-	public synchronized String receiveString() {
-		try {
-
-			String data = dataFromBrick.readUTF();
+	public String receiveString() {
+		synchronized (lockReceive) {
 			try {
-				writer.write(System.currentTimeMillis() + ":" + data
-						+ System.getProperty("line.separator"));
-			} catch (IOException ex) {
-				// report
-				ex.printStackTrace();
+
+				String data = dataFromBrick.readUTF();
+				try {
+					writer.write(System.currentTimeMillis() + ":" + data
+							+ System.getProperty("line.separator"));
+				} catch (IOException ex) {
+					// report
+					ex.printStackTrace();
+				}
+				return data;
+
+			} catch (IOException e) {
+				logger.error("Fehler beim Lesen des DataInputStream");
+				return "ENDE";
+
 			}
-			return data;
-
-		} catch (IOException e) {
-			logger.error("Fehler beim Lesen des DataInputStream");
-			return "ENDE";
-
 		}
-
 	}
 
 	/**
@@ -85,20 +89,22 @@ public class RealCommunicationPi extends CommunicationPi {
 	 *            den String, welcher gesendet werden soll.
 	 */
 	@Override
-	public synchronized void sendString(String data) {
-		try {
-			logger.debug("writes data to DataOutputStream");
-			dataToBrick.writeUTF(data);
-			logger.debug("flushes data");
-			dataToBrick.flush();
-			logger.debug("transmission finished");
+	public void sendString(String data) {
+		synchronized (lockSend) {
+			try {
+				logger.debug("writes data to DataOutputStream");
+				dataToBrick.writeUTF(data);
+				logger.debug("flushes data");
+				dataToBrick.flush();
+				logger.debug("transmission finished");
 
-		} catch (IOException e) {
+			} catch (IOException e) {
 
-			logger.error("IO Exception writing bytes");
+				logger.error("IO Exception writing bytes");
 
-		} catch (NullPointerException npe) {
-			logger.error("NullPointerException writing data");
+			} catch (NullPointerException npe) {
+				logger.error("NullPointerException writing data");
+			}
 		}
 	}
 
