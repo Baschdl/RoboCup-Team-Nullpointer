@@ -1,0 +1,164 @@
+package de.null_pointer.navigation.test;
+
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+
+import org.apache.log4j.Logger;
+
+import de.null_pointer.navigation.map.Navigation;
+
+public class FileHandler {
+	private static Logger logger = Logger.getLogger(Navigation.class);
+
+	private NavSimulationHandler handler = null;
+
+	public FileHandler(NavSimulationHandler handler) {
+		this.handler = handler;
+	}
+
+	public void saveFile(Frame actualWindow) {
+		String filename;
+		int rows = 0;
+		BufferedWriter file = null;
+
+		FileDialog fDialog = new FileDialog(actualWindow,
+				"Select file to write", FileDialog.SAVE);
+		fDialog.setVisible(true);
+
+		int[][] values = handler.getValues();
+		if (fDialog.getFile() != null) {
+			try {
+				filename = fDialog.getFile().toLowerCase();
+				if (filename.indexOf(".map") == -1) {
+					filename = filename + ".map";
+				}
+				file = new BufferedWriter(new FileWriter(fDialog.getDirectory()
+						+ filename));
+
+				StringBuffer data = new StringBuffer();
+				data.insert(0, Integer.toString(values[0].length) + ";"
+						+ Integer.toString(rows = values.length) + "\r\n");
+				file.write(data.toString());
+
+				for (int i = 0; i < rows; i++) {
+					data = new StringBuffer(Integer.toString(values[i][0]));
+					for (int j = 1; j < values[i].length; j++) {
+						data.append(";" + Integer.toString(values[i][j]));
+					}
+					data.append("\r\n");
+					file.write(data.toString());
+				}
+			} catch (IOException e) {
+				logger.error("Fehler beim Erstellen der Datei");
+			} finally {
+				try {
+					if (file != null) {
+						file.close();
+					}
+				} catch (IOException e) {
+				}
+			}
+		}
+	}
+
+	public void loadFile(Frame actualWindow) {
+
+		FileDialog fDialog = new FileDialog(actualWindow,
+				"Choose file to load", FileDialog.LOAD);
+		fDialog.setVisible(true);
+
+		if (fDialog.getFile() != null) {
+			try {
+				readData(new FileReader(fDialog.getDirectory()
+						+ fDialog.getFile()));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void loadFile(String location) {
+		try {
+			readData(new FileReader(location));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void readData(Reader reader) {
+		String data;
+		BufferedReader file = null;
+
+		int[][] tempValues = null;
+		int[] tempData = null;
+
+		try {
+			file = new BufferedReader(reader);
+			int i = -1;
+			while ((data = file.readLine()) != null) {
+				if (i == -1) {
+					tempData = parseData(splitData(data, 2));
+					tempValues = new int[tempData[1]][tempData[0]];
+				} else {
+					tempValues[i] = parseData(splitData(data,
+							tempValues[i].length));
+				}
+				i++;
+			}
+		} catch (Exception e) {
+			logger.error("Fehler beim Lesen der Datei");
+		} finally {
+			try {
+				if (file != null) {
+					file.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+		handler.setValues(tempValues);
+	}
+
+	private String[] splitData(String dataString, int numberData) {
+		String puf[] = new String[numberData];
+		// TODO: Siehe Unterrichtsmaterial, Kommentare ergaenzen
+		int index1 = 0, index2 = 0;
+		for (int i = 0; i < numberData; i++) {
+			if (index1 < dataString.length()) {
+				index2 = dataString.indexOf(";", index1);
+				if (index2 >= 0) {
+					puf[i] = dataString.substring(index1, index2);
+					index1 = index2 + 1;
+				} else {
+					puf[i] = dataString.substring(index1);
+				}
+			}
+		}
+		return puf;
+	}
+
+	private int[] parseData(String[] data) {
+		int numberData = data.length;
+		int[] dataInt = new int[numberData];
+		// Wandelt die Strings in Integer um und speichert sie ab
+		for (int i = 0; i < numberData; i++) {
+			if (data[i].matches("[-0-9]+")) {
+				dataInt[i] = Integer.parseInt(data[i]);
+			} else {
+				logger.error("Ungueltige Zeichen im gelesenen String");
+				return null;
+			}
+		}
+		return dataInt;
+	}
+
+}
